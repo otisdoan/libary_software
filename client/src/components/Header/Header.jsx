@@ -8,6 +8,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import logo from "../../assets/images/logo.png"
 import Searchs from "../Search/Search";
 import { PiShoppingCartSimpleThin } from "react-icons/pi";
+import { Link } from "react-router-dom";
 const text = <span>prompt text</span>;
 const buttonWidth = 70;
 function Header() {
@@ -47,10 +48,10 @@ function Header() {
             </div>
             <div className="flex">
               <div>
-                <Button className="border-0 shadow-none outline-none text-[0.8rem] bg-transparent text-white">Đăng Ký</Button>
+                <Link to="/regester"><Button className="border-0 shadow-none outline-none text-[0.8rem] bg-transparent text-white">Đăng Ký</Button></Link>
               </div>
               <div>
-                <Button className="border-0 border-l-[1px] border-l-[#ddd] shadow-none outline-none bg-transparent rounded-none text-[0.8rem] text-white">Đăng Nhập</Button>
+                <Link to="/login"><Button className="border-0 border-l-[1px] border-l-[#ddd] shadow-none outline-none bg-transparent rounded-none text-[0.8rem] text-white">Đăng Nhập</Button></Link>
               </div>
             </div>
           </div>
@@ -64,7 +65,7 @@ function Header() {
             <Searchs />
           </div>
           <div className="w-0.5/3">
-            <PiShoppingCartSimpleThin className="text-[1.5rem]"/>
+            <PiShoppingCartSimpleThin className="text-[1.5rem]" />
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import facebook from "../../assets/images/facebook.jpg";
 function Accounts() {
     return (
         <>
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center gap-x-[5px]">
                 <div>
                     <button className="flex items-center justify-center border-[1px] border-[#ddd] px-[50px] py-[5px] rounded-[10px]">
                         <img src={google} className="w-[1.3rem] mr-[0.4rem]"/>

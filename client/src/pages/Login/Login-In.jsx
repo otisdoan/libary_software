@@ -3,7 +3,7 @@ import rightImage from "../../assets/images/z6301293252873_f84b802f4314e48198b9e
 function Login() {
     return (
         <>
-            <div className="flex items-center justify-center">
+            <div className="flex items-center justify-center my-[50px]">
                 <div className="w-[40%]">
                     <div>
                         <LoginForm />

@@ -3,7 +3,7 @@ import SignUpForm from "../../components/Forms/SignUpForm";
 function SignUp() {
     return (
         <>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between my-[50px]">
                 <div className="w-[50%]">
                     <img src={leftImage} className="h-[100vh]"/>
                 </div>

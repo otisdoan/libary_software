@@ -1,9 +1,10 @@
-import Footer from "./components/Footer/footer";
+
+import AllRoutes from "./routes/AllRoutes";
 
 function App() {
   return (
     <>
-        <Footer />
+      <AllRoutes />
     </>
   )
 }
