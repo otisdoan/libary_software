@@ -1,4 +1,4 @@
-import logo from "../../assets/images/image_no_background.png";
+import logo from "../../assets/images/logo.png";
 import { FaMapMarker } from "react-icons/fa";
 import { CiMail } from "react-icons/ci";
 import { FaPhoneVolume } from "react-icons/fa6";
@@ -40,7 +40,7 @@ function Footer() {
           <div className="flex items-center justify-around w-full">
             <div className="flex flex-col w-1/2 gap-y-[10px]">
               <h1>DỊCH VỤ</h1>
-              <Link to="#">Giới thiệu Hoko</Link>
+              <Link to="#" >Giới thiệu Hoko</Link>
               <Link to="#">Chính sách bảo mật thông tin cá nhân</Link>
             </div>
             <div className="flex flex-col w-1/2 gap-y-[10px]">
