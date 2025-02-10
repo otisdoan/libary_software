@@ -65,7 +65,7 @@ function Header() {
             <Searchs />
           </div>
           <div className="w-0.5/3">
-            <PiShoppingCartSimpleThin className="text-[1.5rem]" />
+            <PiShoppingCartSimpleThin className="text-[2rem]" />
           </div>
         </div>
       </div>
