@@ -39,14 +39,14 @@ function Footer() {
         <div className="flex flex-col items-start justify-start w-[60%] pl-[50px] gap-y-[20px]">
           <div className="flex items-center justify-around w-full">
             <div className="flex flex-col w-1/2 gap-y-[10px]">
-              <h1>DỊCH VỤ</h1>
-              <Link to="#">Giới thiệu Hoko</Link>
-              <Link to="#">Chính sách bảo mật thông tin cá nhân</Link>
+              <h1 className="font-bold">DỊCH VỤ</h1>
+              <Link to="#" className="text-[0.9rem]">Giới thiệu Hoko</Link>
+              <Link to="#" className="text-[0.9rem]">Chính sách bảo mật thông tin cá nhân</Link>
             </div>
             <div className="flex flex-col w-1/2 gap-y-[10px]">
-              <h1>HỖ TRỢ</h1>
-              <Link to="#">Chính sách trả - mượn</Link>
-              <Link to="#">Chính sách phạt</Link>
+              <h1 className="font-bold">HỖ TRỢ</h1>
+              <Link to="#" className="text-[0.9rem]">Chính sách trả - mượn</Link>
+              <Link to="#" className="text-[0.9rem]">Chính sách phạt</Link>
             </div>
           </div>
           <div className="flex items-center justify-start">
