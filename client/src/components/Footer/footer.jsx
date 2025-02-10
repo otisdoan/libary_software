@@ -42,9 +42,6 @@ function Footer() {
               <h1 className="font-bold">DỊCH VỤ</h1>
               <Link to="#" className="text-[0.9rem]">Giới thiệu Hoko</Link>
               <Link to="#" className="text-[0.9rem]">Chính sách bảo mật thông tin cá nhân</Link>
-              <h1>DỊCH VỤ</h1>
-              <Link to="#" >Giới thiệu Hoko</Link>
-              <Link to="#">Chính sách bảo mật thông tin cá nhân</Link>
             </div>
             <div className="flex flex-col w-1/2 gap-y-[10px]">
               <h1 className="font-bold">HỖ TRỢ</h1>
