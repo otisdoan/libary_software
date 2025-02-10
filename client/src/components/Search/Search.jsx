@@ -1,13 +1,11 @@
-import "./Search.css"
-import { Input, Space } from 'antd';
+import { Input } from 'antd';
 const { Search } = Input;
-
-const onSearch = (value, _e, info) => console.log(info?.source, value);
+const onSearch = (value) => console.log(value);
 function Searchs() {
-    return (
-        <Space direction="vertical">
-            <Search placeholder="input search text" onSearch={onSearch} enterButton />
-        </Space>
-    )
+  return (
+    <>
+      <Search placeholder="Search" onSearch={onSearch} enterButton  className='w-full'/>
+    </>
+  )
 }
 export default Searchs;
