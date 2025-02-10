@@ -1,16 +1,15 @@
-import { useEffect, useState } from "react";
-import axiosClient from "./api/axiosClient";
+import Header from "./components/Header/Header";
+import Login from "./pages/Login/Login-In";
+
+
+
 
 function App() {
-  const [message, setMessage] = useState("");
-
-  useEffect(() => {
-    axiosClient.get("/")
-      .then(res => setMessage(res.data))
-      .catch(err => console.error(err));
-  }, []);
-
-  return <h1>{message}</h1>;
+  return (
+    <>
+        <Login />
+    </>
+  )
 }
 
-export default App;
+export default App; 
