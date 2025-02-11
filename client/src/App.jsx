@@ -1,11 +1,13 @@
+import React from 'react';
+import { UserProvider } from './context/UserContext';
 import AllRoutes from "./routes/AllRoutes";
-
+import 'antd/dist/reset.css';
 
 function App() {
   return (
-    <>
-        <AllRoutes />
-    </>
+    <UserProvider>
+      <AllRoutes />
+    </UserProvider>
   )
 }
 

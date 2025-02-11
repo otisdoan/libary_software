@@ -1,3 +1,4 @@
+import React, { useContext } from 'react';
 import { SiZalo } from "react-icons/si";
 import { MdOutlineFacebook } from "react-icons/md";
 import { CiBellOn } from "react-icons/ci";
@@ -9,9 +10,12 @@ import logo from "../../assets/images/logo.png"
 import Searchs from "../Search/Search";
 import { PiShoppingCartSimpleThin } from "react-icons/pi";
 import { Link } from "react-router-dom";
+import { UserContext } from '../../context/UserContext';
 const text = <span>prompt text</span>;
 const buttonWidth = 70;
 function Header() {
+  const { isLoggedIn, username } = useContext(UserContext);
+
   return (
     <>
       <div className="container mx-auto px-[6rem] bg-[#f7462f] text-white pb-[25px] sticky top-0 z-[9999]">
@@ -47,12 +51,18 @@ function Header() {
               </Tooltip>
             </div>
             <div className="flex">
-              <div>
-                <Link to="/regester"><Button className="border-0 shadow-none outline-none text-[0.8rem] bg-transparent text-white">Đăng Ký</Button></Link>
-              </div>
-              <div>
-                <Link to="/login"><Button className="border-0 border-l-[1px] border-l-[#ddd] shadow-none outline-none bg-transparent rounded-none text-[0.8rem] text-white">Đăng Nhập</Button></Link>
-              </div>
+              {isLoggedIn ? (
+                <div className="text-[0.8rem] text-white mr-[10px]">Xin chào, {username}</div>
+              ) : (
+                <>
+                  <div>
+                    <Link to="/regester"><Button className="border-0 shadow-none outline-none text-[0.8rem] bg-transparent text-white">Đăng Ký</Button></Link>
+                  </div>
+                  <div>
+                    <Link to="/login"><Button className="border-0 border-l-[1px] border-l-[#ddd] shadow-none outline-none bg-transparent rounded-none text-[0.8rem] text-white">Đăng Nhập</Button></Link>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

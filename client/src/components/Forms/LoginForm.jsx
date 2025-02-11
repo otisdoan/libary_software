@@ -1,13 +1,28 @@
+
 import { Button, Form, Input } from 'antd';
 import { Link } from 'react-router-dom';
 import Accounts from '../Accounts/Accounts';
-const onFinish = (values) => {
-  console.log('Success:', values);
-};
-const onFinishFailed = (errorInfo) => {
-  console.log('Failed:', errorInfo);
-};
+import { authApi } from '../../api/authApi';
+
 function LoginForm() {
+  const onFinish = async (values) => {
+    try {
+      const response = await authApi.login(values.email, values.password);
+      console.log('Login successful:', response);
+      localStorage.setItem('accessToken', response.tokens.accessToken);
+      localStorage.setItem('refreshToken', response.tokens.refreshToken);
+      localStorage.setItem('username', response.user.username);
+      // Handle login success, e.g., redirect
+      window.location.href = '/';
+    } catch (error) {
+      console.error('Login failed:', error);
+      // Handle login failure, e.g., show error message
+    }
+  };
+  
+  const onFinishFailed = (errorInfo) => {
+    console.log('Failed:', errorInfo);
+  };
   return (
     <>
       <Form
@@ -33,15 +48,15 @@ function LoginForm() {
         </Form.Item>
         <Form.Item
           label={null}
-          name="username"
+          name="email"
           rules={[
             {
               required: true,
-              message: 'Please input your username!',
+              message: 'Please input your email!',
             },
           ]}
         >
-          <Input placeholder='Username'/>
+          <Input placeholder='email'/>
         </Form.Item>
 
         <Form.Item
@@ -56,7 +71,6 @@ function LoginForm() {
         >
           <Input.Password placeholder='Password'/>
         </Form.Item>
-
 
         <Form.Item label={null}>
           <Button type="primary" danger className='w-full' htmlType='submit'>
@@ -81,10 +95,11 @@ function LoginForm() {
         </Form.Item>
 
         <Form.Item label={null}>
-          <span>Don’t have an account?<Link to="/regester" className='ml-[5px]'>Sign Up</Link></span>
+          <span>Dont have an account?<Link to="/register" className='ml-[5px]'>Sign Up</Link></span>
         </Form.Item>
       </Form>
     </>
   )
 }
+
 export default LoginForm;
