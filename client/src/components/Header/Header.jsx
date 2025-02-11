@@ -14,7 +14,7 @@ const buttonWidth = 70;
 function Header() {
   return (
     <>
-      <div className="container mx-auto px-[6rem] bg-[#f7462f] text-white pb-[25px]">
+      <div className="container mx-auto px-[6rem] bg-[#f7462f] text-white pb-[25px] sticky top-0 z-[9999]">
         <div className="flex items-center justify-between py-[5px] mb-[10px]">
           <div className="flex items-center justify-center">
             <span className="text-[0.8rem] mr-[10px]">Kết nối</span>
