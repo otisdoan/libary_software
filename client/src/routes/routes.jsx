@@ -1,4 +1,5 @@
 
+import SendEmail from "../pages/ForgotPassword/SendEmail";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login-In";
 import SignUp from "../pages/Sign-Up/SignUp";
@@ -16,6 +17,10 @@ export const routes = [
             {
                 path:"/regester",
                 element: <SignUp/>,
+            }, 
+            {
+                path: "/forgot-password",
+                element: <SendEmail />
             }
         ]
     }
