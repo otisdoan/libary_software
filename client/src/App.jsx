@@ -1,15 +1,11 @@
-import Header from "./components/Header/Header";
-
-
-
-
+import HomeAdmin from "./pages/HomeAdmin/HomeAdmin";
 
 function App() {
   return (
     <>
-        <Header />
+      <HomeAdmin />
     </>
-  )
+  );
 }
 
-export default App; 
+export default App;
