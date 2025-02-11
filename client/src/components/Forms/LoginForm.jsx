@@ -81,7 +81,7 @@ function LoginForm() {
         </Form.Item>
 
         <Form.Item label={null}>
-          <span>Don’t have an account?<Link to="/signin" className='ml-[5px]'>Sign Up</Link></span>
+          <span>Don’t have an account?<Link to="/regester" className='ml-[5px]'>Sign Up</Link></span>
         </Form.Item>
       </Form>
     </>
