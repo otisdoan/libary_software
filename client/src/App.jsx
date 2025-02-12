@@ -1,14 +1,15 @@
-import React from 'react';
-import { UserProvider } from './context/UserContext';
-import AllRoutes from "./routes/AllRoutes";
-import 'antd/dist/reset.css';
+import Sidebar from "./components/Sidebar/Sidebar"; // Đảm bảo đường dẫn đúng
+import HeaderAdmin from "./components/Header/HeaderAdmin"; // Đảm bảo đường dẫn đúng
+import Dashboard from "./components/Dasboard/Dasboard";
 
 function App() {
   return (
-    <UserProvider>
-      <AllRoutes />
-    </UserProvider>
-  )
+    <>
+      <HeaderAdmin />
+      <Dashboard />
+      <Sidebar />
+    </>
+  );
 }
 
-export default App; 
+export default App;
