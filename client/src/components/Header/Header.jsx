@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { SiZalo } from "react-icons/si";
 import { MdOutlineFacebook } from "react-icons/md";
 import { CiBellOn } from "react-icons/ci";

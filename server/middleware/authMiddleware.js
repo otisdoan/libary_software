@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 const publicEndpoints = [
-    { path: '/api/auth/login', method: 'POST' },
+    { path: '/api/auth/login', method: 'POST' }, 
     { path: '/api/auth/register', method: 'POST' },
     
 ];

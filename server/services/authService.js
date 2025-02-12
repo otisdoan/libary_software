@@ -28,12 +28,11 @@ class AuthService {
 
     #sendActivationEmail(user, token) {
         console.log('Preparing activation email for user:', {
-            username: user.username,
             email: user.email
         });
         
         const activationUrl = `${process.env.CLIENT_URL}/activate/${token}`;
-        const message = `Hello ${user.username},\n\nPlease activate your account by clicking the link below:\n\n${activationUrl}\n\nThank you!`;
+        const message = `Hello ${user.email},\n\nPlease activate your account by clicking the link below:\n\n${activationUrl}\n\nThank you!`;
 
         sendEmail({
             email: user.email,
@@ -44,12 +43,11 @@ class AuthService {
 
     #sendResetPasswordEmail(user, token) {
         console.log('Preparing reset password email for user:', {
-            username: user.username,
             email: user.email
         });
         
         const resetPasswordUrl = `${process.env.CLIENT_URL}/reset-password/${token}`;
-        const message = `Hello ${user.username},\n\n` +
+        const message = `Hello ${user.email},\n\n` +
             `You have requested to reset your password. Please click the link below to reset your password:\n\n` +
             `${resetPasswordUrl}\n\n` +
             `This link will expire in 15 minutes.\n\n` +
@@ -96,7 +94,6 @@ class AuthService {
             user: {
                 id: user._id,
                 email: user.email,
-                username: user.username,
                 role: user.role
             },
             tokens: {
@@ -106,25 +103,18 @@ class AuthService {
         };
     }
 
-    async register(username, email, password) {
+    async register(email, password) {
         let createdUser = null;
         
         try {
             // Check if user already exists
             const existingEmail = await userRepository.findByEmail(email);
-            const existingUsername = await userRepository.findByUsername(username);
 
             if (existingEmail) {
                 throw new Error('User already exists with this email');
             }
-
-            if (existingUsername) {
-                throw new Error('Username is already taken');
-            }
-
             // Create new user
             createdUser = await userRepository.createUser({
-                username,
                 email,
                 password,
                 status: 'inactive'
@@ -156,7 +146,6 @@ class AuthService {
                 user: {
                     id: createdUser._id,
                     email: createdUser.email,
-                    username: createdUser.username,
                     role: createdUser.role
                 }
             };
@@ -179,7 +168,6 @@ class AuthService {
         return {
             id: user._id,
             email: user.email,
-            username: user.username,
             role: user.role
         };
     }
