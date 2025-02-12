@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { SiZalo } from "react-icons/si";
 import { MdOutlineFacebook } from "react-icons/md";
 import { CiBellOn } from "react-icons/ci";
@@ -56,7 +56,7 @@ function Header() {
               ) : (
                 <>
                   <div>
-                    <Link to="/regester"><Button className="border-0 shadow-none outline-none text-[0.8rem] bg-transparent text-white">Đăng Ký</Button></Link>
+                    <Link to="/register"><Button className="border-0 shadow-none outline-none text-[0.8rem] bg-transparent text-white">Đăng Ký</Button></Link>
                   </div>
                   <div>
                     <Link to="/login"><Button className="border-0 border-l-[1px] border-l-[#ddd] shadow-none outline-none bg-transparent rounded-none text-[0.8rem] text-white">Đăng Nhập</Button></Link>

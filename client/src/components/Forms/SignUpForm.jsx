@@ -1,31 +1,32 @@
 
 import { Button, Form, Input } from 'antd';
 import Accounts from '../Accounts/Accounts';
-import { Link } from 'react-router-dom';
-const layout = {
-    labelCol: {
-        span: 8,
-    },
-    wrapperCol: {
-        span: 16,
-    },
-};
-const validateMessages = {
-    required: '${label} is required!',
-    types: {
-        email: '${label} is not a valid email!',
-        number: '${label} is not a valid number!',
-        password: '${label} is not a valid password!',
-    },
-    number: {
-        range: '${label} must be between ${min} and ${max}',
-    },
-};
-const onFinish = (values) => {
-    console.log(values);
-};
-function SignUpForm() {
+import { Link, useNavigate } from 'react-router-dom';
+import { authApi } from '../../api/authApi';
 
+
+function SignUpForm() {
+    const navigate = useNavigate();
+
+    const layout = {
+        labelCol: {
+            span: 8,
+        },
+        wrapperCol: {
+            span: 16,
+        },
+    };
+
+    const onFinish = async (values) => {
+        try {
+            const { email, password } = values;
+            const response = await authApi.register(email, password);
+            console.log('Register successful:', response);
+            navigate("/login")
+        } catch (error) {
+            console.log(error)
+        }
+    };
     return (
         <>
             <Form
@@ -35,45 +36,64 @@ function SignUpForm() {
                 style={{
                     maxWidth: 600,
                 }}
-                validateMessages={validateMessages}
             >
                 <Form.Item label={null}>
                     <h1 className="text-[1.5rem] font-bold">Sign Up</h1>
                 </Form.Item>
                 <Form.Item
-                    name={['user', 'email']}
+                    name={'email'}
                     label={null}
                     rules={[
                         {
                             required: true,
+                            message: "Email is required",
                         },
+                        {
+                            pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                            message: "Email is not valid!"
+                        }
                     ]}
+                    className='w-full'
                 >
-                    <Input placeholder="Your email" />
+                    <Input placeholder='Enter your email' />
                 </Form.Item>
                 <Form.Item
-                    name={['user', 'password']}
                     label={null}
+                    name={'password'}
                     rules={[
                         {
                             required: true,
-                            types: 'password',
+                            message: "Password is required"
                         },
+                        {
+                            pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+                            message: "Mật khẩu phải có ít nhất 8 ký tự, gồm chữ và số!"
+                        }
                     ]}
                 >
-                    <Input.Password placeholder="Password" />
+                    <Input.Password placeholder='New password' />
                 </Form.Item>
+
                 <Form.Item
-                    name={['user', 'password']}
                     label={null}
+                    name={'confirmPassword'}
+                    dependencies={['password']}
                     rules={[
                         {
                             required: true,
-                            types: 'password',
+                            message: "Repeat password is required"
                         },
+                        ({ getFieldValue }) => ({
+                            validator(_, value) {
+                                if (!value || getFieldValue('password') === value) {
+                                    return Promise.resolve();
+                                }
+                                return Promise.reject(new Error("Mật khẩu phải giống như trên!"));
+                            }
+                        })
                     ]}
                 >
-                    <Input.Password placeholder="Repeat password" />
+                    <Input.Password placeholder='Repeat password' />
                 </Form.Item>
 
                 <Form.Item label={null}>

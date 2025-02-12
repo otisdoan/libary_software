@@ -46,7 +46,7 @@ function FormResetPassword() {
                             })
                         ]}
                     >
-                        <Input.Password placeholder='New password' />
+                        <Input.Password placeholder='Repeat password' />
                     </Form.Item>
 
                     <Form.Item className='w-full'>

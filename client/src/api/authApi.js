@@ -5,4 +5,8 @@ export const authApi = {
     const response = await instance.post("/api/auth/login", { email, password });
     return response.data;
   },
+  register: async (email, password) => {
+    const response = await instance.post("/api/auth/register", {email, password})
+    return response.data;
+  }
 };
