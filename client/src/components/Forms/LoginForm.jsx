@@ -1,20 +1,19 @@
 
 import { Button, Form, Input, message } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Accounts from '../Accounts/Accounts';
 import { authApi } from '../../api/authApi';
 
 function LoginForm() {
-  const navigate = useNavigate();
   const onFinish = async (values) => {
     try {
       const response = await authApi.login(values.email, values.password);
       console.log('Login successful:', response);
       localStorage.setItem('accessToken', response.tokens.accessToken);
       localStorage.setItem('refreshToken', response.tokens.refreshToken);
-      localStorage.setItem('username', response.user.username);
+      localStorage.setItem('email', response.user.email);
       message.success("Đăng nhập thành công!");
-      navigate("/");
+      window.location.href = "/";
     } catch (error) {
       console.error('Login failed:', error);
       if (error.response && error.response.data.message) {

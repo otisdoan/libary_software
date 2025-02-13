@@ -1,9 +1,16 @@
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, message } from 'antd';
+import { authApi } from '../../api/authApi';
 
-const onFinish = (values) => {
-    console.log(values);
-};
 function InputEmail() {
+    const onFinish = async (values) => {
+        try {
+            const response = await authApi.sendResetPasswordEmail(values.user.email);
+            message.success('Email sent successfully!');
+        } catch (error) {
+            message.error('Failed to send email.');
+        }
+    };
+
     return (
         <>
             <div>
@@ -12,7 +19,6 @@ function InputEmail() {
                     onFinish={onFinish}
                     className='w-[400px] flex flex-col justify-center'
                 >
-
                     <Form.Item
                         name={['user', 'email']}
                         label=""
@@ -31,15 +37,15 @@ function InputEmail() {
                         <Input placeholder='Enter your email' />
                     </Form.Item>
 
-                    <Form.Item  className='w-full'>
+                    <Form.Item className='w-full'>
                         <Button htmlType='submit' type='primary' className='w-full'>
                             Send
                         </Button>
                     </Form.Item>
-
                 </Form>
             </div>
         </>
-    )
+    );
 }
+
 export default InputEmail;

@@ -1,12 +1,12 @@
-
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, Modal } from 'antd';
 import Accounts from '../Accounts/Accounts';
 import { Link, useNavigate } from 'react-router-dom';
 import { authApi } from '../../api/authApi';
-
+import { useState } from 'react';
 
 function SignUpForm() {
     const navigate = useNavigate();
+    const [isModalVisible, setIsModalVisible] = useState(false);
 
     const layout = {
         labelCol: {
@@ -22,13 +22,31 @@ function SignUpForm() {
             const { email, password } = values;
             const response = await authApi.register(email, password);
             console.log('Register successful:', response);
-            navigate("/login")
+            setIsModalVisible(true);
         } catch (error) {
-            console.log(error)
+            console.log(error);
         }
     };
+
+    const handleOk = () => {
+        setIsModalVisible(false);
+        navigate("/login");
+    };
+
     return (
         <>
+            <Modal
+                title="Registration Successful"
+                visible={isModalVisible}
+                onOk={handleOk}
+                onCancel={() => setIsModalVisible(false)}
+                footer={null}
+            >
+                <p>Registration successful! Please check your email to verify your account.</p>
+                <Button key="ok" type="primary" onClick={handleOk} style={{ marginTop: '16px' }}>
+                    OK
+                </Button>
+            </Modal>
             <Form
                 {...layout}
                 name="nest-messages"

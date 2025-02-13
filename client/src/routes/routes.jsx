@@ -1,10 +1,9 @@
-
 import SendEmail from "../pages/ForgotPassword/SendEmail";
 import Home from "../pages/Home/Home";
 import Login from "../pages/Login/Login-In";
-import ResetPassword from "../pages/ResetPassword/ResetPassword";
 import SignUp from "../pages/Sign-Up/SignUp";
-
+import Activate from "../pages/Activate/Activate";
+import ResetPassword from "../pages/ResetPassword/ResetPassword";
 
 export const routes = [
     {
@@ -24,8 +23,12 @@ export const routes = [
                 element: <SendEmail />
             },
             {
-                path: "/reset-password",
+                path: "/reset-password/:token",
                 element: <ResetPassword />
+            },
+            {
+                path: "/activate/:token",
+                element: <Activate />
             }
         ]
     }

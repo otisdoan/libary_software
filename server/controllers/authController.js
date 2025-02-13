@@ -4,9 +4,9 @@ class AuthController {
     // Register new user
     async register(req, res) {
         try {
-            const { username, email, password } = req.body;
+            const { email, password } = req.body;
             
-            const { user, tokens } = await authService.register(username, email, password);
+            const { user, tokens } = await authService.register(email, password);
             
             res.status(201).json({
                 user,
@@ -50,7 +50,7 @@ class AuthController {
 
     async activateAccount(req, res) {
         try {
-            const { token } = req.params;
+            const { token } = req.body;
             await authService.activateAccount(token);
             res.json({ message: 'Account activated successfully' });
         } catch (error) {
@@ -88,9 +88,8 @@ class AuthController {
 
     async resetPassword(req, res) {
         try {
-            const { token } = req.params;
-            const { newPassword, confirmPassword } = req.body;
-            
+            const { token, newPassword, confirmPassword } = req.body;
+            console.log(token, newPassword, confirmPassword);
             const result = await authService.resetPassword(token, newPassword, confirmPassword);
             res.json(result);
         } catch (error) {
@@ -104,7 +103,7 @@ class AuthController {
             const page = Math.max(1, parseInt(req.query.page) || 1); 
 
             const size = Math.min(100, Math.max(1, parseInt(req.query.size) || 10)); 
-            const sortField = ['createdAt', 'username', 'email', 'updatedAt'].includes(req.query.field) 
+            const sortField = ['createdAt', 'email', 'updatedAt'].includes(req.query.field) 
                 ? req.query.field 
                 : 'createdAt'; 
 
@@ -117,4 +116,4 @@ class AuthController {
     
 }
 
-module.exports = new AuthController(); 
+module.exports = new AuthController();

@@ -14,7 +14,7 @@ import { UserContext } from '../../context/UserContext';
 const text = <span>prompt text</span>;
 const buttonWidth = 70;
 function Header() {
-  const { isLoggedIn, username } = useContext(UserContext);
+  const { isLoggedIn, email } = useContext(UserContext);
 
   return (
     <>
@@ -52,7 +52,7 @@ function Header() {
             </div>
             <div className="flex">
               {isLoggedIn ? (
-                <div className="text-[0.8rem] text-white mr-[10px]">Xin chào, {username}</div>
+                <div className="text-[0.8rem] text-white mr-[10px]">Xin chào, {email}</div>
               ) : (
                 <>
                   <div>

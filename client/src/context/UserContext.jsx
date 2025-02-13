@@ -4,33 +4,33 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
 
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
-    const storedUsername = localStorage.getItem('username');
+    const storedEmail = localStorage.getItem('email');
     if (accessToken) {
       setIsLoggedIn(true);
-      setUsername(storedUsername);
+      setEmail(storedEmail);
     }
   }, []);
 
   const login = (user) => {
     setIsLoggedIn(true);
-    setUsername(user);
-    localStorage.setItem('username', user);
+    setEmail(user);
+    localStorage.setItem('email', user);
   };
 
   const logout = () => {
     setIsLoggedIn(false);
-    setUsername('');
+    setEmail('');
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
-    localStorage.removeItem('username');
+    localStorage.removeItem('email');
   };
 
   return (
-    <UserContext.Provider value={{ isLoggedIn, username, login, logout }}>
+    <UserContext.Provider value={{ isLoggedIn, email, login, logout }}>
       {children}
     </UserContext.Provider>
   );

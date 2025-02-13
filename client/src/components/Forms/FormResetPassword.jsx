@@ -1,9 +1,20 @@
 import { Form, Input, Button } from 'antd';
+import { useParams } from 'react-router-dom';
+import { authApi } from '../../api/authApi';
 
-const onFinish = (values) => {
-    console.log(values.user.password);
-};
 function FormResetPassword() {
+    const { token } = useParams();
+
+    const onFinish = async (values) => {
+        const { password, confirmPassword } = values;
+        try {
+            const response = await authApi.resetPassword(token, password, confirmPassword);
+            console.log('Password reset successful:', response);
+        } catch (error) {
+            console.error('Password reset failed:', error);
+        }
+    };
+
     return (
         <>
             <div className=''>
@@ -12,9 +23,8 @@ function FormResetPassword() {
                     onFinish={onFinish}
                     className=''
                 >
-
                     <Form.Item
-                        name={['user', 'password']}
+                        name={['password']}
                         rules={[
                             {
                                 required: true,
@@ -29,8 +39,8 @@ function FormResetPassword() {
                         <Input.Password placeholder='New password' />
                     </Form.Item>
                     <Form.Item
-                        name={['user', 'repeat-password']}
-                        dependencies={['user', 'password']}
+                        name={['confirmPassword']} // Changed from 'confirm-password' to 'confirmPassword'
+                        dependencies={['password']}
                         rules={[
                             {
                                 required: true,
@@ -38,7 +48,7 @@ function FormResetPassword() {
                             },
                             ({ getFieldValue }) => ({
                                 validator(_, value) {
-                                    if (!value || getFieldValue(['user', 'password']) === value) {
+                                    if (!value || getFieldValue(['password']) === value) {
                                         return Promise.resolve();
                                     }
                                     return Promise.reject(new Error("Mật khẩu phải giống như trên!"));
