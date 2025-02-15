@@ -12,6 +12,7 @@ function LoginForm() {
       localStorage.setItem('accessToken', response.tokens.accessToken);
       localStorage.setItem('refreshToken', response.tokens.refreshToken);
       localStorage.setItem('email', response.user.email);
+      localStorage.setItem('userId', response.user.id);
       message.success("Đăng nhập thành công!");
       window.location.href = "/";
     } catch (error) {

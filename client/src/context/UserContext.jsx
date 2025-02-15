@@ -9,6 +9,7 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     const accessToken = localStorage.getItem('accessToken');
     const storedEmail = localStorage.getItem('email');
+
     if (accessToken) {
       setIsLoggedIn(true);
       setEmail(storedEmail);
@@ -30,7 +31,7 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={{ isLoggedIn, email, login, logout }}>
+    <UserContext.Provider value={{ isLoggedIn, email, login, logout}}>
       {children}
     </UserContext.Provider>
   );
