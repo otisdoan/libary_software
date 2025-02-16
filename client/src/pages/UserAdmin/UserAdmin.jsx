@@ -1,8 +1,10 @@
 import { Select, Input, Table, Tag, Pagination, Modal, Button } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { authApi } from '../../api/authApi';
 
 function UserAdmin() {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [user, setUser] = useState({});
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -115,6 +117,18 @@ function UserAdmin() {
         },
 
     ]
+    useEffect(() => {
+        const fetchApi = async () => {
+            try {
+                const userList = await authApi.getAllUser(1, 10, 'email');
+                console.log(userList);
+                setUser(userList);
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchApi();
+    }, [])
     return (
         <>
             <div className="px-[20px] py-[50px]">

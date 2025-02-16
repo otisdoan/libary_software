@@ -8,6 +8,7 @@ import Admin from "../pages/Admin/Admin";
 import UserAdmin from "../pages/UserAdmin/UserAdmin";
 import UserProfile from "../pages/Profiles/UserProfiles";
 import AdminProfile from "../pages/Profiles/AdminProfile";
+import BookAdmin from "../pages/BookAdmin/BookAdmin";
 
 export const routes = [
     {
@@ -51,6 +52,10 @@ export const routes = [
             {
                 path: 'profile',
                 element: <AdminProfile />
+            }, 
+            {
+                path: 'book',
+                element: <BookAdmin />
             }
         ]
     }

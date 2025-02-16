@@ -6,7 +6,7 @@ export const authApi = {
     return response.data;
   },
   register: async (email, password) => {
-    const response = await instance.post("/api/auth/register", {email, password})
+    const response = await instance.post("/api/auth/register", { email, password })
     return response.data;
   },
   activate: async (token) => {
@@ -20,5 +20,12 @@ export const authApi = {
   resetPassword: async (token, newPassword, confirmPassword) => {
     const response = await instance.post(`/api/auth/reset-password`, { token, newPassword, confirmPassword });
     return response.data;
+  },
+  getAllUser: async (page, size, sortField) => {
+    const response = await instance.get('/api/auth/get-all-users', {
+      params: { page, size, field: sortField } ,
+    });
+    return response.data;
   }
+
 };
