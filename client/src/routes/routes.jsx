@@ -4,6 +4,8 @@ import Login from "../pages/Login/Login-In";
 import SignUp from "../pages/Sign-Up/SignUp";
 import Activate from "../pages/Activate/Activate";
 import ResetPassword from "../pages/ResetPassword/ResetPassword";
+import Admin from "../pages/Admin/Admin";
+import UserAdmin from "../pages/UserAdmin/UserAdmin";
 
 export const routes = [
     {
@@ -29,6 +31,16 @@ export const routes = [
             {
                 path: "/activate/:token",
                 element: <Activate />
+            }
+        ]
+    },
+    {
+        path: "/admin",
+        element: <Admin />,
+        children: [
+            {
+                path: 'user',
+                element: <UserAdmin />
             }
         ]
     }

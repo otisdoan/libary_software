@@ -7,17 +7,17 @@
 
 }
 
-.ant-btn-variant-solid {
-    background:#f7462f;
-    position: absolute;
-    right: 5px;
-    top:50%;
-    transform: translateY(-50%);
-}
 .ant-input-group-addon:hover, .ant-input-group-addon:focus {
     background: #f7462f !important;;
 }
 .ant-input {
     padding: 8px 14px;
     position: relative;
+}
+.ant-input-search-button {
+    background:#f7462f;
+    position: absolute;
+    right: 5px;
+    top:50%;
+    transform: translateY(-50%);
 }
