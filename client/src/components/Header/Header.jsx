@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { SiZalo } from "react-icons/si";
 import { MdOutlineFacebook } from "react-icons/md";
 import { CiBellOn } from "react-icons/ci";
-import { Button, Tooltip } from 'antd';
+import { Button, Tooltip, Dropdown, Avatar } from 'antd';
 import { BiSupport } from "react-icons/bi";
 import { MdOutlineLanguage } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
@@ -11,14 +11,34 @@ import Searchs from "../Search/Search";
 import { PiShoppingCartSimpleThin } from "react-icons/pi";
 import { Link } from "react-router-dom";
 import { UserContext } from '../../context/UserContext';
+import { IoLogOutSharp } from "react-icons/io5";
+import { ImProfile } from "react-icons/im";
+import avatarUser from "../../assets/images/z5581996737056_ec0f21259be216a6270fde9f7c300f4f.jpg"
 const text = <span>prompt text</span>;
 const buttonWidth = 70;
-function Header() {
-  const { isLoggedIn, email } = useContext(UserContext);
 
+
+function Header() {
+  const { isLoggedIn } = useContext(UserContext);
+  const items = [
+    {
+      key: '1',
+      icon: <ImProfile />,
+      label: (
+        <Link to="#">My profile</Link>
+      )
+    },
+    {
+      key: '2',
+      icon: <IoLogOutSharp />,
+      label: (
+        <Link to="#">Log out</Link>
+      )
+    }
+  ];
   return (
     <>
-      <div className='sticky top-0 z-[9999] w-full flex  bg-[#f7462f] text-white pb-[25px]'>
+      <div className='sticky top-0 z-[1] w-full flex  bg-[#f7462f] text-white pb-[25px]'>
         <div className="container mx-auto px-[6rem] w-[100%]">
           <div className="flex items-center justify-between py-[5px] mb-[10px]">
             <div className="flex items-center justify-center">
@@ -53,7 +73,16 @@ function Header() {
               </div>
               <div className="flex">
                 {isLoggedIn ? (
-                  <div className="text-[0.8rem] text-white mr-[10px]">Xin chào, {email}</div>
+                  <div className=''>
+                    <Dropdown
+                      menu={{
+                        items,
+                      }}
+                      trigger={['click']}
+                    >
+                      <Avatar src={<img src={avatarUser} alt="avatar" className='cursor-pointer' />} />
+                    </Dropdown>
+                  </div>
                 ) : (
                   <>
                     <div>

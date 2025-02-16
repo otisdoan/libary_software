@@ -23,17 +23,12 @@ function AvatarAdmin() {
     return (
         <>
             <Dropdown
-            trigger={'click'}
-            menu={{
-                items,
-            }}
-                dropdownRender={(menu) => (
-                    <>
-                        {menu}
-                    </>
-                )}
+                trigger={'click'}
+                menu={{
+                    items,
+                }}
             >
-                <Avatar src={<img src={avatarAdmin} alt="avatar" />} />
+                <Avatar src={<img src={avatarAdmin} alt="avatar" className='cursor-pointer'/>} />
             </Dropdown>
         </>
     )
