@@ -1,7 +1,7 @@
 function HomeCarousel() {
     return (
         <>
-        
+            
         </>
     )
 }

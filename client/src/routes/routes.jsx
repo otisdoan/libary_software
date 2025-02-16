@@ -6,6 +6,8 @@ import Activate from "../pages/Activate/Activate";
 import ResetPassword from "../pages/ResetPassword/ResetPassword";
 import Admin from "../pages/Admin/Admin";
 import UserAdmin from "../pages/UserAdmin/UserAdmin";
+import UserProfile from "../pages/Profiles/UserProfiles";
+import AdminProfile from "../pages/Profiles/AdminProfile";
 
 export const routes = [
     {
@@ -31,6 +33,10 @@ export const routes = [
             {
                 path: "/activate/:token",
                 element: <Activate />
+            },
+            {
+                path: '/profile',
+                element: <UserProfile />
             }
         ]
     },
@@ -41,6 +47,10 @@ export const routes = [
             {
                 path: 'user',
                 element: <UserAdmin />
+            },
+            {
+                path: 'profile',
+                element: <AdminProfile />
             }
         ]
     }

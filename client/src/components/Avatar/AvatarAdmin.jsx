@@ -9,7 +9,7 @@ function AvatarAdmin() {
             key: '1',
             icon: <FaUser />,
             label: (
-                <Link>My profile</Link>
+                <Link to="/admin/profile">My profile</Link>
             )
         },
         {

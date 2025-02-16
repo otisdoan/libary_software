@@ -9,7 +9,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import logo from "../../assets/images/logo.png"
 import Searchs from "../Search/Search";
 import { PiShoppingCartSimpleThin } from "react-icons/pi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from '../../context/UserContext';
 import { IoLogOutSharp } from "react-icons/io5";
 import { ImProfile } from "react-icons/im";
@@ -19,20 +19,25 @@ const buttonWidth = 70;
 
 
 function Header() {
-  const { isLoggedIn } = useContext(UserContext);
+  const { isLoggedIn, logout} = useContext(UserContext);
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  }
   const items = [
     {
       key: '1',
       icon: <ImProfile />,
       label: (
-        <Link to="#">My profile</Link>
+        <Link to="/profile">My profile</Link>
       )
     },
     {
       key: '2',
       icon: <IoLogOutSharp />,
       label: (
-        <Link to="#">Log out</Link>
+        <Button type='text' className='p-0' onClick={handleLogout}>Log out</Button>
       )
     }
   ];
