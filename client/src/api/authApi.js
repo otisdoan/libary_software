@@ -26,6 +26,14 @@ export const authApi = {
       params: { page, size, field: sortField } ,
     });
     return response.data;
+  },
+  getMyInfo: async () => {
+    const response = await instance.get('/api/auth/get-my-info');
+    return response.data;
+  },
+  updateRoleUser: async (id, role) => {
+    const response = await instance.put(`/api/auth/assign-role/${id}`, {role})
+    return response.data;
   }
 
 };

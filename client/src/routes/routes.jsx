@@ -9,6 +9,8 @@ import UserAdmin from "../pages/UserAdmin/UserAdmin";
 import UserProfile from "../pages/Profiles/UserProfiles";
 import AdminProfile from "../pages/Profiles/AdminProfile";
 import BookAdmin from "../pages/BookAdmin/BookAdmin";
+import CategoryAdmin from "../pages/CategoryAdmin/CategoryAdmin";
+import AddCategory from "../pages/AddCategory/AddCategory";
 
 export const routes = [
     {
@@ -56,6 +58,14 @@ export const routes = [
             {
                 path: 'book',
                 element: <BookAdmin />
+            },
+            {
+                path: 'category',
+                element: <CategoryAdmin />,
+            },
+            {
+                path: 'category/new-category',
+                element: <AddCategory />
             }
         ]
     }

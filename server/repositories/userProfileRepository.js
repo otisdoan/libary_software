@@ -2,22 +2,22 @@ var UserProfile = require('../models/userProfile');
 
 class UserProfileRepository {
     async create(userProfileData) {
-        return await UserProfile.create(userProfileData);
+        return UserProfile.create(userProfileData);
     }
 
     async update(userId, userProfileData) {
-        return await UserProfile.findOneAndUpdate({ userId }, userProfileData, {
+        return UserProfile.findOneAndUpdate({userId}, userProfileData, {
             new: true,
             runValidators: true
         });
     }
 
     async deleteByUserId(userId) {
-        return await UserProfile.findOneAndDelete({ userId });
+        return UserProfile.findOneAndDelete({userId});
     }
 
     async findByUserId(userId) {
-        return await UserProfile.findOne({ userId });
+        return UserProfile.findOne({userId});
     }
 }
 

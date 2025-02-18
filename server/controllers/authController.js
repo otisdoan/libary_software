@@ -1,4 +1,6 @@
 const authService = require('../services/authService');
+const jwt = require('jsonwebtoken');
+const userRepository = require('../repositories/userRepository');
 
 class AuthController {
     // Register new user
@@ -113,7 +115,82 @@ class AuthController {
             res.status(400).json({ message: error.message });
         }
     }
-    
+    async updateUserRole(req, res) {
+        try {
+            const { id } = req.params;
+            const { role } = req.body;
+            const result = await authService.updateUserRole(id, role);
+            res.json(result);
+        } catch (error) {
+            res.status(400).json({ message: error.message });
+        }
+    }
+    async updateUserStatus(req, res) {
+        try {
+            const { id } = req.params;
+            const { status } = req.body;
+            const result = await authService.updateUserStatus(id, status);
+            res.json(result);
+        } catch (error) {
+            res.status(400).json({ message: error.message });
+        }
+    }
+    async refreshAccessToken(req, res) {
+        try {
+            const { accessToken } = req.body;
+
+            if (!accessToken) {
+                return res.status(400).json({ message: 'AccessToken token is required' });
+            }
+
+            const tokens = await authService.refreshAccessToken(accessToken);
+
+            res.status(200).json(tokens);
+
+        } catch (error) {
+            res.status(401).json({
+                message: error.message || 'Error refreshing access token'
+            });
+        }
+    }
+    async googleLogin(req, res) {
+        try {
+            const user = req.user;
+
+            const accessToken = jwt.sign(
+                { userId: user.id },
+                process.env.JWT_SECRET,
+                { expiresIn: process.env.JWT_ACCESS_EXPIRE_TIME }
+            );
+
+            const refreshToken = jwt.sign(
+                { userId: user.id },
+                process.env.JWT_REFRESH_SECRET,
+                { expiresIn: process.env.JWT_REFRESH_EXPIRE_TIME }
+            );
+
+            // Save tokens to the database
+            await userRepository.saveToken({
+                userId: user.id,
+                accessToken,
+                refreshToken,
+            });
+
+            res.json({
+                user: {
+                    id: user.id,
+                    email: user.email,
+                    role: user.role || 'user',
+                },
+                tokens: {
+                    accessToken,
+                    refreshToken,
+                },
+            });
+        } catch (error) {
+            res.status(500).json({ message: `Google Login Error: ${error.message}` });
+        }
+    }
 }
 
 module.exports = new AuthController();

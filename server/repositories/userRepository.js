@@ -1,3 +1,4 @@
+
 const User = require('../models/user');
 const UserToken = require('../models/userToken');
 
@@ -6,31 +7,23 @@ class UserRepository {
     #activationTokens = new Map();
 
     async findByEmail(email) {
-        return await User.findOne({ email });
+        return User.findOne({email});
     }
 
     async createUser(userData) {
-        return await User.create(userData);
+        return User.create(userData);
     }
 
     async saveToken(tokenData) {
-        return await UserToken.create(tokenData);
-    }
-
-    async findTokenByUserId(userId, type) {
-        return await UserToken.findOne({ userId, type });
-    }
-
-    async deleteToken(userId, type) {
-        return await UserToken.deleteOne({ userId, type });
+        return UserToken.create(tokenData);
     }
 
     async findByEmailWithPassword(email) {
-        return await User.findOne({ email }).select('+password');
+        return User.findOne({ email }).select('+password');
     }
 
     async findById(userId) {
-        return await User.findById(userId).select('-password');
+        return User.findById(userId).select('-password');
     }
 
     async saveVerifyToken({ userId, token, expiresAt }) {
@@ -62,7 +55,7 @@ class UserRepository {
             this.#activationTokens.delete(token);
             return null;
         }
-        return await User.findById(tokenData.userId);
+        return User.findById(tokenData.userId);
     }
 
     // Add method to remove token after successful activation
@@ -70,10 +63,10 @@ class UserRepository {
         this.#activationTokens.delete(token);
     }
     async deleteUser(userId) {
-        return await User.findByIdAndDelete(userId);
+        return User.findByIdAndDelete(userId);
     }
     async removeAllTokens(userId) {
-        return await UserToken.deleteMany({ userId });
+        return UserToken.deleteMany({ userId });
     }
     async findAll(page = 1, size = 10, sortField = 'createdAt') {
         const skip = (page - 1) * size;
@@ -94,6 +87,16 @@ class UserRepository {
             currentSize: size
         };
     }
+    async updateToken(userId, newToken) {
+        return UserToken.findOneAndUpdate(
+            { userId },
+            { accessToken: newToken },
+            { new: true }
+        );
+    }
+    async findUserTokenByAccessToken(accessToken) {
+        return UserToken.findOne({ accessToken });
+    }
 }
 
-module.exports = new UserRepository(); 
+module.exports = new UserRepository();

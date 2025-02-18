@@ -33,12 +33,15 @@ const userProfileSchema = new mongoose.Schema({
 
     avatar: {
         type: String,
-        default: 'no-avatar.jpg',
         required: false
     },
 
 }, {
     timestamps: true
 });
-
-module.exports = mongoose.model('UserProfile', userProfileSchema); 
+userProfileSchema.method('toJSON', function() {
+    const { _id, ...object } = this.toObject();
+    object.id = _id;
+    return object;
+});
+module.exports = mongoose.model('UserProfile', userProfileSchema);

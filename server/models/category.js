@@ -14,7 +14,11 @@ const categorySchema = new mongoose.Schema({
 }, {
     timestamps: true 
 });
-
+categorySchema.method('toJSON', function() {
+    const { _id, ...object } = this.toObject();
+    object.id = _id;
+    return object;
+});
 const Category = mongoose.model('Category', categorySchema);
 
 module.exports = Category; 

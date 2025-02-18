@@ -4,20 +4,64 @@ import { authApi } from '../../api/authApi';
 
 function UserAdmin() {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [user, setUser] = useState({});
-    const showModal = () => {
+    const [users, setUsers] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalUsers, setTotalUsers] = useState(0);
+    const [pageSize, setPageSize] = useState(3);
+    const [emailCurrent, setEmailCurrent] = useState('');
+    const [roleCurrent, setRoleCurrent] = useState('');
+    const [statusCurrent, setStatusCurrent] = useState('');
+
+    const showModal = (email, role, status) => {
+        setRoleCurrent(role);
+        setStatusCurrent(status);
+        setEmailCurrent(email);
         setIsModalOpen(true);
     };
-    const handleOk = () => {
+    const handleOk = async (id, role) => {
+        console.log(role);
+        try {
+            const result = await authApi.updateRoleUser(id, role);
+            console.log(result);
+            fetchApi(currentPage);
+        } catch (error) {
+            console.log(error)
+        }
         setIsModalOpen(false);
     };
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+    const handleChangeRole = (value) => {
+        setRoleCurrent(value);
+    }
+    const handleChangeStatus = (value) => {
+        setStatusCurrent(value);
+    }
+    const fetchApi = async (page) => {
+        try {
+            const userList = await authApi.getAllUser(page, pageSize, 'email');
+            console.log(userList);
+            setUsers(userList.data);
+            setTotalUsers(userList.totalElements);
+            setCurrentPage(userList.currentPage);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    useEffect(() => {
+        fetchApi(currentPage);
+    }, [currentPage]);
+
+    const handlePageChange = (page) => {
+        setCurrentPage(page);
+    };
+
     const columns = [
         {
             title: 'ID',
-            dataIndex: 'ID',
+            dataIndex: 'id',
         },
         {
             title: 'Email',
@@ -42,32 +86,32 @@ function UserAdmin() {
         {
             title: 'Thao tác',
             dataIndex: 'action',
-            render: (action) => (
+            render: (_, record) => (
                 <div className='flex gap-x-3'>
                     <div>
-                        <Button type='default'>{action[1]}</Button>
+                        <Button type='default'>Delete</Button>
                     </div>
                     <div className=''>
-                        <Button onClick={showModal}>
-                            {action[0]}
+                        <Button onClick={() => showModal(record.email, record.role, record.status)}>
+                            Update
                         </Button>
-                        <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText='Update'>
+                        <Modal open={isModalOpen} onOk={() => handleOk(record.id, roleCurrent)} onCancel={handleCancel} okText='Update'>
                             <div className='flex flex-col gap-y-4'>
                                 <h1 className='text-center text-[1.4rem]'>User informations</h1>
-                                <span>User: </span>
-                                <span>Email: </span>
+                                <span>Email: {emailCurrent}</span>
                                 <div className='flex flex-col'>
                                     <span>Role</span>
                                     <Select
-                                        defaultValue={'User'}
+                                        value={roleCurrent}
+                                        onChange={handleChangeRole}
                                         options={[
                                             {
-                                                value: 'User',
-                                                label: 'User'
+                                                value: 'user',
+                                                label: 'user'
                                             },
                                             {
-                                                value: 'Admin',
-                                                label: 'Admin'
+                                                value: 'admin',
+                                                label: 'admin'
                                             }
                                         ]}
                                     />
@@ -75,7 +119,8 @@ function UserAdmin() {
                                 <div className='flex flex-col mb-[50px]'>
                                     <span>Status</span>
                                     <Select
-                                        defaultValue={'Active'}
+                                        onChange={handleChangeStatus}
+                                        value={statusCurrent}
                                         options={[
                                             {
                                                 value: 'Active',
@@ -89,46 +134,14 @@ function UserAdmin() {
                                     />
                                 </div>
                             </div>
-
                         </Modal>
                     </div>
                 </div>
             )
         },
-    ]
-    const data = [
-        {
-            key: '1',
-            ID: '01',
-            email: 'ledoanhieu12a6@gmail.com',
-            phone: '0344258554',
-            role: 'Admin',
-            status: 'active',
-            action: ['Update', 'Delete']
-        },
-        {
-            key: '2',
-            ID: '01',
-            email: 'ledoanhieu12a6@gmail.com',
-            phone: '0344258554',
-            role: 'Admin',
-            status: 'active',
-            action: ['Update', 'Delete']
-        },
+    ];
 
-    ]
-    useEffect(() => {
-        const fetchApi = async () => {
-            try {
-                const userList = await authApi.getAllUser(1, 10, 'email');
-                console.log(userList);
-                setUser(userList);
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        fetchApi();
-    }, [])
+
     return (
         <>
             <div className="px-[20px] py-[50px]">
@@ -158,13 +171,15 @@ function UserAdmin() {
                     </div>
                 </div>
                 <div className='mt-[30px] mb-[40px]'>
-                    <Table columns={columns} dataSource={data} pagination={false} />
+                    <Table columns={columns} dataSource={users} pagination={false} />
                 </div>
                 <div className='flex items-center justify-center'>
-                    <Pagination defaultCurrent={1} total={50} />
+                    <Pagination current={currentPage} total={totalUsers} pageSize={pageSize}
+                        onChange={handlePageChange} />
                 </div>
             </div>
         </>
-    )
+    );
 }
+
 export default UserAdmin;

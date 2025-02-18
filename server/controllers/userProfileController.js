@@ -2,10 +2,21 @@ const UserProfileService = require('../services/userProfileService');
 
 class UserProfileController {
     async updateUserProfile(req, res) {
-        const userProfile = await UserProfileService.updateUserProfile(req.params.userId, req.body);
-        res.status(200).json(userProfile);
+        try {
+            const userProfileData = req.body;
+    
+            // Check if the request contains an avatar image
+            if (req.file) {
+                userProfileData.avatar = req.file.buffer.toString('base64'); // Chuyển thành base64
+            }
+    
+            const userProfile = await UserProfileService.updateUserProfile(req.params.userId, userProfileData);
+            res.status(200).json(userProfile);
+        } catch (error) {
+            res.status(400).json({ message: error.message });
+        }
     }
-
+    
     async getUserProfileByUserId(req, res) {
         const userProfile = await UserProfileService.getUserProfileByUserId(req.params.userId);
         if (!userProfile) {
@@ -15,4 +26,4 @@ class UserProfileController {
     }
 }
 
-module.exports = new UserProfileController(); 
+module.exports = new UserProfileController();

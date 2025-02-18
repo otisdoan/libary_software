@@ -43,7 +43,7 @@ function LayoutAdmin() {
     },
     {
       key: 'the-loai-sach',
-      label: 'Quản lý thể loại sách',
+      label: <Link to='/admin/category'>Quản lý thể loại sách</Link>,
       icon: <BiCategory />
     }
   ]
@@ -65,6 +65,7 @@ function LayoutAdmin() {
         <Layout>
           <Header
             className='bg-white p-0 flex justify-between items-center'
+            
           >
             <Button
               type="text"

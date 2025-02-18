@@ -7,7 +7,7 @@ class AuthService {
         return jwt.sign(
             { userId },
             process.env.JWT_SECRET,
-            { expiresIn: '15m' }
+            { expiresIn: process.env.JWT_ACCESS_EXPIRE_TIME }
         );
     }
 
@@ -15,7 +15,7 @@ class AuthService {
         return jwt.sign(
             { userId },
             process.env.JWT_REFRESH_SECRET,
-            { expiresIn: '1d' }
+            { expiresIn: process.env.JWT_REFRESH_EXPIRE_TIME}
         );
     }
 
@@ -309,6 +309,67 @@ class AuthService {
     async getAllUsers(page, size, sortField) {
         return await userRepository.findAll(page, size, sortField);
     }
+    
+    async updateUserRole(userId, role) {
+        const validRoles = ['user', 'admin'];
+        if (!validRoles.includes(role)) {
+            throw new Error('Invalid role');
+        }
+
+        const user = await userRepository.findById(userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        user.role = role;
+        await user.save();
+
+        return { message: 'User role updated successfully' };
+    }
+    async updateUserStatus(userId, status) {
+        const validStatus = ['active', 'inactive', 'deleted'];
+        if (!validStatus.includes(status)) {
+            throw new Error('Invalid status');
+        }
+
+        const user = await userRepository.findById(userId);
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        user.status = status;
+        await user.save();
+
+        return { message: 'User status updated successfully' };
+    }
+    async refreshAccessToken(accessToken) {
+        try {
+            const storedToken = await userRepository.findUserTokenByAccessToken(accessToken);
+
+            if (!storedToken || !storedToken.refreshToken) {
+                throw new Error('Refresh token not found or is invalid');
+            }
+
+            const decoded = jwt.verify(storedToken.refreshToken, process.env.JWT_REFRESH_SECRET);
+
+            if (!decoded) {
+                throw new Error('Refresh token is invalid or expired');
+            }
+
+            const userId = decoded.userId;
+
+            const newAccessToken = this.#generateAccessToken(userId);
+
+            await userRepository.updateToken(userId,newAccessToken);
+
+            return {
+                accessToken: newAccessToken
+            };
+        } catch (error) {
+            console.error('Error refreshing access token:', error.message);
+            throw new Error('Unable to refresh access token');
+        }
+    }
 }
 
-module.exports = new AuthService(); 
+module.exports = new AuthService();
