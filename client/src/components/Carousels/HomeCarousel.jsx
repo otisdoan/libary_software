@@ -9,7 +9,7 @@ import p7 from "../../assets/images/Fahasa_Onine_392x156.webp"
 function HomeCarousel() {
     return (
         <>
-            <div className="flex items-center justify-center gap-x-1 mt-[50px]">
+            <div className="flex items-center justify-center gap-x-1">
                 <div className="w-[70%] h-full">
                     <Carousel arrows infinite={true} autoplay >
                         <div>

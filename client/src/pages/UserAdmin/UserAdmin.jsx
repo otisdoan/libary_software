@@ -11,23 +11,26 @@ function UserAdmin() {
     const [emailCurrent, setEmailCurrent] = useState('');
     const [roleCurrent, setRoleCurrent] = useState('');
     const [statusCurrent, setStatusCurrent] = useState('');
+    const [userIdCurrent, setUserIdCurrent] = useState(null);
 
-    const showModal = (email, role, status) => {
+    const showModal = (id,email, role, status) => {
+        setUserIdCurrent(id);
         setRoleCurrent(role);
         setStatusCurrent(status);
         setEmailCurrent(email);
         setIsModalOpen(true);
     };
-    const handleOk = async (id, role) => {
-        console.log(role);
+    const handleOk = async () => {
         try {
-            const result = await authApi.updateRoleUser(id, role);
-            console.log(result);
+            const resultRole = await authApi.updateRoleUser(userIdCurrent, roleCurrent);
+            const resultStatus = await authApi.updateStatusUser(userIdCurrent, statusCurrent);
+            console.log(resultRole);
+            console.log(resultStatus);
+            setIsModalOpen(false);
             fetchApi(currentPage);
         } catch (error) {
             console.log(error)
         }
-        setIsModalOpen(false);
     };
     const handleCancel = () => {
         setIsModalOpen(false);
@@ -57,6 +60,9 @@ function UserAdmin() {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
+    const handleDelete = () => {
+        
+    }
 
     const columns = [
         {
@@ -88,14 +94,11 @@ function UserAdmin() {
             dataIndex: 'action',
             render: (_, record) => (
                 <div className='flex gap-x-3'>
-                    <div>
-                        <Button type='default'>Delete</Button>
-                    </div>
                     <div className=''>
-                        <Button onClick={() => showModal(record.email, record.role, record.status)}>
+                        <Button  type='primary'  onClick={() => showModal(record.id, record.email, record.role, record.status)}>
                             Update
                         </Button>
-                        <Modal open={isModalOpen} onOk={() => handleOk(record.id, roleCurrent)} onCancel={handleCancel} okText='Update'>
+                        <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText='Update'>
                             <div className='flex flex-col gap-y-4'>
                                 <h1 className='text-center text-[1.4rem]'>User informations</h1>
                                 <span>Email: {emailCurrent}</span>
@@ -123,12 +126,12 @@ function UserAdmin() {
                                         value={statusCurrent}
                                         options={[
                                             {
-                                                value: 'Active',
-                                                label: 'Active'
+                                                value: 'active',
+                                                label: 'active'
                                             },
                                             {
-                                                value: 'Inactive',
-                                                label: 'Inactive'
+                                                value: 'deleted',
+                                                label: 'deleted'
                                             }
                                         ]}
                                     />

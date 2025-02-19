@@ -46,10 +46,10 @@ function CategoryAdmin() {
             render: (_, record) => (
                 <div className='flex gap-x-3'>
                     <div>
-                        <Button type='default' onClick={() => handleDelete(record.id)}>Delete</Button>
+                        <Button type='primary' danger onClick={() => handleDelete(record.id)}>Delete</Button>
                     </div>
                     <div className=''>
-                        <Button onClick={() => showModal(record.name)}>
+                        <Button type='primary' onClick={() => showModal(record.name)}>
                             Update
                         </Button>
                         <Modal open={isModalOpen} onOk={() => handleOk(record.id, currentCategory)} onCancel={handleCancel} okText='Update'>

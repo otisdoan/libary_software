@@ -34,6 +34,10 @@ export const authApi = {
   updateRoleUser: async (id, role) => {
     const response = await instance.put(`/api/auth/assign-role/${id}`, {role})
     return response.data;
+  },
+  updateStatusUser: async (id, status) => {
+    const response = await instance.put(`/api/auth/update-user-status/${id}`, {status})
+    return response.data;
   }
 
 };
