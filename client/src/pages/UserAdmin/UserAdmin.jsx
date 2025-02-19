@@ -1,4 +1,4 @@
-import { Select, Input, Table, Tag, Pagination, Modal, Button } from 'antd';
+import { Select, Input, Table, Tag, Pagination, Modal, Button, Alert } from 'antd';
 import { useEffect, useState } from 'react';
 import { authApi } from '../../api/authApi';
 
@@ -12,8 +12,9 @@ function UserAdmin() {
     const [roleCurrent, setRoleCurrent] = useState('');
     const [statusCurrent, setStatusCurrent] = useState('');
     const [userIdCurrent, setUserIdCurrent] = useState(null);
+    const [showAlert, setShowAlert] = useState(false);
 
-    const showModal = (id,email, role, status) => {
+    const showModal = (id, email, role, status) => {
         setUserIdCurrent(id);
         setRoleCurrent(role);
         setStatusCurrent(status);
@@ -24,10 +25,14 @@ function UserAdmin() {
         try {
             const resultRole = await authApi.updateRoleUser(userIdCurrent, roleCurrent);
             const resultStatus = await authApi.updateStatusUser(userIdCurrent, statusCurrent);
-            console.log(resultRole);
-            console.log(resultStatus);
-            setIsModalOpen(false);
-            fetchApi(currentPage);
+            if (resultRole || resultStatus ) {
+                setShowAlert(true);
+                setIsModalOpen(false);
+                fetchApi(currentPage);
+            }
+            setTimeout(() => {
+                setShowAlert(false);
+            }, 1500)
         } catch (error) {
             console.log(error)
         }
@@ -61,7 +66,7 @@ function UserAdmin() {
         setCurrentPage(page);
     };
     const handleDelete = () => {
-        
+
     }
 
     const columns = [
@@ -95,7 +100,7 @@ function UserAdmin() {
             render: (_, record) => (
                 <div className='flex gap-x-3'>
                     <div className=''>
-                        <Button  type='primary'  onClick={() => showModal(record.id, record.email, record.role, record.status)}>
+                        <Button type='primary' onClick={() => showModal(record.id, record.email, record.role, record.status)}>
                             Update
                         </Button>
                         <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText='Update'>
@@ -147,6 +152,11 @@ function UserAdmin() {
 
     return (
         <>
+            <div className="w-full flex items-center justify-center mt-[50px] ">
+                {showAlert && (
+                    <Alert message="Cập nhập thành công" type="success" showIcon closable className="w-[250px]" />
+                )}
+            </div>
             <div className="px-[20px] py-[50px]">
                 <h1 className="text-[1.2rem] font-bold mb-[20px]">Quản lý người dùng</h1>
                 <div className='flex items-center justify-between'>

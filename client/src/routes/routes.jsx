@@ -12,6 +12,7 @@ import BookAdmin from "../pages/BookAdmin/BookAdmin";
 import CategoryAdmin from "../pages/CategoryAdmin/CategoryAdmin";
 import AddCategory from "../pages/AddCategory/AddCategory";
 import LayoutDefault from "../pages/LayoutDefault/LayoutDefault";
+import Notifications from "../pages/Notifications/Notifications";
 
 export const routes = [
 
@@ -47,6 +48,10 @@ export const routes = [
                 path: '/profile',
                 element: <UserProfile />
             },
+            {
+                path: '/notifications',
+                element: <Notifications />
+            }
         ]
     },
     {

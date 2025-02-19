@@ -36,12 +36,16 @@ function Books() {
                             />
                         }
                         actions={[
-                            <Link to='#' key={index}>Borrow</Link>
+                            <Link to='#' key={index} style={{ color: 'red' }} className="hover:font-bold">Borrow book</Link>
                         ]}
                     >
                         <Meta
                             title={element.title}
-                            description={`Total book: ${element.totalBook}`}
+                            description={
+                                <>
+                                    Total book: <span style={{ color: 'red' }}>{element.totalBook}</span>
+                                </>
+                            }
                         />
                     </Card>
                 ))}

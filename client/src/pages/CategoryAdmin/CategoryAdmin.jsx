@@ -1,4 +1,4 @@
-import { Select, Input, Table, Pagination, Modal, Button } from 'antd';
+import { Select, Input, Table, Pagination, Modal, Button, Alert } from 'antd';
 import { useEffect, useState } from 'react';
 import { categoryApi } from '../../api/categoryApi';
 import { Link, Outlet } from 'react-router-dom';
@@ -9,20 +9,28 @@ function CategoryAdmin() {
     const [categories, setCategories] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalCategory, setTotalCategory] = useState(0);
-    const [pageSize, setPageSize] = useState(3);
+    const [pageSize, setPageSize] = useState(5);
     const [currentCategory, setCurrentCategory] = useState();
+    const [idCategoryCurrent, setIdCategoryCurrent] = useState('');
+    const [showAlert, setShowAlert] = useState(false);
 
-    const showModal = (name) => {
+    const showModal = (id, name) => {
+        setIdCategoryCurrent(id);
         setCurrentCategory(name);
         setIsModalOpen(true);
 
     };
-    const handleOk = async (id, name) => {
+    const handleOk = async () => {
         try {
-            const result = await categoryApi.updateCategory(id, { name });
-            fetchApi(currentPage);
-            console.log(result)
-            setIsModalOpen(false);
+            const result = await categoryApi.updateCategory(idCategoryCurrent, { name: currentCategory });
+            if (result) {
+                setShowAlert(true);
+                fetchApi(currentPage);
+                setIsModalOpen(false);
+            }
+            setTimeout(() => {
+                setShowAlert(false);
+            }, 1500)
         } catch (error) {
             console.log(error)
         }
@@ -49,10 +57,10 @@ function CategoryAdmin() {
                         <Button type='primary' danger onClick={() => handleDelete(record.id)}>Delete</Button>
                     </div>
                     <div className=''>
-                        <Button type='primary' onClick={() => showModal(record.name)}>
+                        <Button type='primary' onClick={() => showModal(record.id, record.name)}>
                             Update
                         </Button>
-                        <Modal open={isModalOpen} onOk={() => handleOk(record.id, currentCategory)} onCancel={handleCancel} okText='Update'>
+                        <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText='Update'>
                             <div className='flex flex-col gap-y-4'>
                                 <h1 className='text-center text-[1.4rem]'>Update Category</h1>
                                 <div>
@@ -106,6 +114,11 @@ function CategoryAdmin() {
     }
     return (
         <>
+            <div className="w-full flex items-center justify-center mt-[50px] ">
+                {showAlert && (
+                    <Alert message="Cập nhập thành công" type="success" showIcon closable className="w-[250px]" />
+                )}
+            </div>
             <div className="px-[20px] py-[50px]">
                 <h1 className="text-[1.2rem] font-bold mb-[20px]">Quản lý thể loại sách</h1>
                 <div className='flex items-center justify-between'>

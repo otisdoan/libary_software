@@ -88,7 +88,7 @@ function Header() {
   ];
   return (
     <>
-      <div className='sticky top-0 z-[1] w-full flex  bg-[#f7462f] text-white pb-[25px]'>
+      <div className='sticky top-0 z-[1] w-full flex bg-[#FF4500]  text-white pb-[25px]'>
         <div className="container mx-auto px-[150px] w-[100%]">
           <div className="flex items-center justify-between py-[5px] mb-[10px]">
             <div className="flex items-center justify-center">
@@ -111,7 +111,7 @@ function Header() {
                           <span>Thông báo</span>
                         </div>
                         <div>
-                          <Link to='#' className='text-blue-500'>Xem thêm</Link>
+                          <Link to='/notifications' className='text-blue-500'>Xem thêm</Link>
                         </div>
                       </div>
                       <div className='rounded-none'>
@@ -168,9 +168,13 @@ function Header() {
             </div>
           </div>
           <div className="flex items-center justify-between">
-            <div className="flex items-center justify-center w-0.5/3">
-              <img src={logo} alt="logo" className="w-[5rem]" />
-              <span className="text-white text-[2rem] font-bold ml-[0.4rem]">HOKO</span>
+            <div>
+              <Link to='/'>
+                <div className="flex items-center justify-center w-0.5/3">
+                  <img src={logo} alt="logo" className="w-[5rem]" />
+                  <span className="text-white text-[2rem] font-bold ml-[0.4rem]">HOKO</span>
+                </div>
+              </Link>
             </div>
             <div className="w-2/3">
               <Searchs />
