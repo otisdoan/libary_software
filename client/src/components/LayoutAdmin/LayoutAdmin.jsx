@@ -6,6 +6,7 @@ import { FaRegUser } from "react-icons/fa";
 import { MdAutorenew } from "react-icons/md";
 import { SiGooglecloudstorage } from "react-icons/si";
 import { BiCategory } from "react-icons/bi";
+import { FaUser } from "react-icons/fa";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -13,6 +14,7 @@ import {
 import { useState } from 'react';
 import AvatarAdmin from '../Avatar/AvatarAdmin';
 import { Link, Outlet } from 'react-router-dom';
+import { FaUserShield } from "react-icons/fa6";
 const { Header, Sider, Content, Footer } = Layout;
 function LayoutAdmin() {
   const [collapsed, setCollapsed] = useState(false);
@@ -28,7 +30,7 @@ function LayoutAdmin() {
     },
     {
       key: 'sach',
-      label: 'Quản lý sách',
+      label: <Link to='/admin/book'>Quản lý sách</Link>,
       icon: <FaBook />
     },
     {
@@ -38,13 +40,23 @@ function LayoutAdmin() {
     },
     {
       key: 'kho-sach',
-      label: 'Quản lý kho sách',
+      label: <Link to='#'>Quản lý kho sách</Link>,
       icon: <SiGooglecloudstorage />
     },
     {
       key: 'the-loai-sach',
       label: <Link to='/admin/category'>Quản lý thể loại sách</Link>,
       icon: <BiCategory />
+    },
+    {
+      key: 'tac-gia',
+      label: <Link to='/admin/author'>Quản lý tác giả</Link>,
+      icon: <FaUser />
+    },
+    {
+      key: 'nha-xuat-ban',
+      label: <Link to='/admin/publisher'>Quản lý nhà xuất bản</Link>,
+      icon: <FaUserShield />
     }
   ]
   return (

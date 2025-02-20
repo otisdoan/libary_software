@@ -7,7 +7,7 @@ function UserAdmin() {
     const [users, setUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalUsers, setTotalUsers] = useState(0);
-    const [pageSize, setPageSize] = useState(3);
+    const [pageSize, setPageSize] = useState(5);
     const [emailCurrent, setEmailCurrent] = useState('');
     const [roleCurrent, setRoleCurrent] = useState('');
     const [statusCurrent, setStatusCurrent] = useState('');

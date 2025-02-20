@@ -13,6 +13,9 @@ import CategoryAdmin from "../pages/CategoryAdmin/CategoryAdmin";
 import AddCategory from "../pages/AddCategory/AddCategory";
 import LayoutDefault from "../pages/LayoutDefault/LayoutDefault";
 import Notifications from "../pages/Notifications/Notifications";
+import AddBook from "../pages/AddBook/AddBook";
+import AuthorAdmin from "../pages/AuthorAdmin/AuthorAdmin";
+import PublishAdmin from "../pages/PublisherAdmin/PublishAdmin";
 
 export const routes = [
 
@@ -77,7 +80,23 @@ export const routes = [
             {
                 path: 'category/new-category',
                 element: <AddCategory />
-            }
+            },
+            {
+                path: 'book',
+                element: <BookAdmin />
+            },
+            {
+                path:'book/new-book',
+                element: <AddBook />
+            },
+            {
+                path: 'author',
+                element: <AuthorAdmin />
+            },
+            {
+                path: 'publisher',
+                element: <PublishAdmin />
+            },
         ]
     }
 ]

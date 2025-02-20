@@ -18,7 +18,7 @@ function Category() {
     }, [])
     return (
         <>
-            <div className="bg-white rounded-[10px] mt-[20px] py-[40px] flex gap-x-4 justify-around">
+            <div className="bg-white rounded-[10px] mt-[20px] py-[40px] flex gap-x-4 justify-around flex-wrap">
                 {category.map((element, index) => (
                     <Link to='#' key={index}>{element.name}</Link>
                 ))}

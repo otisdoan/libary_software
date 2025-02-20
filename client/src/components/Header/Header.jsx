@@ -5,7 +5,7 @@ import { Button, Tooltip, Dropdown, Avatar } from 'antd';
 import { BiSupport } from "react-icons/bi";
 import { MdOutlineLanguage } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
-import logo from "../../assets/images/logo.png"
+import logoWhite from "../../assets/images/logo_white.png"
 import Searchs from "../Search/Search";
 import { PiShoppingCartSimpleThin } from "react-icons/pi";
 import { Link, useNavigate } from "react-router-dom";
@@ -170,9 +170,9 @@ function Header() {
           <div className="flex items-center justify-between">
             <div>
               <Link to='/'>
-                <div className="flex items-center justify-center w-0.5/3">
-                  <img src={logo} alt="logo" className="w-[5rem]" />
-                  <span className="text-white text-[2rem] font-bold ml-[0.4rem]">HOKO</span>
+                <div className="flex items-center justify-center w-0.5/3 relative">
+                  <img src={logoWhite} alt="logo" className='w-[7rem]' />
+                  <span className="text-white text-[1.7rem] font-bold absolute top-[50%] translate-y-[-50%] left-[77%] ">HOKO</span>
                 </div>
               </Link>
             </div>

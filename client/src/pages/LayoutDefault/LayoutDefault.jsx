@@ -6,7 +6,7 @@ function LayoutDefault() {
     return (
         <>
             <Header />
-            <div className="px-[150px]">
+            <div className="px-[150px] border-[1px]">
                 <Outlet />
             </div>
             <Footer />

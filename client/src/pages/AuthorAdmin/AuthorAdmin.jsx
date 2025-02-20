@@ -2,28 +2,29 @@ import { Select, Input, Table, Pagination, Modal, Button, Alert } from 'antd';
 import { useEffect, useState } from 'react';
 import { categoryApi } from '../../api/categoryApi';
 import { Link, Outlet } from 'react-router-dom';
-import { bookApi } from '../../api/bookApi';
+import { publisherApi } from '../../api/publisherApi';
+import { authorApi } from '../../api/authorApi';
 
-function BookAdmin() {
+function AuthorAdmin() {
 
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [books, setBooks] = useState([]);
+    const [authors, setAuthors] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalBook, setTotalBook] = useState(0);
+    const [totalAuthors, setTotalAuthors] = useState(0);
     const [pageSize, setPageSize] = useState(5);
-    const [currentBook, setCurrentBook] = useState();
-    const [idBookCurrent, setIdBookCurrent] = useState('');
+    const [currentAuthors, setCurrentAuthors] = useState();
+    const [idAuthorCurrent, setIdAuthorCurrent] = useState('');
     const [showAlert, setShowAlert] = useState(false);
 
     const showModal = (id, name) => {
-        setIdBookCurrent(id);
-        setCurrentBook(name);
+        setIdAuthorCurrent(id);
+        setCurrentPage(name);
         setIsModalOpen(true);
 
     };
     const handleOk = async () => {
         try {
-            const result = await categoryApi.updateCategory(idBookCurrent, { name: currentBook });
+            const result = await categoryApi.updateCategory(idAuthorCurrent, { name: currentAuthors });
             if (result) {
                 setShowAlert(true);
                 fetchApi(currentPage);
@@ -46,18 +47,9 @@ function BookAdmin() {
             dataIndex: 'id'
         },
         {
-            title: 'Sản phẩm',
-            dataIndex: ['image', 'title'],
-            render: (_, record) => (
-                <div className='flex items-center gap-x-1 justify-start'>
-                    <img src={record.image}  />
-                    <span>{record.title}</span>
-                </div>
-            )
+            title: 'Name',
+            dataIndex: 'name',
         },
-        {
-            title: 'Kho'
-        }, 
         {
             title: 'Thao tác',
             dataIndex: 'action',
@@ -75,7 +67,7 @@ function BookAdmin() {
                                 <h1 className='text-center text-[1.4rem]'>Update Category</h1>
                                 <div>
                                     <span>Name</span>
-                                    <Input value={currentBook} onChange={(e) => setCurrentBook(e.target.value)} />
+                                    <Input value={currentAuthors} onChange={(e) => setCurrentAuthors(e.target.value)} />
                                 </div>
                             </div>
                         </Modal>
@@ -100,11 +92,11 @@ function BookAdmin() {
 
     const fetchApi = async (page) => {
         try {
-            const bookList = await bookApi.getAllBook(page, pageSize, 'id');
-            console.log(bookList);
-            setBooks(bookList.data);
-            setTotalBook(bookList.totalElements);
-            setCurrentPage(bookList.currentPage);
+            const categoryList = await authorApi.getAllAuthor(page, pageSize, 'name');
+            console.log(categoryList);
+            setAuthors(categoryList.data);
+            setTotalAuthors(categoryList.totalElements);
+            setCurrentPage(categoryList.currentPage);
         } catch (error) {
             console.log(error);
         }
@@ -130,7 +122,7 @@ function BookAdmin() {
                 )}
             </div>
             <div className="px-[20px] py-[50px]">
-                <h1 className="text-[1.2rem] font-bold mb-[20px]">Quản lý sách</h1>
+                <h1 className="text-[1.2rem] font-bold mb-[20px]">Quản lý thể loại sách</h1>
                 <div className='flex items-center justify-between'>
                     <Select
                         defaultValue={'Tất cả'}
@@ -156,13 +148,13 @@ function BookAdmin() {
                     </div>
                 </div>
                 <div className='mt-[10px]'>
-                    <Link to='/admin/book/new-book'><Button type="primary" onClick={handleCreate}>Create</Button></Link>
+                    <Link to='/admin/category/new-category'><Button type="primary" onClick={handleCreate}>Create</Button></Link>
                 </div>
                 <div className='mt-[30px] mb-[40px]'>
-                    <Table columns={columns} dataSource={books} pagination={false} />
+                    <Table columns={columns} dataSource={authors} pagination={false} />
                 </div>
                 <div className='flex items-center justify-center'>
-                    <Pagination current={currentPage} total={totalBook} pageSize={pageSize}
+                    <Pagination current={currentPage} total={totalAuthors} pageSize={pageSize}
                         onChange={handlePageChange} />
                 </div>
             </div>
@@ -171,4 +163,4 @@ function BookAdmin() {
     );
 }
 
-export default BookAdmin;
+export default AuthorAdmin;

@@ -16,7 +16,7 @@ function Login() {
         <>
             <div className="flex items-center justify-center my-[50px]">
                 <div className="w-[40%]">
-                    <div>
+                    <div className="bg-white">
                         <LoginForm />
                     </div>
                 </div>
