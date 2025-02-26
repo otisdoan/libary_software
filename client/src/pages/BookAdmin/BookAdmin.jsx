@@ -7,7 +7,7 @@ import AddBook from '../AddBook/AddBook';
 import UpdateBook from '../../components/UpdateBook/UpdateBook';
 
 function BookAdmin() {
-
+    const [bookUpdate, setBookUpdate] = useState({});
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [books, setBooks] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -28,10 +28,9 @@ function BookAdmin() {
         setIsModalOpen(true);
     };
     const handleOk = async () => {
-        console.log(currentBook);
+        console.log(bookUpdate);
         try {
-            const result = await bookApi.updateBook(idBookCurrent, {currentBook});
-            console.log(result);
+            const result = await bookApi.updateBook(idBookCurrent, bookUpdate);
             if (result) {
                 setShowAlert(true);
                 fetchApi(currentPage);
@@ -47,6 +46,9 @@ function BookAdmin() {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+    const handleBookUpdate = (updateDataBook) => {
+        setBookUpdate(updateDataBook);
+    }
 
     const columns = [
         {
@@ -80,7 +82,7 @@ function BookAdmin() {
                             Update
                         </Button>
                         <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText='Update'>
-                            <UpdateBook book={currentBook}/>
+                            <UpdateBook book={currentBook} onBookUpdate={handleBookUpdate}/>
                         </Modal>
                     </div>
                 </div>

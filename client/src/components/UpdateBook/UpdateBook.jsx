@@ -5,7 +5,7 @@ import { authorApi } from "../../api/authorApi";
 import { publisherApi } from "../../api/publisherApi";
 import { categoryApi } from "../../api/categoryApi";
 const { TextArea } = Input;
-function UpdateBook({ book }) {
+function UpdateBook({ book, onBookUpdate }) {
     const [currentPage, setCurrentPage] = useState();
     const [sizePage, setSizePage] = useState();
     const [author, setAuthor] = useState([]);
@@ -54,9 +54,8 @@ function UpdateBook({ book }) {
             })
         }
     }, [book, form])
-    const changedValue = (changedFields, allFields) => {
-        console.log(changedFields);
-        console.log(allFields);
+    const changedValue = (_, allFields) => {
+        onBookUpdate(allFields);
     }
     return (
         <>
