@@ -1,8 +1,6 @@
 import { Select, Input, Table, Pagination, Modal, Button, Alert } from 'antd';
 import { useEffect, useState } from 'react';
-import { categoryApi } from '../../api/categoryApi';
 import { Link, Outlet } from 'react-router-dom';
-import { publisherApi } from '../../api/publisherApi';
 import { authorApi } from '../../api/authorApi';
 
 function AuthorAdmin() {
@@ -18,13 +16,13 @@ function AuthorAdmin() {
 
     const showModal = (id, name) => {
         setIdAuthorCurrent(id);
-        setCurrentPage(name);
+        setCurrentAuthors(name);
         setIsModalOpen(true);
 
     };
     const handleOk = async () => {
         try {
-            const result = await categoryApi.updateCategory(idAuthorCurrent, { name: currentAuthors });
+            const result = await authorApi.updateAuthor(idAuthorCurrent, { name: currentAuthors });
             if (result) {
                 setShowAlert(true);
                 fetchApi(currentPage);
@@ -64,7 +62,7 @@ function AuthorAdmin() {
                         </Button>
                         <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText='Update'>
                             <div className='flex flex-col gap-y-4'>
-                                <h1 className='text-center text-[1.4rem]'>Update Category</h1>
+                                <h1 className='text-center text-[1.4rem]'>Update Author</h1>
                                 <div>
                                     <span>Name</span>
                                     <Input value={currentAuthors} onChange={(e) => setCurrentAuthors(e.target.value)} />
@@ -77,7 +75,7 @@ function AuthorAdmin() {
         },
     ];
     const fetchApiDelete = async (id) => {
-        const result = await categoryApi.deleteCategory(id);
+        const result = await authorApi.deleteAuthor(id);
         return result;
     }
     const handleDelete = async (id) => {
@@ -92,22 +90,22 @@ function AuthorAdmin() {
 
     const fetchApi = async (page) => {
         try {
-            const categoryList = await authorApi.getAllAuthor(page, pageSize, 'name');
+            const categoryList = await authorApi.getAllAuthor(page, pageSize, 'id');
             console.log(categoryList);
             setAuthors(categoryList.data);
-            setTotalAuthors(categoryList.totalElements);
-            setCurrentPage(categoryList.currentPage);
+            setTotalAuthors(categoryList.meta.total);
+            setCurrentPage(categoryList.meta.page);
         } catch (error) {
             console.log(error);
         }
     };
 
     useEffect(() => {
-
         fetchApi(currentPage);
     }, [currentPage]);
 
     const handlePageChange = (page) => {
+        console.log(page);
         setCurrentPage(page);
     };
 
@@ -122,7 +120,7 @@ function AuthorAdmin() {
                 )}
             </div>
             <div className="px-[20px] py-[50px]">
-                <h1 className="text-[1.2rem] font-bold mb-[20px]">Quản lý thể loại sách</h1>
+                <h1 className="text-[1.2rem] font-bold mb-[20px]">Quản lý tác giả</h1>
                 <div className='flex items-center justify-between'>
                     <Select
                         defaultValue={'Tất cả'}
@@ -148,7 +146,7 @@ function AuthorAdmin() {
                     </div>
                 </div>
                 <div className='mt-[10px]'>
-                    <Link to='/admin/category/new-category'><Button type="primary" onClick={handleCreate}>Create</Button></Link>
+                    <Link to='/admin/author/new-author'><Button type="primary" onClick={handleCreate}>Create</Button></Link>
                 </div>
                 <div className='mt-[30px] mb-[40px]'>
                     <Table columns={columns} dataSource={authors} pagination={false} />

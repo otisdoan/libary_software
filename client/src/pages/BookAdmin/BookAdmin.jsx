@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { categoryApi } from '../../api/categoryApi';
 import { Link, Outlet } from 'react-router-dom';
 import { bookApi } from '../../api/bookApi';
+import AddBook from '../AddBook/AddBook';
+import UpdateBook from '../../components/UpdateBook/UpdateBook';
 
 function BookAdmin() {
 
@@ -15,15 +17,21 @@ function BookAdmin() {
     const [idBookCurrent, setIdBookCurrent] = useState('');
     const [showAlert, setShowAlert] = useState(false);
 
-    const showModal = (id, name) => {
+    const showModal = async (id) => {
         setIdBookCurrent(id);
-        setCurrentBook(name);
+        try {
+            const result = await bookApi.getBookById(id);
+            setCurrentBook(result);
+        } catch (error) {
+            console.log(error)
+        }
         setIsModalOpen(true);
-
     };
     const handleOk = async () => {
+        console.log(currentBook);
         try {
-            const result = await categoryApi.updateCategory(idBookCurrent, { name: currentBook });
+            const result = await bookApi.updateBook(idBookCurrent, {currentBook});
+            console.log(result);
             if (result) {
                 setShowAlert(true);
                 fetchApi(currentPage);
@@ -49,15 +57,16 @@ function BookAdmin() {
             title: 'Sản phẩm',
             dataIndex: ['image', 'title'],
             render: (_, record) => (
-                <div className='flex items-center gap-x-1 justify-start'>
-                    <img src={record.image}  />
+                <div className='flex items-center gap-x-1 justify-start w-full'>
+                    <img src={record.image} className='w-[60px]' />
                     <span>{record.title}</span>
                 </div>
             )
         },
         {
-            title: 'Kho'
-        }, 
+            title: 'Kho',
+            dataIndex: 'totalBook'
+        },
         {
             title: 'Thao tác',
             dataIndex: 'action',
@@ -66,18 +75,12 @@ function BookAdmin() {
                     <div>
                         <Button type='primary' danger onClick={() => handleDelete(record.id)}>Delete</Button>
                     </div>
-                    <div className=''>
-                        <Button type='primary' onClick={() => showModal(record.id, record.name)}>
+                    <div>
+                        <Button type='primary' onClick={() => showModal(record.id)}>
                             Update
                         </Button>
                         <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText='Update'>
-                            <div className='flex flex-col gap-y-4'>
-                                <h1 className='text-center text-[1.4rem]'>Update Category</h1>
-                                <div>
-                                    <span>Name</span>
-                                    <Input value={currentBook} onChange={(e) => setCurrentBook(e.target.value)} />
-                                </div>
-                            </div>
+                            <UpdateBook book={currentBook}/>
                         </Modal>
                     </div>
                 </div>
@@ -85,7 +88,7 @@ function BookAdmin() {
         },
     ];
     const fetchApiDelete = async (id) => {
-        const result = await categoryApi.deleteCategory(id);
+        const result = await bookApi.deleteBook(id);
         return result;
     }
     const handleDelete = async (id) => {
@@ -101,7 +104,6 @@ function BookAdmin() {
     const fetchApi = async (page) => {
         try {
             const bookList = await bookApi.getAllBook(page, pageSize, 'id');
-            console.log(bookList);
             setBooks(bookList.data);
             setTotalBook(bookList.totalElements);
             setCurrentPage(bookList.currentPage);

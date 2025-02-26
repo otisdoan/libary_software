@@ -17,13 +17,13 @@ function PublishAdmin() {
 
     const showModal = (id, name) => {
         setIdPublisherCurrent(id);
-        setCurrentPage(name);
+        setCurrentPublishers(name);
         setIsModalOpen(true);
 
     };
     const handleOk = async () => {
         try {
-            const result = await categoryApi.updateCategory(idPublisherCurrent, { name: currentPublishers });
+            const result = await publisherApi.updatePublisher(idPublisherCurrent, { name: currentPublishers });
             if (result) {
                 setShowAlert(true);
                 fetchApi(currentPage);
@@ -63,7 +63,7 @@ function PublishAdmin() {
                         </Button>
                         <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText='Update'>
                             <div className='flex flex-col gap-y-4'>
-                                <h1 className='text-center text-[1.4rem]'>Update Category</h1>
+                                <h1 className='text-center text-[1.4rem]'>Update Publisher</h1>
                                 <div>
                                     <span>Name</span>
                                     <Input value={currentPublishers} onChange={(e) => setCurrentPublishers(e.target.value)} />
@@ -76,7 +76,7 @@ function PublishAdmin() {
         },
     ];
     const fetchApiDelete = async (id) => {
-        const result = await categoryApi.deleteCategory(id);
+        const result = await publisherApi.deletePublisher(id);
         return result;
     }
     const handleDelete = async (id) => {
@@ -94,8 +94,8 @@ function PublishAdmin() {
             const categoryList = await publisherApi.getAllPublisher(page, pageSize, 'name');
             console.log(categoryList);
             setPublishers(categoryList.data);
-            setTotalPublishers(categoryList.totalElements);
-            setCurrentPage(categoryList.currentPage);
+            setTotalPublishers(categoryList.meta.total);
+            setCurrentPage(categoryList.meta.page);
         } catch (error) {
             console.log(error);
         }
@@ -121,7 +121,7 @@ function PublishAdmin() {
                 )}
             </div>
             <div className="px-[20px] py-[50px]">
-                <h1 className="text-[1.2rem] font-bold mb-[20px]">Quản lý thể loại sách</h1>
+                <h1 className="text-[1.2rem] font-bold mb-[20px]">Quản lý nhà xuất bản</h1>
                 <div className='flex items-center justify-between'>
                     <Select
                         defaultValue={'Tất cả'}
@@ -147,7 +147,7 @@ function PublishAdmin() {
                     </div>
                 </div>
                 <div className='mt-[10px]'>
-                    <Link to='/admin/category/new-category'><Button type="primary" onClick={handleCreate}>Create</Button></Link>
+                    <Link to='/admin/publisher/new-publisher'><Button type="primary" onClick={handleCreate}>Create</Button></Link>
                 </div>
                 <div className='mt-[30px] mb-[40px]'>
                     <Table columns={columns} dataSource={publishers} pagination={false} />

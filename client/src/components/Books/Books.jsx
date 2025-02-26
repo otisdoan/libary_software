@@ -5,11 +5,11 @@ import { Link } from "react-router-dom";
 const { Meta } = Card;
 function Books() {
     const [pageCurrent, setPageCurrent] = useState(1);
-    const [pageSize, setPageSize] = useState(5);
+    const [pageSize, setPageSize] = useState(1000);
     const [books, setBooks] = useState([]);
     const fetchApi = async (page) => {
         try {
-            const result = await bookApi.getAllBook(page, pageSize, 'title');
+            const result = await bookApi.getAllBook(page, pageSize, 'id');
             console.log(result);
             setBooks(result.data);
             setPageCurrent(result.currentPage);
@@ -31,8 +31,7 @@ function Books() {
                         className="w-[250px]"
                         cover={
                             <img
-                                alt="example"
-                                src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                                src={element.image}
                             />
                         }
                         actions={[

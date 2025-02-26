@@ -1,27 +1,23 @@
 
-import { Button, Form, Input, message, Select, Upload } from "antd";
-import { authorApi } from "../../api/authorApi";
+import { Form, Input, Select } from "antd";
 import { useEffect, useState } from "react";
+import { authorApi } from "../../api/authorApi";
 import { publisherApi } from "../../api/publisherApi";
 import { categoryApi } from "../../api/categoryApi";
-import { UploadOutlined } from '@ant-design/icons';
-import { bookApi } from "../../api/bookApi";
 const { TextArea } = Input;
-function AddBook() {
-    const [title, setTitle] = useState('');
-    const [bookCurrent, setBookCurrent] = useState({});
-    const [currentPage, setCurrentPage] = useState(1);
-    const [sizePage, setSizePage] = useState(1e12);
+function UpdateBook({ book }) {
+    const [currentPage, setCurrentPage] = useState();
+    const [sizePage, setSizePage] = useState();
     const [author, setAuthor] = useState([]);
     const [publisher, setPublisher] = useState([]);
     const [category, setCategory] = useState([]);
     const optionsAuthor = [];
     const optionsPublishers = [];
     const optionsCategory = [];
-    const fetchApi = async (api, functionName, setName) => {
+    const fetchApi = async (api, functionName, set) => {
         try {
             const result = await api[functionName](currentPage, sizePage, 'name');
-            setName(result.data);
+            set(result.data);
         } catch (error) {
             console.log(error);
         }
@@ -43,28 +39,32 @@ function AddBook() {
         fetchApi(publisherApi, 'getAllPublisher', setPublisher);
         fetchApi(categoryApi, 'getAllCategories', setCategory);
     }, [currentPage])
-
-
-    const onFinish = async (value) => {
-        const book = {
-            ...value,
-            author: Array.isArray(value.author) ? value.author.join(', ') : "",
-            publisher: Array.isArray(value.publisher) ? value.publisher.join(', ') : "",
-            category: Array.isArray(value.category) ? value.category.join(', ') : ""
+    const [form] = Form.useForm();
+    useEffect(() => {
+        if (book) {
+            form.setFieldsValue({
+                title: book.title || '',
+                totalBook: book.totalBook || '',
+                description: book.description || '',
+                author: book.author || '',
+                categoryName: book.categoryName || '',
+                publisher: book.publisher || '',
+                isbn: book.isbn || '',
+                image: book.image || ''
+            })
         }
-        try {
-            const result = await bookApi.createBook(book);
-            console.log(result);
-        } catch (error) {
-            console.log(error);
-        }
+    }, [book, form])
+    const changedValue = (changedFields, allFields) => {
+        console.log(changedFields);
+        console.log(allFields);
     }
     return (
         <>
             <div className="flex flex-col gap-y-4 p-[50px]">
-                <h1 className="text-[1.4rem] font-bold">Add New Book</h1>
+                <h1 className="text-[1.4rem] font-bold">Update Book</h1>
                 <Form
-                    onFinish={onFinish}
+                    form={form}
+                    onValuesChange={changedValue}
                 >
                     <div className="flex items-center gap-x-4">
                         <Form.Item
@@ -79,10 +79,10 @@ function AddBook() {
                                 }
                             ]}
                             className="w-1/2"
-                    
+
                         >
-                            <Input placeholder="Title"/>
-                            
+                            <Input placeholder="Title" />
+
                         </Form.Item>
                         <Form.Item
                             name={'totalBook'}
@@ -200,19 +200,11 @@ function AddBook() {
                             }
                         ]}
                     >
-                        <Input placeholder="Link image"/>
+                        <Input placeholder="Link image" />
                     </Form.Item>
-                    <div className="flex items-center justify-between">
-                        <Form.Item>
-                            <Button>Cancle</Button>
-                        </Form.Item>
-                        <Form.Item>
-                            <Button type="primary" htmlType="submit">Save</Button>
-                        </Form.Item>
-                    </div>
                 </Form>
             </div>
         </>
     )
 }
-export default AddBook; 
+export default UpdateBook; 

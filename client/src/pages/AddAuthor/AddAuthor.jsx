@@ -1,20 +1,19 @@
 import { Alert, Button, Form, Input } from "antd"
 import { useNavigate } from "react-router-dom"
-import { categoryApi } from "../../api/categoryApi";
 import { useState } from "react";
+import { authorApi } from "../../api/authorApi";
 
-function AddCategory() {
+function AddAuthor() {
     const navigate = useNavigate();
     const [showAlert, setShowAlert] = useState(false);
     const [hidden, setHidden] = useState('hidden');
 
     const fetchApi = async (value) => {
-        const result = await categoryApi.createCategory(value);
+        const result = await authorApi.createAuthor(value);
         return result;
     }
 
     const onFinish = async (values) => {
-        console.log(values);
         try {
             const data = await fetchApi(values);
             console.log(data);
@@ -44,7 +43,7 @@ function AddCategory() {
                 )}
             </div>
             <div className="flex flex-col py-[120px] px-[400px]">
-                <h1 className="text-[1.2rem] text-center">Add new category</h1>
+                <h1 className="text-[1.2rem] text-center">Add new author</h1>
                 <Form
                     onFinish={onFinish}
                 >
@@ -62,14 +61,6 @@ function AddCategory() {
                             <Input placeholder="Enter new category" />
                         </div>
                     </Form.Item>
-                    <Form.Item
-                        name={'description'}
-                    >
-                        <div>
-                            <span>Desciption</span>
-                            <Input placeholder="Description" />
-                        </div>
-                    </Form.Item>
                     <Form.Item>
                         <div className="flex justify-between">
                             <Button htmlType="submit" type="primary">Save</Button>
@@ -81,4 +72,4 @@ function AddCategory() {
         </>
     )
 }
-export default AddCategory;
+export default AddAuthor;

@@ -16,6 +16,8 @@ import Notifications from "../pages/Notifications/Notifications";
 import AddBook from "../pages/AddBook/AddBook";
 import AuthorAdmin from "../pages/AuthorAdmin/AuthorAdmin";
 import PublishAdmin from "../pages/PublisherAdmin/PublishAdmin";
+import AddAuthor from "../pages/AddAuthor/AddAuthor";
+import AddPublisher from "../pages/AddPublisher/AddPublisher";
 
 export const routes = [
 
@@ -97,6 +99,14 @@ export const routes = [
                 path: 'publisher',
                 element: <PublishAdmin />
             },
+            {
+                path: 'author/new-author',
+                element: <AddAuthor />
+            },
+            {
+                path: 'publisher/new-publisher',
+                element: <AddPublisher />
+            }
         ]
     }
 ]

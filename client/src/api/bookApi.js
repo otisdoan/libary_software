@@ -7,4 +7,20 @@ export const bookApi = {
         });
         return response.data;
     },
+    createBook: async (data) => {
+        const response = await instance.post('/api/books/', data);
+        return response.data;
+    },
+    updateBook: async (id, data) => {
+        const response = await instance.put(`/api/books/${id}`, data);
+        return response.data;
+    },
+    deleteBook: async (id) => {
+        const response = await instance.delete(`/api/books/${id}`);
+        return response.data;
+    },
+    getBookById: async (id) => {
+        const response = await instance.get(`/api/books/${id}`);
+        return response.data;
+    }
 }
