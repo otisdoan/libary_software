@@ -68,15 +68,15 @@ class UserRepository {
     async removeAllTokens(userId) {
         return UserToken.deleteMany({ userId });
     }
-    async findAll(page = 1, size = 10, sortField = 'createdAt') {
+    async findAll(page = 1, size = 10, sortField = 'createdAt', searchText = '') {
         const skip = (page - 1) * size;
-        
+
         const [data, total] = await Promise.all([
-            User.find()
+            User.find({ email: new RegExp(searchText, 'i') })
                 .sort({ [sortField]: 1 })
                 .skip(skip)
                 .limit(size),
-            User.countDocuments()
+            User.countDocuments({ email: new RegExp(searchText, 'i') })
         ]);
 
         return {

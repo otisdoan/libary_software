@@ -22,7 +22,7 @@ export const authApi = {
     return response.data;
   },
   getAllUser: async (page, size, sortField) => {
-    const response = await instance.get('/api/auth/get-all-users', {
+    const response = await instance.get('/api/auth/', {
       params: { page, size, field: sortField } ,
     });
     return response.data;

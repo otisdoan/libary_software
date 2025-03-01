@@ -88,7 +88,7 @@ function Header() {
   ];
   return (
     <>
-      <div className='sticky top-0 z-[1] w-full flex bg-[#FF4500]  text-white pb-[25px]'>
+      <div className='sticky top-0 z-[999] w-full flex bg-[#FF4500]  text-white pb-[25px]'>
         <div className="container mx-auto px-[150px] w-[100%]">
           <div className="flex items-center justify-between py-[5px] mb-[10px]">
             <div className="flex items-center justify-center">

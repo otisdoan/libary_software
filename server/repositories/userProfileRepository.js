@@ -1,4 +1,4 @@
-var UserProfile = require('../models/userProfile');
+const UserProfile = require('../models/userProfile');
 
 class UserProfileRepository {
     async create(userProfileData) {

@@ -2,6 +2,7 @@ import { createContext, useState, useEffect } from 'react';
 
 export const UserContext = createContext();
 
+// eslint-disable-next-line react/prop-types
 export const UserProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [email, setEmail] = useState('');

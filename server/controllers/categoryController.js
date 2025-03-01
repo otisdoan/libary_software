@@ -39,15 +39,14 @@ class CategoryController {
 
     async getAllCategories(req, res) {
         try {
-            // Get and validate pagination parameters from query parameters
-            const page = Math.max(1, parseInt(req.query.page) || 1); 
+            const page = Math.max(1, parseInt(req.query.page) || 1);
+            const size = Math.min(100, Math.max(1, parseInt(req.query.size) || 10));
+            const sortField = ['createdAt', 'name', 'updatedAt'].includes(req.query.field)
+                ? req.query.field
+                : 'createdAt';
+            const searchText = req.query.searchText || '';
 
-            const size = Math.min(100, Math.max(1, parseInt(req.query.size) || 10)); 
-            const sortField = ['createdAt', 'name', 'updatedAt'].includes(req.query.field) 
-                ? req.query.field 
-                : 'createdAt'; 
-
-            const result = await categoryService.getAllCategories(page, size, sortField);
+            const result = await categoryService.getAllCategories(page, size, sortField, searchText);
             res.json(result);
         } catch (error) {
             res.status(400).json({ message: error.message });

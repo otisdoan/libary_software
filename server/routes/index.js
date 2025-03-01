@@ -8,7 +8,7 @@ const borrowRecordRoutes = require('./borrowrecordRoutes');
 const notificationRoutes = require('./notificationRoutes');
 const publisherRoutes = require('./publisherRoutes');
 const authorRoutes = require('./authorRoutes');
-
+const reviewRoutes = require('./reviewRoutes');
 router.use('/auth', authRoutes);
 router.use('/categories', categoryRoutes);
 router.use('/user-profile', userProfileRoutes);
@@ -17,5 +17,5 @@ router.use('/borrow-record', borrowRecordRoutes);
 router.use('/notifications', notificationRoutes);
 router.use('/publishers', publisherRoutes);
 router.use('/authors', authorRoutes);
-
+router.use('/review', reviewRoutes);
 module.exports = router; 

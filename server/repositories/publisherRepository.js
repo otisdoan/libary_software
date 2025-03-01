@@ -14,12 +14,16 @@ const publisherRepository = {
     delete: async (id) => {
         return Publisher.findByIdAndDelete(id);
     },
-    findAllPaginated: async (page, size, sortField) => {
+    findAllPaginated: async (page, size, sortField, searchText) => {
         const skip = (page - 1) * size;
-        const total = await Publisher.countDocuments();
+        const total = await Publisher.countDocuments({
+            name: new RegExp(searchText, 'i')
+        });
 
-        const publishers = await Publisher.find()
-            .sort({ [sortField]: 1 }) // 1 for ascending, -1 for descending
+        const publishers = await Publisher.find({
+            name: new RegExp(searchText, 'i')
+        })
+            .sort({ [sortField]: 1 })
             .skip(skip)
             .limit(size);
 
@@ -32,6 +36,9 @@ const publisherRepository = {
                 totalPages: Math.ceil(total / size),
             },
         };
+    },
+    findByName: async (name) => {
+        return Publisher.findOne({ name });
     },
 };
 

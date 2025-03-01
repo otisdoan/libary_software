@@ -18,15 +18,15 @@ class BookRepository {
     return Book.findByIdAndDelete(bookId);
   }
 
-  async findAll(page = 1, size = 10, sortField = 'createdAt') {
+  async findAll(page = 1, size = 10, sortField = 'createdAt', searchText = '') {
     const skip = (page - 1) * size;
 
     const [data, total] = await Promise.all([
-      Book.find()
-        .sort({ [sortField]: 1 })
-        .skip(skip)
-        .limit(size),
-      Book.countDocuments()
+      Book.find({ title: new RegExp(searchText, 'i') })
+          .sort({ [sortField]: 1 })
+          .skip(skip)
+          .limit(size),
+      Book.countDocuments({ title: new RegExp(searchText, 'i') })
     ]);
 
     return {
@@ -43,7 +43,7 @@ class BookRepository {
   }
 
   async findByTitle(title) {
-    return Book.find({title: new RegExp(title, 'i')});
+    return Book.findOne({ title: new RegExp(`^${title}$`, 'i') });
   }
 }
 

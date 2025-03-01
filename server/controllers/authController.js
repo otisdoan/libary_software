@@ -102,14 +102,14 @@ class AuthController {
     }
     async getAllUsers(req, res) {
         try {
-            const page = Math.max(1, parseInt(req.query.page) || 1); 
+            const page = Math.max(1, parseInt(req.query.page) || 1);
+            const size = Math.min(100, Math.max(1, parseInt(req.query.size) || 10));
+            const sortField = ['createdAt', 'email', 'updatedAt'].includes(req.query.field)
+                ? req.query.field
+                : 'createdAt';
+            const searchText = req.query.searchText || '';
 
-            const size = Math.min(100, Math.max(1, parseInt(req.query.size) || 10)); 
-            const sortField = ['createdAt', 'email', 'updatedAt'].includes(req.query.field) 
-                ? req.query.field 
-                : 'createdAt'; 
-
-            const result = await authService.getAllUsers(page, size, sortField);
+            const result = await authService.getAllUsers(page, size, sortField, searchText);
             res.json(result);
         } catch (error) {
             res.status(400).json({ message: error.message });

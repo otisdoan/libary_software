@@ -53,8 +53,8 @@ const notificationRepo = require('../repositories/notificationRepository');
         }
       }
 
-      async getUserNotifications(userId) {
-        return await notificationRepo.getUserNotifications(userId);
+      async getUserNotifications(userId, page = 1, size = 10) {
+        return await notificationRepo.getUserNotifications(userId, page, size);
       }
 
       async markNotificationAsRead(notificationId) {

@@ -1,8 +1,12 @@
 import { Button, DatePicker, Form, Input, Modal, Select } from "antd";
 import dayjs from 'dayjs';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useProfileApi } from "../../api/userProfileApi";
 
 function UserProfile() {
+    const userId = localStorage.getItem('userId');
+    const emailUser = localStorage.getItem('email');
+    const [userProfile, setUserProfile] = useState({});
     const onFinish = (e) => {
         console.log(e);
     }
@@ -16,6 +20,13 @@ function UserProfile() {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+    const fetchApi = async (id) => {
+        const result = await useProfileApi.getUserProfile(id);
+        setUserProfile(result);
+    }
+    useEffect(() => {
+        fetchApi(userId);
+    },[])
     return (
         <>
             <div className="flex flex-col gap-x-4 py-[100px] px-[200px]">
@@ -26,66 +37,42 @@ function UserProfile() {
                     <div className="flex gap-x-4 ">
                         <Form.Item
                             name={'fullname'}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Fullname is required!'
-                                }
-                            ]}
                             className="w-1/2"
                         >
                             <div>
                                 <span>Họ và tên</span>
-                                <Input placeholder="Chưa có thông tin" />
+                                <Input value={userProfile.fullName} disabled={true}/>
                             </div>
                         </Form.Item>
 
                         <Form.Item
                             name={'phone'}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Phone is required!'
-                                }
-                            ]}
                             className="w-1/2"
                         >
                             <div>
                                 <span>Số điện thoại</span>
-                                <Input placeholder="Chưa có thông tin" />
+                                <Input placeholder="Chưa có thông tin" disabled={true}/>
                             </div>
                         </Form.Item>
                     </div>
                     <div className="flex gap-x-4 ">
                         <Form.Item
                             name={'sex'}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Sex is required!'
-                                }
-                            ]}
                             className="w-1/2"
                         >
                             <div>
                                 <span>Giới tính</span>
-                                <Input placeholder="Chưa có thông tin" />
+                                <Input value={userProfile.gender} disabled={true}/>
                             </div>
                         </Form.Item>
 
                         <Form.Item
                             name={'phone'}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Birth is required!'
-                                }
-                            ]}
                             className="w-1/2"
                         >
                             <div>
                                 <span>Ngày sinh</span>
-                                <Input placeholder="Chưa có thông tin" />
+                                <Input placeholder="Chưa có thông tin" disabled={true}/>
                             </div>
                         </Form.Item>
                     </div>
@@ -96,23 +83,17 @@ function UserProfile() {
                         >
                             <div>
                                 <span>Email</span>
-                                <Input placeholder="Chưa có thông tin" disabled={true} />
+                                <Input value={emailUser} disabled={true} />
                             </div>
                         </Form.Item>
 
                         <Form.Item
                             name={'address'}
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Address is required!'
-                                }
-                            ]}
                             className="w-1/2"
                         >
                             <div>
                                 <span>Địa chỉ</span>
-                                <Input placeholder="Chưa có thông tin" />
+                                <Input placeholder="Chưa có thông tin" disabled={true}/>
                             </div>
                         </Form.Item>
                     </div>

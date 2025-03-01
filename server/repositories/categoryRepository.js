@@ -2,7 +2,7 @@ const Category = require('../models/category');
 
 class CategoryRepository {
     async create(categoryData) {
-        const existingCategory = await Category.findOne({ name: categoryData.name });
+        const existingCategory = await this.findByName(categoryData.name);
         if (existingCategory) {
             throw new Error('Category name already exists');
         }
@@ -11,19 +11,12 @@ class CategoryRepository {
 
     async update(id, categoryData) {
         if (categoryData.name) {
-            const existingCategory = await Category.findOne({
-                name: categoryData.name,
-                _id: { $ne: id }
-            });
-            if (existingCategory) {
+            const existingCategory = await this.findByName(categoryData.name);
+            if (existingCategory && existingCategory._id.toString() !== id) {
                 throw new Error('Category name already exists');
             }
         }
-        const category = await Category.findByIdAndUpdate(
-            id,
-            categoryData,
-            { new: true }
-        );
+        const category = await Category.findByIdAndUpdate(id, categoryData, {new: true});
         if (!category) {
             throw new Error('Category not found');
         }
@@ -46,15 +39,15 @@ class CategoryRepository {
         return category;
     }
 
-    async findAll(page = 1, size = 10, sortField = 'createdAt') {
+    async findAll(page = 1, size = 10, sortField = 'createdAt', searchText = '') {
         const skip = (page - 1) * size;
-        
+
         const [data, total] = await Promise.all([
-            Category.find()
+            Category.find({ name: new RegExp(searchText, 'i') })
                 .sort({ [sortField]: 1 })
                 .skip(skip)
                 .limit(size),
-            Category.countDocuments()
+            Category.countDocuments({ name: new RegExp(searchText, 'i') })
         ]);
 
         return {
@@ -65,6 +58,10 @@ class CategoryRepository {
             currentSize: size
         };
     }
+
+    async findByName(name) {
+        return await Category.findOne({name: new RegExp(`^${name}$`, 'i')});
+    }
 }
 
-module.exports = new CategoryRepository(); 
+module.exports = new CategoryRepository();

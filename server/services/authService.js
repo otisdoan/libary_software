@@ -306,8 +306,8 @@ class AuthService {
             throw error;
         }
     }
-    async getAllUsers(page, size, sortField) {
-        return await userRepository.findAll(page, size, sortField);
+    async getAllUsers(page, size, sortField, searchText) {
+        return await userRepository.findAll(page, size, sortField, searchText);
     }
     
     async updateUserRole(userId, role) {

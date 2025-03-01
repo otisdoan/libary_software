@@ -11,11 +11,12 @@ const authorController = {
     },
     getAllAuthors: async (req, res) => {
         try {
-            const page = Math.max(1, parseInt(req.query.page) || 1); // Default page is 1
-            const size = Math.min(100, Math.max(1, parseInt(req.query.size) || 10)); // Size is capped at 100. Default size is 10
-            const sortField = req.query.sortField || 'createdAt'; // Field to sort by. Default is createdAt
+            const page = Math.max(1, parseInt(req.query.page) || 1);
+            const size = Math.min(100, Math.max(1, parseInt(req.query.size) || 10));
+            const sortField = req.query.sortField || 'createdAt';
+            const searchText = req.query.searchText || '';
 
-            const result = await authorService.getAllAuthors(page, size, sortField);
+            const result = await authorService.getAllAuthors(page, size, sortField, searchText);
 
             res.json(result); // Return the paginated authors
         } catch (error) {

@@ -6,8 +6,20 @@ class NotificationRepository {
     return await notification.save();
   }
 
-  async getUserNotifications(userId) {
-    return Notification.find({userId}).sort({createdAt: -1});
+  async getUserNotifications(userId, page = 1, size = 10) {
+    const skip = (page - 1) * size;
+    const [data, total] = await Promise.all([
+      Notification.find({ userId }).sort({ createdAt: -1 }).skip(skip).limit(size),
+      Notification.countDocuments({ userId })
+    ]);
+
+    return {
+      data,
+      totalElements: total,
+      totalPages: Math.ceil(total / size),
+      currentPage: page,
+      currentSize: size
+    };
   }
 
   async markAsRead(notificationId) {
