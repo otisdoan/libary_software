@@ -6,8 +6,10 @@ import { publisherApi } from "../../api/publisherApi";
 import { categoryApi } from "../../api/categoryApi";
 import { UploadOutlined } from '@ant-design/icons';
 import { bookApi } from "../../api/bookApi";
+import { useNavigate } from "react-router-dom";
 const { TextArea } = Input;
 function AddBook() {
+    const navigate = useNavigate();
     const [title, setTitle] = useState('');
     const [bookCurrent, setBookCurrent] = useState({});
     const [currentPage, setCurrentPage] = useState(1);
@@ -58,6 +60,9 @@ function AddBook() {
         } catch (error) {
             console.log(error);
         }
+    }
+    const handleCancel = () => {
+        navigate(-1);
     }
     return (
         <>
@@ -204,7 +209,7 @@ function AddBook() {
                     </Form.Item>
                     <div className="flex items-center justify-between">
                         <Form.Item>
-                            <Button>Cancle</Button>
+                            <Button onClick={handleCancel}>Cancel</Button>
                         </Form.Item>
                         <Form.Item>
                             <Button type="primary" htmlType="submit">Save</Button>

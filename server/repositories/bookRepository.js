@@ -43,8 +43,8 @@ class BookRepository {
   }
 
   async findByTitle(title) {
-    return Book.findOne({ title: new RegExp(`^${title}$`, 'i') });
-  }
+    return Book.find({ title: { $regex: `^${title}`, $options: "i" } });
+  }  
 }
 
 module.exports = new BookRepository();

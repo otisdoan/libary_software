@@ -82,7 +82,7 @@ function BookAdmin() {
                             Update
                         </Button>
                         <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText='Update'>
-                            <UpdateBook book={currentBook} onBookUpdate={handleBookUpdate}/>
+                            <UpdateBook book={currentBook} onBookUpdate={handleBookUpdate} />
                         </Modal>
                     </div>
                 </div>
@@ -126,6 +126,21 @@ function BookAdmin() {
     const handleCreate = () => {
 
     }
+    const handleChange = async (e) => {
+        try {
+            const searchBook = [];
+            const result = await bookApi.searchBookByTitle(e.target.value);
+            if (result) {
+                searchBook.push(result);
+                console.log(searchBook);
+                setBooks(searchBook);
+            } else {
+                fetchApi(currentPage);
+            }
+        } catch (error) {
+            console.error("Lỗi khi tìm kiếm sách:", error);
+        }
+    };
     return (
         <>
             <div className="w-full flex items-center justify-center mt-[50px] ">
@@ -134,29 +149,10 @@ function BookAdmin() {
                 )}
             </div>
             <div className="px-[20px] py-[50px]">
-                <h1 className="text-[1.2rem] font-bold mb-[20px]">Quản lý sách</h1>
-                <div className='flex items-center justify-between'>
-                    <Select
-                        defaultValue={'Tất cả'}
-                        placeholder=""
-                        options={[
-                            {
-                                value: 'Tất cả',
-                                label: 'Tất cả',
-                            },
-                            {
-                                value: 'Admin',
-                                label: 'Admin',
-                            },
-                            {
-                                value: 'Người dùng',
-                                label: 'Người dùng',
-                            },
-                        ]}
-                        className='w-[120px]'
-                    />
+                <h1 className="text-[1.5rem] font-bold mb-[20px]">Quản lý sách</h1>
+                <div className='flex items-center justify-center'>
                     <div>
-                        <Input placeholder="Tìm kiếm người dùng theo email..." className='w-[300px] h-[33px]' />;
+                        <Input placeholder="Tìm kiếm sách theo title..." className='w-[300px] h-[33px]' onChange={handleChange} />
                     </div>
                 </div>
                 <div className='mt-[10px]'>

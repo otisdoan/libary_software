@@ -40,7 +40,7 @@ function Header() {
       key: '2',
       icon: <RiAdminLine />,
       label: (
-        <Link to="/admin">Admin</Link>
+        <Link to="/admin/user">Admin</Link>
       )
     },
     {

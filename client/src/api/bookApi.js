@@ -22,5 +22,17 @@ export const bookApi = {
     getBookById: async (id) => {
         const response = await instance.get(`/api/books/${id}`);
         return response.data;
-    }
+    },
+    searchBookByCategory: async (data) => {
+        const response = await instance.get('/api/books/search/category', {
+            "categories":`"${data}"`
+        });
+        return response.data;
+    },
+    searchBookByTitle: async (data) => {
+        const response = await instance.get('/api/books/search/title', 
+            { params: {title: data} }
+        )
+        return response.data;
+    } 
 }
