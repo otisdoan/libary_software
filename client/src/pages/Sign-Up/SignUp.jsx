@@ -14,10 +14,10 @@ function SignUp() {
     return (
         <>
             <div className="flex items-center justify-between my-[50px]">
-                <div className="w-[50%]">
-                    <img src={leftImage} className="h-[100vh]"/>
+                <div className="w-[55%]">
+                    <img src={leftImage} className="h-[600px] rounded-lg"/>
                 </div>
-                <div className="w-[50%] flex flex-col justify-">
+                <div className="w-[45%] flex flex-col bg-white p-[50px] rounded-lg">
                     <SignUpForm />
                 </div>
             </div>

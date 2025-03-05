@@ -8,7 +8,7 @@ import { SiZalo } from "react-icons/si";
 function Footer() {
   return (
     <>
-      <div className="contanier mx-auto px-[6rem] pt-[20px] pb-[50px] bg-white flex">
+      <div className="contanier mx-auto px-[150px] pt-[20px] pb-[50px] bg-white flex">
         <div className="flex flex-col justify-center items-start w-[40%] px-[10px] border-r-[1px] border-r-[#ddd]">
           <div className="flex items-center justify-center mb-[15px] relative">
             <img src={logo} className="w-[15rem]" />

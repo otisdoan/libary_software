@@ -25,31 +25,36 @@ function Books() {
         <>
             <div className="flex items-center flex-wrap gap-[40px] justify-center mb-[50px] mt-[50px]">
                 {books.map((element, index) => (
-                    <Card
-                        hoverable
-                        key={index}
-                        className="w-[250px]"
-                        cover={
-                            <img
-                                src={element.image}
-                            />
-                        }
-                        actions={[
-                            <Link to='#' key={index} style={{ color: 'red' }} className="hover:font-bold">Borrow book</Link>
-                        ]}
-                    >
-                        <Meta
-                            title={element.title}
-                            description={
-                                <>
-                                    Total book: <span style={{ color: 'red' }}>{element.totalBook}</span>
-                                </>
+                    <Link to={`/book-detail/${element.id}`} key={index}>
+                        <Card
+                            hoverable
+                            key={index}
+                            className="w-[250px]"
+                            cover={
+                                <img
+                                    src={element.image}
+                                />
                             }
-                        />
-                    </Card>
+                            actions={[
+                                <div key={index} className="flex justify-center gap-x-2">
+                                    <span>Đã mượn</span>
+                                    <span className="text-red-500">{element.leftBook}</span>
+                                </div>
+                            ]}
+                        >
+                            <Meta
+                                title={element.title}
+                                description={
+                                    <>
+                                        Total book: <span style={{ color: 'red' }}>{element.totalBook}</span>
+                                    </>
+                                }
+                            />
+                        </Card>
+                    </Link>
                 ))}
             </div>
-            
+
         </>
     )
 }

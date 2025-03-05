@@ -7,7 +7,7 @@ function Home() {
     return (
         <>
             <Header />
-            <div className="container mx-auto px-[120px]">
+            <div className="container mx-auto px-[120px] bg-[#f0f0f0]">
                 <Content />
             </div>
             <Footer />

@@ -6,7 +6,7 @@ import Tab from "../../components/Tabs/Tabs";
 function Content() {
     return (
         <>
-            <div className="bg-[#f0f0f0] py-[50px]">
+            <div className="py-[50px]">
                 <HomeCarousel />
                 <Category />
                 <Tab />

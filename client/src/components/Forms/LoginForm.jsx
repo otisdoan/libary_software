@@ -26,36 +26,21 @@ function LoginForm() {
     }
   };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
   return (
     <>
       <div className=''>
         <Form
-          name="basic"
-          labelCol={{
-            span: 8,
-          }}
           wrapperCol={{
-            span: 16,
-          }}
-          style={{
-            maxWidth: 600,
-          }}
-          initialValues={{
-            remember: true,
+            span: 24,
           }}
           onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
+          autoComplete="on"
         >
-          <Form.Item label={null}>
+          <Form.Item>
             <h1 className="text-[1.5rem] font-bold">Log In</h1>
           </Form.Item>
           <Form.Item
             name={'email'}
-            label={null}
             rules={[
               {
                 required: true,
@@ -72,7 +57,6 @@ function LoginForm() {
           </Form.Item>
 
           <Form.Item
-            label={null}
             name={'password'}
             rules={[
               {
@@ -85,10 +69,10 @@ function LoginForm() {
               }
             ]}
           >
-            <Input.Password placeholder='Password' />
+            <Input.Password placeholder='Password' size='large' />
           </Form.Item>
 
-          <Form.Item label={null}>
+          <Form.Item >
             <Button type="primary" danger className='w-full' htmlType='submit'>
               Login
             </Button>
@@ -98,7 +82,7 @@ function LoginForm() {
             <Link to="/forgot-password">Forgot password?</Link>
           </div>
 
-          <Form.Item label={null}>
+          <Form.Item >
             <div className='flex items-center justify-center mt-[20px]'>
               <div className='border-[1px] border-[#ddd] w-full'></div>
               <span className='text-[0.8rem]'>Or</span>
@@ -106,12 +90,14 @@ function LoginForm() {
             </div>
           </Form.Item>
 
-          <Form.Item label={null}>
+          <Form.Item >
             <Accounts />
           </Form.Item>
 
-          <Form.Item label={null}>
-            <span>Dont have an account?<Link to="/register" className='ml-[5px]'>Sign Up</Link></span>
+          <Form.Item >
+            <div className='text-center'>
+              <span >Dont have an account?<Link to="/register" className='ml-[5px] text-red-500'>Sign Up</Link></span>
+            </div>
           </Form.Item>
         </Form>
       </div>

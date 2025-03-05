@@ -8,15 +8,6 @@ function SignUpForm() {
     const navigate = useNavigate();
     const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const layout = {
-        labelCol: {
-            span: 8,
-        },
-        wrapperCol: {
-            span: 16,
-        },
-    };
-
     const onFinish = async (values) => {
         try {
             const { email, password } = values;
@@ -48,19 +39,16 @@ function SignUpForm() {
                 </Button>
             </Modal>
             <Form
-                {...layout}
-                name="nest-messages"
                 onFinish={onFinish}
-                style={{
-                    maxWidth: 600,
+                wrapperCol={{
+                    span: 24,
                 }}
             >
-                <Form.Item label={null}>
+                <Form.Item >
                     <h1 className="text-[1.5rem] font-bold">Sign Up</h1>
                 </Form.Item>
                 <Form.Item
                     name={'email'}
-                    label={null}
                     rules={[
                         {
                             required: true,
@@ -76,7 +64,6 @@ function SignUpForm() {
                     <Input placeholder='Enter your email' />
                 </Form.Item>
                 <Form.Item
-                    label={null}
                     name={'password'}
                     rules={[
                         {
@@ -89,11 +76,10 @@ function SignUpForm() {
                         }
                     ]}
                 >
-                    <Input.Password placeholder='New password' />
+                    <Input.Password placeholder='New password' size='large'/>
                 </Form.Item>
 
                 <Form.Item
-                    label={null}
                     name={'confirmPassword'}
                     dependencies={['password']}
                     rules={[
@@ -111,16 +97,16 @@ function SignUpForm() {
                         })
                     ]}
                 >
-                    <Input.Password placeholder='Repeat password' />
+                    <Input.Password placeholder='Repeat password' size='large'/>
                 </Form.Item>
 
-                <Form.Item label={null}>
+                <Form.Item>
                     <Button type="primary" htmlType="submit" className='w-full' danger>
                         Sign up
                     </Button>
                 </Form.Item>
 
-                <Form.Item label={null}>
+                <Form.Item>
                     <div className='flex items-center justify-center mt-[20px]'>
                         <div className='border-[1px] border-[#ddd] w-full'></div>
                         <span className='text-[0.8rem]'>Or</span>
@@ -128,12 +114,14 @@ function SignUpForm() {
                     </div>
                 </Form.Item>
 
-                <Form.Item label={null}>
+                <Form.Item>
                     <Accounts />
                 </Form.Item>
 
-                <Form.Item label={null}>
-                    <span>Already have an account?<Link to="/login" className='ml-[5px]'>Log In</Link></span>
+                <Form.Item>
+                    <div className='text-center'>
+                        <span>Already have an account?<Link to="/login" className='ml-[5px] text-red-500'>Log In</Link></span>
+                    </div>
                 </Form.Item>
             </Form>
         </>
