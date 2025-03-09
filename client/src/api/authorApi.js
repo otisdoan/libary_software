@@ -1,9 +1,9 @@
 import instance from "./axiosClient";
 
 export const authorApi = {
-    getAllAuthor: async (page, size, sortField) => {
+    getAllAuthor: async (page, size, sortField, searchText) => {
         const response = await instance.get('/api/authors/', {
-            params: { page, size, field: sortField }
+            params: { page, size, field: sortField, searchText }
         });
         return response.data;
     },

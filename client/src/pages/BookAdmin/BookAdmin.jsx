@@ -128,12 +128,9 @@ function BookAdmin() {
     }
     const handleChange = async (e) => {
         try {
-            const searchBook = [];
-            const result = await bookApi.searchBookByTitle(e.target.value);
+            const result = await bookApi.getAllBook(currentPage, pageSize, 'id', e.target.value)
             if (result) {
-                searchBook.push(result);
-                console.log(searchBook);
-                setBooks(searchBook);
+                setBooks(result.data);
             } else {
                 fetchApi(currentPage);
             }

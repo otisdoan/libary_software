@@ -25,7 +25,7 @@ function UserAdmin() {
         try {
             const resultRole = await authApi.updateRoleUser(userIdCurrent, roleCurrent);
             const resultStatus = await authApi.updateStatusUser(userIdCurrent, statusCurrent);
-            if (resultRole || resultStatus ) {
+            if (resultRole || resultStatus) {
                 setShowAlert(true);
                 setIsModalOpen(false);
                 fetchApi(currentPage);
@@ -101,7 +101,7 @@ function UserAdmin() {
                 <div className='flex gap-x-3'>
                     <div className=''>
                         <Button type='primary' onClick={() => showModal(record.id, record.email, record.role, record.status)}>
-                            Update
+                            Update 
                         </Button>
                         <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText='Update'>
                             <div className='flex flex-col gap-y-4'>
@@ -148,7 +148,19 @@ function UserAdmin() {
             )
         },
     ];
-
+    const handleChange = async (e) => {
+        try {
+            const result = await authApi.getAllUser(currentPage, pageSize, 'email', e.target.valiue);
+            console.log(result);
+            // if (result) {
+            //     setUsers(result.data);
+            //     setCurrentPage(result.currentPage);
+            //     setTotalUsers(result.totalElements);
+            // }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <>
@@ -159,28 +171,9 @@ function UserAdmin() {
             </div>
             <div className="px-[20px] py-[50px]">
                 <h1 className="text-[1.2rem] font-bold mb-[20px]">Quản lý người dùng</h1>
-                <div className='flex items-center justify-between'>
-                    <Select
-                        defaultValue={'Tất cả'}
-                        placeholder=""
-                        options={[
-                            {
-                                value: 'Tất cả',
-                                label: 'Tất cả',
-                            },
-                            {
-                                value: 'Admin',
-                                label: 'Admin',
-                            },
-                            {
-                                value: 'Người dùng',
-                                label: 'Người dùng',
-                            },
-                        ]}
-                        className='w-[120px]'
-                    />
+                <div className='flex items-center justify-center'>
                     <div>
-                        <Input placeholder="Tìm kiếm người dùng theo email..." className='w-[300px] h-[33px]' />;
+                        <Input placeholder="Tìm kiếm người dùng theo email..." className='w-[300px] h-[33px]' onChange={handleChange} />
                     </div>
                 </div>
                 <div className='mt-[30px] mb-[40px]'>

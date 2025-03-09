@@ -3,12 +3,16 @@ const Book = require('../models/book');
 const notificationService = require('./notificationService');
 
   class BorrowRecordService {
-    async requestBorrowBook(userId, bookId) {
+    async requestBorrowBook(userId, bookId, returnDays) {
       const book = await Book.findById(bookId);
       if (!book) throw new Error('Book does not exist');
       if (book.leftBook <= 0) throw new Error('Book is out of stock');
 
-      return await borrowRecordRepo.createBorrowRequest(userId, bookId);
+      const borrowDate = new Date();
+      const dueDate = new Date(borrowDate);
+      dueDate.setDate(borrowDate.getDate() + returnDays);
+
+      return await borrowRecordRepo.createBorrowRequest(userId, bookId, dueDate);
     }
 
     async approveOrRejectBorrowRequest(id, status) {

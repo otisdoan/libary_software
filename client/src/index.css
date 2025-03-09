@@ -21,8 +21,8 @@
     top:50%;
     transform: translateY(-50%);
 }
-.ant-tabs-tab-btn {
-    color: #f7462f !important;
+.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+    color: #f7462f ;
 }
 .ant-tabs .ant-tabs-ink-bar {
     background: #f7462f;

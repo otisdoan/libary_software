@@ -21,9 +21,9 @@ export const authApi = {
     const response = await instance.post(`/api/auth/reset-password`, { token, newPassword, confirmPassword });
     return response.data;
   },
-  getAllUser: async (page, size, sortField) => {
+  getAllUser: async (page, size, sortField, searchText) => {
     const response = await instance.get('/api/auth/', {
-      params: { page, size, field: sortField } ,
+      params: { page, size, field: sortField, searchText } ,
     });
     return response.data;
   },

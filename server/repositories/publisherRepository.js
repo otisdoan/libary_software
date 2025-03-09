@@ -37,8 +37,8 @@ const publisherRepository = {
             },
         };
     },
-    findByName: async (name) => {
-        return Publisher.findOne({ name });
+    existByName: async (name) => {
+        return Publisher.findOne({ name: name});
     },
 };
 

@@ -112,6 +112,19 @@ function AuthorAdmin() {
     const handleCreate = () => {
 
     }
+    const handleChange = async (e) => {
+        try {
+            const result = await authorApi.getAllAuthor(currentPage, pageSize, 'name', e.target.value);
+            console.log(result);
+            if (result) {
+                setAuthors(result.data);
+                setCurrentPage(result.meta.page);
+                setTotalAuthors(result.meta.total);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return (
         <>
             <div className="w-full flex items-center justify-center mt-[50px] ">
@@ -121,28 +134,9 @@ function AuthorAdmin() {
             </div>
             <div className="px-[20px] py-[50px]">
                 <h1 className="text-[1.2rem] font-bold mb-[20px]">Quản lý tác giả</h1>
-                <div className='flex items-center justify-between'>
-                    <Select
-                        defaultValue={'Tất cả'}
-                        placeholder=""
-                        options={[
-                            {
-                                value: 'Tất cả',
-                                label: 'Tất cả',
-                            },
-                            {
-                                value: 'Admin',
-                                label: 'Admin',
-                            },
-                            {
-                                value: 'Người dùng',
-                                label: 'Người dùng',
-                            },
-                        ]}
-                        className='w-[120px]'
-                    />
+                <div className='flex items-center justify-center'>
                     <div>
-                        <Input placeholder="Tìm kiếm người dùng theo email..." className='w-[300px] h-[33px]' />;
+                        <Input placeholder="Tìm kiếm tác giả theo name..." className='w-[300px] h-[33px]' onChange={handleChange}/>
                     </div>
                 </div>
                 <div className='mt-[10px]'>
