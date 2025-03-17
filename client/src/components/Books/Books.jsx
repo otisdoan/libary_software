@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { bookApi } from "../../api/bookApi";
-import { Card } from 'antd';
+import { Card, Pagination } from 'antd';
 import { Link } from "react-router-dom";
 const { Meta } = Card;
 function Books() {
     const [pageCurrent, setPageCurrent] = useState(1);
-    const [pageSize, setPageSize] = useState(1000);
+    const [pageSize, setPageSize] = useState(5);
     const [books, setBooks] = useState([]);
+    const [totalBook, setTotalBook] = useState(0);
     const fetchApi = async (page) => {
         try {
             const result = await bookApi.getAllBook(page, pageSize, 'id');
@@ -14,25 +15,30 @@ function Books() {
             setBooks(result.data);
             setPageCurrent(result.currentPage);
             setPageSize(result.currentSize);
+            setTotalBook(result.totalElements)
         } catch (error) {
             console.log(error)
         }
+    }
+    const handlePageChange = (e) => {
+        setPageCurrent(e);
     }
     useEffect(() => {
         fetchApi(pageCurrent);
     }, [pageCurrent])
     return (
         <>
-            <div className="flex items-center flex-wrap gap-[40px] justify-center mb-[50px] mt-[50px]">
+            <div className="flex items-center gap-6 my-[50px] flex-wrap justify-center">
                 {books.map((element, index) => (
                     <Link to={`/book-detail/${element.id}`} key={index}>
                         <Card
                             hoverable
                             key={index}
-                            className="w-[250px]"
+                            className="w-[250px] shadow-2xl"
                             cover={
                                 <img
                                     src={element.image}
+                                    className="hover:scale-90 duration-500 transition-transform"
                                 />
                             }
                             actions={[
@@ -54,7 +60,10 @@ function Books() {
                     </Link>
                 ))}
             </div>
-
+            <div className='flex items-center justify-center mb-[100px]'>
+                <Pagination current={pageCurrent} total={totalBook} pageSize={pageSize}
+                    onChange={handlePageChange} />
+            </div>
         </>
     )
 }

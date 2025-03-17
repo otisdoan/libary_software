@@ -16,7 +16,7 @@ class CategoryRepository {
                 throw new Error('Category name already exists');
             }
         }
-        const category = await Category.findByIdAndUpdate(id, categoryData, { new: true });
+        const category = await Category.findByIdAndUpdate(id, categoryData, {new: true});
         if (!category) {
             throw new Error('Category not found');
         }
@@ -59,11 +59,9 @@ class CategoryRepository {
         };
     }
 
-    async existByName(name) {
-        return await Category.findOne({ name: name });
-    }
     async findByName(name) {
-        return await Category.findOne({ name: new RegExp(`^${name}$`, 'i') });
+        return await Category.findOne({name: new RegExp(`^${name}$`, 'i')});
     }
 }
+
 module.exports = new CategoryRepository();

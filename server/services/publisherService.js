@@ -1,7 +1,7 @@
 const publisherRepository = require('../repositories/publisherRepository');
 class PublisherService {
     async createPublisher(publisherData) {
-        const existingPublisher = await publisherRepository.existByName(publisherData.name);
+        const existingPublisher = await publisherRepository.findByName(publisherData.name);
         if (existingPublisher) {
             throw new Error('Publisher with this name already exists');
         }
@@ -16,7 +16,7 @@ class PublisherService {
     }
     async updatePublisher(publisherId, updateData) {
         if (updateData.name) {
-            const existingPublisher = await publisherRepository.existByName(updateData.name);
+            const existingPublisher = await publisherRepository.findByName(updateData.name);
             if (existingPublisher && existingPublisher.id !== publisherId) {
                 throw new Error('Publisher with this name already exists');
             }

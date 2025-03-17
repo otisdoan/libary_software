@@ -1,5 +1,4 @@
 const Author = require('../models/Author');
-const Book = require("../models/book");
 
 const authorRepository = {
     create: async (data) => {
@@ -37,8 +36,8 @@ const authorRepository = {
             },
         };
     },
-    async existByName(name) {
-        return Author.findOne({name: name});
+    findByName: async (name) => {
+        return Author.findOne({name: new RegExp(`^${name}$`, 'i')});
     },
 };
 

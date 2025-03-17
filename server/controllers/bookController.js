@@ -64,7 +64,7 @@ class BookController {
 
   async searchBooksByCategory(req, res) {
     try {
-      const { categories } = req.body;
+      const { categories } = req.query;
       const books = await bookService.searchBooksByCategory(categories);
       res.status(200).json(books);
     } catch (error) {

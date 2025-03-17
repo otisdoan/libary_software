@@ -128,14 +128,17 @@ function BookAdmin() {
     }
     const handleChange = async (e) => {
         try {
-            const result = await bookApi.getAllBook(currentPage, pageSize, 'id', e.target.value)
+            const result = await bookApi.getAllBook(currentPage, pageSize, 'id', e.target.value);
+            console.log(result);
             if (result) {
                 setBooks(result.data);
+                setCurrentPage(result.currentPage);
+                setTotalBook(result.totalElements);
             } else {
                 fetchApi(currentPage);
             }
         } catch (error) {
-            console.error("Lỗi khi tìm kiếm sách:", error);
+            console.log(error)
         }
     };
     return (

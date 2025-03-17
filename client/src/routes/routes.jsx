@@ -19,6 +19,7 @@ import PublishAdmin from "../pages/PublisherAdmin/PublishAdmin";
 import AddAuthor from "../pages/AddAuthor/AddAuthor";
 import AddPublisher from "../pages/AddPublisher/AddPublisher";
 import BookDetail from "../pages/BookDetail/BookDetail";
+import SearchPage from "../pages/SearchPage";
 
 export const routes = [
 
@@ -61,6 +62,10 @@ export const routes = [
             {
                 path: '/book-detail/:id',
                 element: <BookDetail />
+            },
+            {
+                path: '/search/:title',
+                element: <SearchPage />
             }
         ]
     },

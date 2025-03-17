@@ -3,8 +3,8 @@ const borrowRecordService = require('../services/borrowRecordService');
     class BorrowRecordController {
       async requestBorrowBook(req, res) {
         try {
-          const { userId, bookId, returnDays } = req.body;
-          const result = await borrowRecordService.requestBorrowBook(userId, bookId, returnDays);
+          const { userId, bookId } = req.body;
+          const result = await borrowRecordService.requestBorrowBook(userId, bookId);
           res.status(201).json({ message: 'Borrow book request has been sent', result });
         } catch (error) {
           res.status(400).json({ message: error.message });

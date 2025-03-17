@@ -150,13 +150,13 @@ function UserAdmin() {
     ];
     const handleChange = async (e) => {
         try {
-            const result = await authApi.getAllUser(currentPage, pageSize, 'email', e.target.valiue);
+            const result = await authApi.getAllUser(currentPage, pageSize, 'email', e.target.value);
             console.log(result);
-            // if (result) {
-            //     setUsers(result.data);
-            //     setCurrentPage(result.currentPage);
-            //     setTotalUsers(result.totalElements);
-            // }
+            if (result) {
+                setUsers(result.data);
+                setCurrentPage(result.currentPage);
+                setTotalUsers(result.totalElements);
+            }
         } catch (error) {
             console.log(error)
         }

@@ -2,7 +2,7 @@ const bookRepository = require('../repositories/bookRepository');
 
 class BookService {
   async createBook(bookData) {
-    const existingBook = await bookRepository.existByTitle(bookData.title);
+    const existingBook = await bookRepository.findByTitle(bookData.title);
     if (existingBook) {
       throw new Error('Book with this title already exists');
     }
@@ -19,7 +19,7 @@ class BookService {
 
   async updateBook(bookId, updateData) {
     if (updateData.title) {
-      const existingBook = await bookRepository.existByTitle(updateData.title);
+      const existingBook = await bookRepository.findByTitle(updateData.title);
       if (existingBook && existingBook.id !== bookId) {
         throw new Error('Book with this title already exists');
       }

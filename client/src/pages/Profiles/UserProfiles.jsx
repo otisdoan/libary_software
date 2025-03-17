@@ -1,7 +1,8 @@
-import { Button, DatePicker, Form, Input, Modal, Select } from "antd";
+import { Breadcrumb, Button, DatePicker, Form, Input, Modal, Select } from "antd";
 import dayjs from 'dayjs';
 import { useEffect, useState } from "react";
 import { useProfileApi } from "../../api/userProfileApi";
+import { Link } from "react-router-dom";
 
 function UserProfile() {
     const userId = localStorage.getItem('userId');
@@ -26,9 +27,19 @@ function UserProfile() {
     }
     useEffect(() => {
         fetchApi(userId);
-    },[])
+    }, [])
     return (
         <>
+            <div className="mt-[20px]">
+                <Breadcrumb separator='>'>
+                    <Breadcrumb.Item>
+                        <Link to='/'>Trang chủ</Link>
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>
+                        Profile
+                    </Breadcrumb.Item>
+                </Breadcrumb>
+            </div>
             <div className="flex flex-col gap-x-4 py-[100px] px-[200px]">
                 <h1 className="text-[1.4rem] font-medium text-center mb-[50px] ">Hồ sơ</h1>
                 <Form
@@ -41,7 +52,7 @@ function UserProfile() {
                         >
                             <div>
                                 <span>Họ và tên</span>
-                                <Input value={userProfile.fullName} disabled={true}/>
+                                <Input value={userProfile.fullName} disabled={true} />
                             </div>
                         </Form.Item>
 
@@ -51,7 +62,7 @@ function UserProfile() {
                         >
                             <div>
                                 <span>Số điện thoại</span>
-                                <Input placeholder="Chưa có thông tin" disabled={true}/>
+                                <Input placeholder="Chưa có thông tin" disabled={true} />
                             </div>
                         </Form.Item>
                     </div>
@@ -62,7 +73,7 @@ function UserProfile() {
                         >
                             <div>
                                 <span>Giới tính</span>
-                                <Input value={userProfile.gender} disabled={true}/>
+                                <Input value={userProfile.gender} disabled={true} />
                             </div>
                         </Form.Item>
 
@@ -72,7 +83,7 @@ function UserProfile() {
                         >
                             <div>
                                 <span>Ngày sinh</span>
-                                <Input placeholder="Chưa có thông tin" disabled={true}/>
+                                <Input placeholder="Chưa có thông tin" disabled={true} />
                             </div>
                         </Form.Item>
                     </div>
@@ -93,7 +104,7 @@ function UserProfile() {
                         >
                             <div>
                                 <span>Địa chỉ</span>
-                                <Input placeholder="Chưa có thông tin" disabled={true}/>
+                                <Input placeholder="Chưa có thông tin" disabled={true} />
                             </div>
                         </Form.Item>
                     </div>

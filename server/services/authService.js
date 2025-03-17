@@ -307,7 +307,7 @@ class AuthService {
         }
     }
     async getAllUsers(page, size, sortField, searchText) {
-        return await userRepository.getAllUsers(page, size, sortField, searchText);
+        return await userRepository.findAll(page, size, sortField, searchText);
     }
     
     async updateUserRole(userId, role) {

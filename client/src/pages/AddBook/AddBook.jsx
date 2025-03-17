@@ -1,5 +1,5 @@
 
-import { Button, Form, Input, message, Select, Upload } from "antd";
+import { Alert, Button, Form, Input, message, Select, Upload } from "antd";
 import { authorApi } from "../../api/authorApi";
 import { useEffect, useState } from "react";
 import { publisherApi } from "../../api/publisherApi";
@@ -17,6 +17,8 @@ function AddBook() {
     const [author, setAuthor] = useState([]);
     const [publisher, setPublisher] = useState([]);
     const [category, setCategory] = useState([]);
+    const [showAlert, setShowAlert] = useState(false);
+    const [hidden, setHidden] = useState('hidden');
     const optionsAuthor = [];
     const optionsPublishers = [];
     const optionsCategory = [];
@@ -52,13 +54,19 @@ function AddBook() {
             ...value,
             author: Array.isArray(value.author) ? value.author.join(', ') : "",
             publisher: Array.isArray(value.publisher) ? value.publisher.join(', ') : "",
-            category: Array.isArray(value.category) ? value.category.join(', ') : ""
+            // category: Array.isArray(value.category) ? value.category.join(', ') : ""
         }
         try {
             const result = await bookApi.createBook(book);
-            console.log(result);
+            console.log(result)
+            setHidden('');
+            setShowAlert(true);
+            setTimeout(() => {
+                navigate(-1);
+            }, 1500)
         } catch (error) {
-            console.log(error);
+            console.log(error)
+            setHidden('');
         }
     }
     const handleCancel = () => {
@@ -66,6 +74,13 @@ function AddBook() {
     }
     return (
         <>
+            <div className={"w-full flex items-center justify-center mt-[50px] " + hidden}>
+                {showAlert ? (
+                    <Alert message="Thêm thành công" type="success" showIcon closable className="w-[250px]" />
+                ) : (
+                    <Alert message="Book có thể đã tồn tại!" type="error" showIcon closable />
+                )}
+            </div>
             <div className="flex flex-col gap-y-4 p-[50px]">
                 <h1 className="text-[1.4rem] font-bold">Add New Book</h1>
                 <Form
@@ -84,10 +99,10 @@ function AddBook() {
                                 }
                             ]}
                             className="w-1/2"
-                    
+
                         >
-                            <Input placeholder="Title"/>
-                            
+                            <Input placeholder="Title" />
+
                         </Form.Item>
                         <Form.Item
                             name={'totalBook'}
@@ -205,7 +220,7 @@ function AddBook() {
                             }
                         ]}
                     >
-                        <Input placeholder="Link image"/>
+                        <Input placeholder="Link image" />
                     </Form.Item>
                     <div className="flex items-center justify-between">
                         <Form.Item>

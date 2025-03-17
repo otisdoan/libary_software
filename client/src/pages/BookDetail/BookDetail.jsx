@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { bookApi } from "../../api/bookApi";
-import { Button, DatePicker, Form, Input, List, Modal, Tabs, Typography } from "antd";
+import { Breadcrumb, Button, DatePicker, Form, Input, List, Modal, Tabs, Typography } from "antd";
 import { GiReturnArrow } from "react-icons/gi";
 import { MdAutorenew } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
@@ -72,7 +72,15 @@ function BookDetail() {
     }, [id])
     return (
         <>
-            <div className="flex gap-x-4 justify-center mt-[50px]">
+            <div className="my-[20px]">
+                <Breadcrumb separator=">">
+                    <Breadcrumb.Item>
+                        <Link to="/">Trang chủ</Link>
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>{bookDetail.title}</Breadcrumb.Item>
+                </Breadcrumb>
+            </div>
+            <div className="flex gap-x-4 justify-center">
                 <div className="w-[40%] bg-white p-[40px] rounded-lg h-full sticky top-[150px]">
                     <div className="flex flex-col gap-y-4 items-center mb-[16px]">
                         <img src={bookDetail.image} className="h-full w-full" />
@@ -95,7 +103,7 @@ function BookDetail() {
                                 <Form.Item
                                     label={'Tên sách'}
                                 >
-                                    <Input value={bookDetail.title}/>
+                                    <Input value={bookDetail.title} />
                                 </Form.Item>
                                 <Form.Item
                                     label={'Ngày mượn'}

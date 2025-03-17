@@ -1,13 +1,12 @@
 import { useContext } from 'react';
 import { SiZalo } from "react-icons/si";
 import { MdOutlineFacebook } from "react-icons/md";
-import { Button, Tooltip, Dropdown, Avatar } from 'antd';
+import { Button, Tooltip, Dropdown, Avatar, Input } from 'antd';
 import { BiSupport } from "react-icons/bi";
 import { MdOutlineLanguage } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
 import logoWhite from "../../assets/images/logo_white.png"
-import Searchs from "../Search/Search";
-import { PiShoppingCartSimpleThin } from "react-icons/pi";
+import { RiBookFill } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from '../../context/UserContext';
 import { IoLogOutSharp } from "react-icons/io5";
@@ -15,6 +14,8 @@ import { ImProfile } from "react-icons/im";
 import avatarUser from "../../assets/images/z5581996737056_ec0f21259be216a6270fde9f7c300f4f.jpg";
 import { GoBell } from "react-icons/go";
 import { RiAdminLine } from "react-icons/ri";
+import { FaBookOpen } from "react-icons/fa";
+import { IoIosSearch } from "react-icons/io";
 const text = <span>prompt text</span>;
 const buttonWidth = 70;
 
@@ -45,11 +46,18 @@ function Header() {
     },
     {
       key: '3',
+      icon: <FaBookOpen />,
+      label: (
+        <span>Sách đã mượn</span>
+      )
+    },
+    {
+      key: '4',
       icon: <IoLogOutSharp />,
       label: (
-        <Button type='text' className='p-0' onClick={handleLogout}>Log out</Button>
+        <span onClick={handleLogout}>Log out</span>
       )
-    }
+    },
   ];
   const itemsNotification = [
     {
@@ -86,10 +94,15 @@ function Header() {
       ),
     },
   ];
+
+  const handleEnter = async (e) => {
+    navigate(`/search/${e.target.value}`);
+  }
+
   return (
     <>
       <div className='sticky top-0 z-[999] w-full flex bg-[#FF4500]  text-white pb-[25px]'>
-        <div className="container mx-auto px-[150px] w-[100%]">
+        <div className="px-[150px] w-[100%]">
           <div className="flex items-center justify-between py-[5px] mb-[10px]">
             <div className="flex items-center justify-center">
               <span className="text-[0.8rem] mr-[10px]">Kết nối</span>
@@ -177,10 +190,10 @@ function Header() {
               </Link>
             </div>
             <div className="w-2/3">
-              <Searchs />
+              <Input suffix={<IoIosSearch />} className='w-[50rem]' onPressEnter={handleEnter} />
             </div>
             <div className="w-0.5/3">
-              <PiShoppingCartSimpleThin className="text-[2rem]" />
+              <RiBookFill className='text-[2rem]' />
             </div>
           </div>
         </div>
