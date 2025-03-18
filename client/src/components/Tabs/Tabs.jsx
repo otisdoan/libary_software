@@ -1,12 +1,12 @@
 import { Tabs } from 'antd';
 import Books from '../Books/Books';
 function Tab() {
-  
+
     const items = [
         {
             key: '1',
             label: 'Sách HOT',
-            children: <Books />  
+            children: <Books />
         },
         {
             key: '2',
@@ -22,7 +22,7 @@ function Tab() {
     return (
         <>
             <div className='mt-[20px] bg-white rounded-[10px]'>
-                <Tabs defaultActiveKey="1" items={items}  centered/>
+                <Tabs defaultActiveKey="1" items={items} centered />
             </div>
         </>
     )

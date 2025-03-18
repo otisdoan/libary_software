@@ -28,37 +28,39 @@ function Books() {
     }, [pageCurrent])
     return (
         <>
-            <div className="flex items-center gap-6 my-[50px] flex-wrap justify-center">
-                {books.map((element, index) => (
-                    <Link to={`/book-detail/${element.id}`} key={index}>
-                        <Card
-                            hoverable
-                            key={index}
-                            className="w-[250px] shadow-2xl"
-                            cover={
-                                <img
-                                    src={element.image}
-                                    className="hover:scale-90 duration-500 transition-transform"
-                                />
-                            }
-                            actions={[
-                                <div key={index} className="flex justify-center gap-x-2">
-                                    <span>Đã mượn</span>
-                                    <span className="text-red-500">{element.leftBook}</span>
-                                </div>
-                            ]}
-                        >
-                            <Meta
-                                title={element.title}
-                                description={
-                                    <>
-                                        Total book: <span style={{ color: 'red' }}>{element.totalBook}</span>
-                                    </>
+            <div className="flex justify-center">
+                <div className="flex items-center gap-6 my-[50px] flex-wrap w-[90%] px-[12px]">
+                    {books.map((element, index) => (
+                        <Link to={`/book-detail/${element.id}`} key={index}>
+                            <Card
+                                hoverable
+                                key={index}
+                                className="w-[250px] shadow-2xl"
+                                cover={
+                                    <img
+                                        src={element.image}
+                                        className="hover:scale-90 duration-500 transition-transform"
+                                    />
                                 }
-                            />
-                        </Card>
-                    </Link>
-                ))}
+                                actions={[
+                                    <div key={index} className="flex justify-center gap-x-2">
+                                        <span>Đã mượn</span>
+                                        <span className="text-red-500">{element.leftBook}</span>
+                                    </div>
+                                ]}
+                            >
+                                <Meta
+                                    title={element.title}
+                                    description={
+                                        <>
+                                            Total book: <span style={{ color: 'red' }}>{element.totalBook}</span>
+                                        </>
+                                    }
+                                />
+                            </Card>
+                        </Link>
+                    ))}
+                </div>
             </div>
             <div className='flex items-center justify-center mb-[100px]'>
                 <Pagination current={pageCurrent} total={totalBook} pageSize={pageSize}

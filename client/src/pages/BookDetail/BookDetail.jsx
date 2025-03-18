@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { bookApi } from "../../api/bookApi";
-import { Breadcrumb, Button, DatePicker, Form, Input, List, Modal, Tabs, Typography } from "antd";
+import { Breadcrumb, Button, Card, DatePicker, Form, Input, List, Modal, Tabs, Typography } from "antd";
 import { GiReturnArrow } from "react-icons/gi";
 import { MdAutorenew } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
 import { FaPen } from "react-icons/fa";
 import TextArea from "antd/es/input/TextArea";
-import dayjs from 'dayjs';
+import Meta from "antd/es/card/Meta";
+
 const { Paragraph } = Typography;
 function BookDetail() {
     const [isModalOpenBorrow, setIsModalBorrowOpen] = useState(false);
@@ -15,6 +16,7 @@ function BookDetail() {
     const [isModalOpenFeedback, setIsModalOpenFeedBack] = useState(false);
     const [isModalOpenRequest, setIsModalOpenRequest] = useState(false);
     const [ellipsis, setEllipsis] = useState(true);
+    const [allBook, setAllBook] = useState([]);
     const { id } = useParams();
     const [bookDetail, setBookDetail] = useState({});
     const dateFormat = 'DD/MM/YYYY';
@@ -70,6 +72,16 @@ function BookDetail() {
         fetchApi();
         console.log(bookDetail)
     }, [id])
+
+    useEffect(() => {
+        const fetchBookByTitle = async () => {
+            const result = await bookApi.getAllBook(1, 99999, id);
+            if (result) {
+                setAllBook(result.data);
+            }
+        }
+        fetchBookByTitle();
+    }, [])
     return (
         <>
             <div className="my-[20px]">
@@ -280,6 +292,40 @@ function BookDetail() {
             </div>
             <div className="bg-white p-[20px] rounded-lg mt-[16px]">
                 <h2 className="text-[1.1rem] font-bold">Gợi ý cho bạn</h2>
+                <div className="flex justify-center">
+                    <div className="flex items-center gap-6 my-[50px] flex-wrap w-[95%] px-[12px]">
+                        {allBook.map((element, index) => (
+                            <Link to={`/book-detail/${element.id}`} key={index}>
+                                <Card
+                                    hoverable
+                                    key={index}
+                                    className="w-[250px] shadow-2xl"
+                                    cover={
+                                        <img
+                                            src={element.image}
+                                            className="hover:scale-90 duration-500 transition-transform"
+                                        />
+                                    }
+                                    actions={[
+                                        <div key={index} className="flex justify-center gap-x-2">
+                                            <span>Đã mượn</span>
+                                            <span className="text-red-500">{element.leftBook}</span>
+                                        </div>
+                                    ]}
+                                >
+                                    <Meta
+                                        title={element.title}
+                                        description={
+                                            <>
+                                                Total book: <span style={{ color: 'red' }}>{element.totalBook}</span>
+                                            </>
+                                        }
+                                    />
+                                </Card>
+                            </Link>
+                        ))}
+                    </div>
+                </div>
             </div>
         </>
     )
