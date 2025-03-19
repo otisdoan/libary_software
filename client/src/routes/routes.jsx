@@ -20,6 +20,8 @@ import AddAuthor from "../pages/AddAuthor/AddAuthor";
 import AddPublisher from "../pages/AddPublisher/AddPublisher";
 import BookDetail from "../pages/BookDetail/BookDetail";
 import SearchPage from "../pages/SearchPage";
+import BorrowBook from "../pages/BorrowBook";
+import HistoryBorrowBook from "../pages/HistoryBorrowBook";
 
 export const routes = [
 
@@ -66,6 +68,10 @@ export const routes = [
             {
                 path: '/search/:title',
                 element: <SearchPage />
+            },
+            {
+                path: '/history-borrow-book',
+                element: <HistoryBorrowBook />
             }
         ]
     },
@@ -116,6 +122,10 @@ export const routes = [
             {
                 path: 'publisher/new-publisher',
                 element: <AddPublisher />
+            },
+            {
+                path: 'borrow-book',
+                element: <BorrowBook />
             }
         ]
     }

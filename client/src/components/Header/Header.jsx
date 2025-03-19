@@ -48,7 +48,7 @@ function Header() {
       key: '3',
       icon: <FaBookOpen />,
       label: (
-        <span>Sách đã mượn</span>
+        <Link to="/history-borrow-book">Lịch sử mượn sách</Link>
       )
     },
     {

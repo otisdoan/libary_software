@@ -2,7 +2,7 @@ const authorRepository = require('../repositories/authorRepository');
 
 class AuthorService {
     async create(authorData) {
-        const existingAuthor = await authorRepository.findByName(authorData.name);
+        const existingAuthor = await authorRepository.existByName(authorData.name);
         if (existingAuthor) {
             throw new Error('Author with this name already exists');
         }
@@ -19,7 +19,7 @@ class AuthorService {
 
     async update(authorId, updateData) {
         if (updateData.name) {
-            const existingAuthor = await authorRepository.findByName(updateData.name);
+            const existingAuthor = await authorRepository.existByName(updateData.name);
             if (existingAuthor && existingAuthor.id !== authorId) {
                 throw new Error('Author with this name already exists');
             }
@@ -30,6 +30,7 @@ class AuthorService {
     async delete(authorId) {
         return await authorRepository.delete(authorId);
     }
+
 }
 
 module.exports = new AuthorService();

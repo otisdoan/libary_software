@@ -35,9 +35,9 @@ const notificationRepo = require('../repositories/notificationRepository');
         const book = await bookRepo.findById(borrowRecord.bookId);
         const bookTitle = book ? book.title : 'a book';
 
-        const dueDate = new Date(borrowRecord.dueDate);
+        const returnDate = new Date(borrowRecord.returnDate);
         const today = new Date();
-        const daysLeft = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+        const daysLeft = Math.ceil((returnDate - today) / (1000 * 60 * 60 * 24));
 
         let message = '';
         if (daysLeft === 3) {

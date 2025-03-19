@@ -1,10 +1,11 @@
 const borrowRecordService = require('../services/borrowRecordService');
+const bookService = require("../services/bookService");
 
     class BorrowRecordController {
       async requestBorrowBook(req, res) {
         try {
-          const { userId, bookId } = req.body;
-          const result = await borrowRecordService.requestBorrowBook(userId, bookId);
+          const { userId, bookId, returnDays } = req.body;
+          const result = await borrowRecordService.requestBorrowBook(userId, bookId, returnDays);
           res.status(201).json({ message: 'Borrow book request has been sent', result });
         } catch (error) {
           res.status(400).json({ message: error.message });
@@ -32,22 +33,29 @@ const borrowRecordService = require('../services/borrowRecordService');
 
       async getUserBorrowHistory(req, res) {
         try {
-          const result = await borrowRecordService.getUserBorrowHistory(req.params.userId);
-          res.status(200).json({ history: result });
+          const page = Math.max(1, parseInt(req.query.page) || 1);
+          const size = Math.min(100, Math.max(1, parseInt(req.query.size) || 10));
+          const result = await borrowRecordService.getUserBorrowHistory(req.params.userId, page, size);
+          res.status(200).json(result);
         } catch (error) {
           res.status(500).json({ message: error.message });
         }
       }
 
-      async getBorrowRecordDetail(req, res) {
+      async getAllBorrowRecords(req, res) {
         try {
-          const result = await borrowRecordService.getBorrowRecordDetail(req.params.id);
-          res.status(200).json({ detail: result });
+          const page = Math.max(1, parseInt(req.query.page) || 1);
+          const size = Math.min(100, Math.max(1, parseInt(req.query.size) || 10));
+          const sortField = ['createdAt'].includes(req.query.field)
+              ? req.query.field
+              : 'createdAt';
+
+          const result = await borrowRecordService.getAllBorrowRecords(page, size, sortField);
+          res.json(result);
         } catch (error) {
-          res.status(500).json({ message: error.message });
+          res.status(400).json({ message: error.message });
         }
       }
-
     }
 
     module.exports = new BorrowRecordController();

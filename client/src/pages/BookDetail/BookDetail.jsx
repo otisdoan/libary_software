@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { bookApi } from "../../api/bookApi";
-import { Breadcrumb, Button, Card, DatePicker, Form, Input, List, Modal, Tabs, Typography } from "antd";
+import { Breadcrumb, Button, Card, DatePicker, Form, Input, List, Modal, notification, Tabs, Typography } from "antd";
 import { GiReturnArrow } from "react-icons/gi";
 import { MdAutorenew } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
 import { FaPen } from "react-icons/fa";
 import TextArea from "antd/es/input/TextArea";
 import Meta from "antd/es/card/Meta";
+import dayjs from 'dayjs';
+import { bookBorrowApi } from "../../api/bookBorrowApi";
 
 const { Paragraph } = Typography;
 function BookDetail() {
+    const today = dayjs();
     const [isModalOpenBorrow, setIsModalBorrowOpen] = useState(false);
     const [isModalOpenRenew, setIsModalOpenRenew] = useState(false);
     const [isModalOpenFeedback, setIsModalOpenFeedBack] = useState(false);
@@ -20,6 +23,7 @@ function BookDetail() {
     const { id } = useParams();
     const [bookDetail, setBookDetail] = useState({});
     const dateFormat = 'DD/MM/YYYY';
+    const [api, contextHolder] = notification.useNotification();
     const items = [
         {
             key: '1',
@@ -65,8 +69,22 @@ function BookDetail() {
     const onFinish = () => {
 
     }
-    const onFinishRequest = (values) => {
-        console.log(values);
+    const onFinishRequest = async (values) => {
+        try {
+            const userId = localStorage.getItem('userId');
+            const result = await bookBorrowApi.requestBorrowBook(userId, id, values.returnDays);
+            if (result) {
+                setIsModalOpenRequest(false);
+                api['success']({
+                    message: 'Yêu cầu mượn sách thành công',
+                    description:
+                        'Yêu cầu mượn sách của bạn đã được gửi thành công và đang chờ phê duyệt.',
+                    duration: 5
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
     useEffect(() => {
         fetchApi();
@@ -84,6 +102,7 @@ function BookDetail() {
     }, [])
     return (
         <>
+            {contextHolder}
             <div className="my-[20px]">
                 <Breadcrumb separator=">">
                     <Breadcrumb.Item>
@@ -121,13 +140,23 @@ function BookDetail() {
                                     label={'Ngày mượn'}
                                     name={'borrowDay'}
                                 >
-                                    <DatePicker format={dateFormat} />
+                                    <DatePicker format={dateFormat} defaultValue={today} disabled />
                                 </Form.Item>
                                 <Form.Item
                                     label={'Ngày trả'}
-                                    name={'returnDay'}
+                                    name={'returnDays'}
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Bắt buộc phải nhập!'
+                                        },
+                                        {
+                                            pattern: /^(?:[1-9]|[12][0-9]|3[01])$/,
+                                            message: 'Vui lòng nhập một số nguyên từ 1 đến 31!',
+                                        },
+                                    ]}
                                 >
-                                    <DatePicker format={dateFormat} />
+                                    <Input placeholder="Ngày trả" className="w-1/4 h-[40px]" />
                                 </Form.Item>
                                 <Form.Item className="flex justify-end">
                                     <Button htmlType="submit" type="default" className="mr-[16px]" onClick={handleCancel}>Hủy</Button>

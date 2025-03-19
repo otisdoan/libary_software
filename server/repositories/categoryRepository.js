@@ -59,8 +59,8 @@ class CategoryRepository {
         };
     }
 
-    async findByName(name) {
-        return await Category.findOne({name: new RegExp(`^${name}$`, 'i')});
+    async existByName(name) {
+        return await Category.findOne({name: name});
     }
 }
 

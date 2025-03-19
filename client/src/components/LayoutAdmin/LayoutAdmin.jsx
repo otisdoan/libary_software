@@ -4,7 +4,6 @@ import logoFold from "../../assets/images/logo-fold.png";
 import { FaBook } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
 import { MdAutorenew } from "react-icons/md";
-import { SiGooglecloudstorage } from "react-icons/si";
 import { BiCategory } from "react-icons/bi";
 import { FaUser } from "react-icons/fa";
 import {
@@ -35,13 +34,8 @@ function LayoutAdmin() {
     },
     {
       key: 'muon-tra',
-      label: 'Quản lý mượn trả',
+      label: <Link to='/admin/borrow-book'>Quản lý mượn trả</Link>,
       icon: <MdAutorenew />
-    },
-    {
-      key: 'kho-sach',
-      label: <Link to='#'>Quản lý kho sách</Link>,
-      icon: <SiGooglecloudstorage />
     },
     {
       key: 'the-loai-sach',

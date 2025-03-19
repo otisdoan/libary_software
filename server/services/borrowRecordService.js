@@ -1,14 +1,20 @@
+
+
 const borrowRecordRepo = require('../repositories/borrowrecordRepository');
 const Book = require('../models/book');
 const notificationService = require('./notificationService');
 
   class BorrowRecordService {
-    async requestBorrowBook(userId, bookId) {
+    async requestBorrowBook(userId, bookId, returnDays) {
       const book = await Book.findById(bookId);
       if (!book) throw new Error('Book does not exist');
       if (book.leftBook <= 0) throw new Error('Book is out of stock');
 
-      return await borrowRecordRepo.createBorrowRequest(userId, bookId);
+      const borrowDate = new Date();
+      const returnDate = new Date(borrowDate);
+      returnDate.setDate(borrowDate.getDate() + returnDays);
+
+      return await borrowRecordRepo.createBorrowRequest(userId, bookId, returnDate);
     }
 
     async approveOrRejectBorrowRequest(id, status) {
@@ -46,23 +52,27 @@ const notificationService = require('./notificationService');
       return await borrowRecordRepo.updateReturnDate(id);
     }
 
-    async getUserBorrowHistory(userId) {
-      return await borrowRecordRepo.findBorrowRequestsByUser(userId);
+    async getUserBorrowHistory(userId, page, size) {
+      return await borrowRecordRepo.findBorrowRequestsByUser(userId, page, size);
     }
 
-    async getBorrowRecordDetail(borrowRecordId) {
-      const borrowRecord = await borrowRecordRepo.getBorrowRecordDetail(borrowRecordId);
-      if (!borrowRecord) {
-        throw new Error('Borrow request not found.');
-      }
+    async getAllBorrowRecords(page, size, sortField) {
+      const result = await borrowRecordRepo.findAll(page, size, sortField);
+      const detailedRecords = result.data.map(borrowRecord => ({
+        id: borrowRecord._id,
+        email: borrowRecord.userId ? borrowRecord.userId.email : 'Unknown user',
+        bookTitle: borrowRecord.bookId ? borrowRecord.bookId.title : 'Unknown book',
+        borrowDate: borrowRecord.borrowDate,
+        returnDate: borrowRecord.returnDate,
+        status: borrowRecord.status
+      }));
 
       return {
-        email: borrowRecord.userId.email,
-        bookTitle: borrowRecord.bookId.title,
-        borrowDate: borrowRecord.borrowDate,
-        dueDate: borrowRecord.dueDate,
-        returnDate: borrowRecord.returnDate || 'Not returned',
-        status: borrowRecord.status
+        data: detailedRecords,
+        totalElements: result.totalElements,
+        totalPages: result.totalPages,
+        currentPage: result.currentPage,
+        currentSize: result.currentSize
       };
     }
   }
