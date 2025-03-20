@@ -1,11 +1,12 @@
 import { Button, Layout, Menu } from 'antd';
-import logoAmin from "../../assets/images/logoadmin.png";
-import logoFold from "../../assets/images/logo-fold.png";
+import logoAmin from "../../assets/images/logo-admin-2.png";
+import logoFold from "../../assets/images/logo-admin.png";
 import { FaBook } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
 import { MdAutorenew } from "react-icons/md";
 import { BiCategory } from "react-icons/bi";
 import { FaUser } from "react-icons/fa";
+import { GoGitPullRequest } from "react-icons/go";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -34,7 +35,12 @@ function LayoutAdmin() {
     },
     {
       key: 'muon-tra',
-      label: <Link to='/admin/borrow-book'>Quản lý mượn trả</Link>,
+      label: <Link to='/admin/borrow-book'>Quản lý yêu cầu</Link>,
+      icon: <GoGitPullRequest />
+    },
+    {
+      key: 'da-tra',
+      label: <Link to='/admin/returned-book'>Quản lý sách đã trả</Link>,
       icon: <MdAutorenew />
     },
     {
@@ -60,8 +66,8 @@ function LayoutAdmin() {
           theme='light'
           collapsible collapsed={collapsed}
         >
-          <div className=''>
-            <img src={collapsed ? logoFold : logoAmin} />
+          <div className='p-4'>
+            <img src={collapsed ? logoFold : logoAmin} className='w-[150px]'/>
           </div>
           <Menu
             mode="inline"

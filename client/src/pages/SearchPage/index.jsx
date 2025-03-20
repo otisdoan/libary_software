@@ -17,8 +17,14 @@ function SearchPage() {
         setPageCurrent(e)
     }
 
-    const handleChangeRadio = (e) => {
-        console.log(e);
+    const handleChangeRadio = async (values) => {
+        try {
+            const result = await bookApi.searchBookByCategory(values);
+            console.log(result);
+        } catch (error) {
+            console.log(error)
+        }
+
     }
 
     useEffect(() => {

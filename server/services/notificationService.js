@@ -60,6 +60,13 @@ const notificationRepo = require('../repositories/notificationRepository');
       async markNotificationAsRead(notificationId) {
         return await notificationRepo.markAsRead(notificationId);
       }
+
+      async deleteNotification(notificationId) {
+        return await notificationRepo.deleteNotification(notificationId);
+      }
+      async markAllNotificationsAsRead(userId) {
+        return await notificationRepo.markAllNotificationsAsRead(userId);
+      }
     }
 
     module.exports = new NotificationService();

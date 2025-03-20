@@ -39,7 +39,7 @@ class BookRepository {
     }
 
     async findByCategories(categories) {
-        return Book.find({categoryName: {$in: categories}});
+        return Book.find({ categoryName: { $all: categories } });
     }
 
     async existByTitle(title) {

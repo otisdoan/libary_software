@@ -25,6 +25,14 @@ class NotificationRepository {
   async markAsRead(notificationId) {
     return Notification.findByIdAndUpdate(notificationId, {status: 'read'}, {new: true});
   }
+
+  async deleteNotification(notificationId) {
+    return Notification.findByIdAndDelete(notificationId);
+  }
+  async markAllNotificationsAsRead(userId) {
+    return Notification.updateMany({ userId, status: 'unread' }, { status: 'read' });
+  }
+
 }
 
 module.exports = new NotificationRepository();

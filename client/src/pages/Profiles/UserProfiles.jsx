@@ -1,13 +1,14 @@
-import { Breadcrumb, Button, DatePicker, Form, Input, Modal, Select } from "antd";
-import dayjs from 'dayjs';
+import { Breadcrumb, Button, Form, Input, Modal, Select } from "antd";
 import { useEffect, useState } from "react";
-import { useProfileApi } from "../../api/userProfileApi";
 import { Link } from "react-router-dom";
+import { useProfileApi } from "../../api/userProfileApi";
 
 function UserProfile() {
     const userId = localStorage.getItem('userId');
     const emailUser = localStorage.getItem('email');
     const [userProfile, setUserProfile] = useState({});
+    const [inforUpdate, setInforUpdate] = useState({});
+    const [form] = Form.useForm();
     const onFinish = (e) => {
         console.log(e);
     }
@@ -15,19 +16,44 @@ function UserProfile() {
     const showModal = () => {
         setIsModalOpen(true);
     };
-    const handleOk = () => {
-        setIsModalOpen(false);
+    const handleOk = async () => {
+        try {
+            setIsModalOpen(false);
+            const result = await useProfileApi.upDateProfile(userId, inforUpdate);
+            if (result) {
+                
+                form.setFieldsValue({
+                    gender: result?.gender || '',
+                    fullName: result?.fullName || '',
+                    avatar: result?.avatar || ''
+                })
+            }
+        } catch (error) {
+            console.log(error)
+        }
     };
     const handleCancel = () => {
         setIsModalOpen(false);
     };
-    const fetchApi = async (id) => {
-        const result = await useProfileApi.getUserProfile(id);
-        setUserProfile(result);
+    const handleChange = (_, allValues) => {
+        setInforUpdate(allValues)
     }
     useEffect(() => {
-        fetchApi(userId);
-    }, [])
+        const fetchProfiles = async () => {
+            try {
+                const result = await useProfileApi.getUserProfile(userId);
+                console.log(result);
+                form.setFieldsValue({
+                    gender: result?.gender || '',
+                    fullName: result?.fullName || '',
+                    avatar: result?.avatar || ''
+                })
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchProfiles();
+    }, [userId, form])
     return (
         <>
             <div className="mt-[20px]">
@@ -40,140 +66,106 @@ function UserProfile() {
                     </Breadcrumb.Item>
                 </Breadcrumb>
             </div>
-            <div className="flex flex-col gap-x-4 py-[100px] px-[200px]">
+            <div className="flex flex-col gap-x-4 pt-[50px] px-[200px] pb-[100px]">
                 <h1 className="text-[1.4rem] font-medium text-center mb-[50px] ">Hồ sơ</h1>
                 <Form
+                    wrapperCol={{ span: 24 }}
+                    labelCol={{ span: 24 }}
                     onFinish={onFinish}
+                    form={form}
                 >
                     <div className="flex gap-x-4 ">
                         <Form.Item
-                            name={'fullname'}
+                            label='User ID'
                             className="w-1/2"
                         >
-                            <div>
-                                <span>Họ và tên</span>
-                                <Input value={userProfile.fullName} disabled={true} />
-                            </div>
+                            <Input value={userId} disabled={true} />
                         </Form.Item>
-
                         <Form.Item
-                            name={'phone'}
+                            label='Họ và tên'
+                            name={'fullName'}
                             className="w-1/2"
                         >
-                            <div>
-                                <span>Số điện thoại</span>
-                                <Input placeholder="Chưa có thông tin" disabled={true} />
-                            </div>
+                            <Input  disabled={true} />
                         </Form.Item>
                     </div>
-                    <div className="flex gap-x-4 ">
+                    <div className="flex gap-x-4 items-center ">
                         <Form.Item
-                            name={'sex'}
+                            label='Email'
                             className="w-1/2"
                         >
-                            <div>
-                                <span>Giới tính</span>
-                                <Input value={userProfile.gender} disabled={true} />
-                            </div>
+                            <Input value={emailUser} disabled={true} />
                         </Form.Item>
-
                         <Form.Item
-                            name={'phone'}
-                            className="w-1/2"
+                            label='Giới tính'
+                            name={'gender'}
+                            className="w-1/4"
                         >
-                            <div>
-                                <span>Ngày sinh</span>
-                                <Input placeholder="Chưa có thông tin" disabled={true} />
-                            </div>
+                            <Select disabled className="h-[40px]" />
                         </Form.Item>
                     </div>
-                    <div className="flex gap-x-4 ">
-                        <Form.Item
-                            name={'email'}
-                            className="w-1/2"
-                        >
-                            <div>
-                                <span>Email</span>
-                                <Input value={emailUser} disabled={true} />
-                            </div>
-                        </Form.Item>
-
-                        <Form.Item
-                            name={'address'}
-                            className="w-1/2"
-                        >
-                            <div>
-                                <span>Địa chỉ</span>
-                                <Input placeholder="Chưa có thông tin" disabled={true} />
-                            </div>
-                        </Form.Item>
-                    </div>
-                    <Form.Item className="text-center mt-[30px]">
+                    <Form.Item
+                        label='Avatar'
+                        name={'avatar'}
+                        className="w-1/3"
+                    >
+                        <Input disabled />
+                    </Form.Item>
+                    <Form.Item className="text-center mt-[70px]">
                         <Button type="primary" htmlType="submit" className="w-[300px]" onClick={showModal}>Chỉnh sửa thông tin</Button>
                         <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText={'Lưu'} cancelText={'Hủy'}>
                             <div>
-                                <h1>Chỉnh sửa thông tin</h1>
-                                <Form className="flex flex-col">
-                                    <Form.Item className="w-full">
-                                        <div>
-                                            <span>Họ và tên</span>
-                                            <Input />
-                                        </div>
-                                    </Form.Item>
-                                    <div className="flex items-center gap-x-4">
-                                        <div className="w-1/2">
-                                            <Form.Item
-                                                name={'sex'}
-                                            >
-                                                <div>
-                                                    <span>Giới tính</span>
-                                                    <Select
-                                                        placeholder='Chọn giới tính'
-                                                        options={[
-                                                            {
-                                                                value: 'Nam',
-                                                                label: 'Nam'
-                                                            },
-                                                            {
-                                                                value: 'Nữ',
-                                                                label: 'Nữ'
-                                                            },
-
-                                                        ]}
-                                                    />
-                                                </div>
-                                            </Form.Item>
-                                        </div>
-                                        <div className="w-1/2">
-                                            <Form.Item
-                                                name={'birthDate'}
-                                                getValueProps={(value) => ({
-                                                    value: value && dayjs(value),
-                                                })}
-                                                normalize={(value) => value && `${dayjs(value).format('dd-mm-yyyy')}`}
-                                            >
-                                                <div className="flex flex-col">
-                                                    <span>Ngày sinh</span>
-                                                    <DatePicker />
-                                                </div>
-                                            </Form.Item>
-                                        </div>
-                                    </div>
+                                <h1 className="text-[1.3rem] font-bold text-center">Chỉnh sửa thông tin</h1>
+                                <Form
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
+                                    className="flex flex-col"
+                                    form={form}
+                                    onValuesChange={handleChange}
+                                >
                                     <Form.Item
-                                        name={'phone'}
+                                        label='User ID'
+                                        className="w-1/2"
                                     >
-                                        <div>
-                                            <span>Số điện thoại</span>
-                                            <Input placeholder="Số điện thoại" />
-                                        </div>
+                                        <Input value={userId} disabled />
                                     </Form.Item>
                                     <Form.Item
-                                        name={'address'}
+                                        label='Họ và tên'
+                                        name={'fullName'}
+                                        className="w-1/2"
                                     >
-                                        <div>
-                                            <span>Địa chỉ</span>
-                                            <Input placeholder="Địa chỉ" />
-                                        </div>
+                                        <Input value={userProfile.fullName} />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label='Giới tính'
+                                        name={'gender'}
+                                        className="w-1/4"
+                                    >
+                                        <Select
+                                            className="h-[40px]"
+                                            options={[
+                                                {
+                                                    label: 'male',
+                                                    value: 'male'
+                                                },
+                                                {
+                                                    label: 'female',
+                                                    value: 'female'
+                                                }
+                                            ]}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label='Link avatar'
+                                        name={'avatar'}
+                                    >
+                                        <Input />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label='Email'
+                                        className="w-1/2"
+                                    >
+                                        <Input value={emailUser} disabled />
                                     </Form.Item>
                                 </Form>
                             </div>

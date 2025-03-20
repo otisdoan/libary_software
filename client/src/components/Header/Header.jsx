@@ -1,7 +1,7 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { SiZalo } from "react-icons/si";
 import { MdOutlineFacebook } from "react-icons/md";
-import { Button, Tooltip, Dropdown, Avatar, Input } from 'antd';
+import { Button, Tooltip, Dropdown, Avatar, Input, Badge } from 'antd';
 import { BiSupport } from "react-icons/bi";
 import { MdOutlineLanguage } from "react-icons/md";
 import { IoIosArrowDown } from "react-icons/io";
@@ -11,23 +11,35 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from '../../context/UserContext';
 import { IoLogOutSharp } from "react-icons/io5";
 import { ImProfile } from "react-icons/im";
-import avatarUser from "../../assets/images/z5581996737056_ec0f21259be216a6270fde9f7c300f4f.jpg";
 import { GoBell } from "react-icons/go";
 import { RiAdminLine } from "react-icons/ri";
 import { FaBookOpen } from "react-icons/fa";
 import { IoIosSearch } from "react-icons/io";
+import { bookBorrowApi } from '../../api/bookBorrowApi';
+import { UserOutlined } from '@ant-design/icons';
+import { useProfileApi } from '../../api/userProfileApi';
+import { notificationApi } from '../../api/notificationApi';
+import { PiDotsThreeCircleFill } from "react-icons/pi";
+import { TbPointFilled } from "react-icons/tb";
+import { MdDone } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
 const text = <span>prompt text</span>;
 const buttonWidth = 70;
 
 
 function Header() {
-  const { isLoggedIn, logout, email } = useContext(UserContext);
+  const { isLoggedIn, logout } = useContext(UserContext);
   const navigate = useNavigate();
+  const [totalBorrow, setTotalBorrow] = useState(0);
+  const userId = localStorage.getItem('userId');
+  const [avatar, setAvatar] = useState('');
+  const [notification, setNotification] = useState([]);
+  const [readed, setReaded] = useState();
   const handleLogout = () => {
     logout();
     navigate('/');
   }
-  const emailAdmin = 'admin@gmail.com'
+  const role = localStorage.getItem('role');
   const items = [
     {
       key: '1',
@@ -36,7 +48,7 @@ function Header() {
         <Link to="/profile">My profile</Link>
       )
     },
-    email === emailAdmin &&
+    role === 'admin' &&
     {
       key: '2',
       icon: <RiAdminLine />,
@@ -59,45 +71,62 @@ function Header() {
       )
     },
   ];
-  const itemsNotification = [
-    {
-      key: '1',
-      label: (
-        <a target="_blank" rel="noopener noreferrer" href="https://www.antgroup.com">
-          1st menu item
-        </a>
-      ),
-    },
-    {
-      key: '2',
-      label: (
-        <a target="_blank" rel="noopener noreferrer" href="https://www.aliyun.com">
-          2nd menu item
-        </a>
-      ),
-
-    },
-    {
-      key: '3',
-      label: (
-        <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
-          3rd menu item
-        </a>
-      ),
-    },
-    {
-      key: '3',
-      label: (
-        <a target="_blank" rel="noopener noreferrer" href="https://www.luohanacademy.com">
-          3rd menu item
-        </a>
-      ),
-    },
-  ];
 
   const handleEnter = async (e) => {
     navigate(`/search/${e.target.value}`);
   }
+
+  const handleReaded = async (id) => {
+    try {
+      const result = await notificationApi.maskAsRead(id);
+      if (result) {
+        setReaded(result);
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    const fetchBorrowBook = async () => {
+      try {
+        const result = await bookBorrowApi.getHistoryBorrowBook(userId, 1, 9999999);
+        if (result) {
+          setTotalBorrow(result.totalElements);
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchBorrowBook();
+  }, [userId])
+
+  useEffect(() => {
+    const fetchProfiles = async () => {
+      try {
+        const result = await useProfileApi.getUserProfile(userId);
+        setAvatar(result.avatar);
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchProfiles();
+  }, [userId, avatar])
+
+  useEffect(() => {
+    const fetchNotification = async () => {
+      try {
+        const result = await notificationApi.getAllNotification(userId);
+        console.log('Noti1', result)
+        if (result) {
+          setNotification(result.data);
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetchNotification();
+  }, [userId])
 
   return (
     <>
@@ -112,23 +141,64 @@ function Header() {
             <div className="flex items-center justify-center">
               <div>
                 <Dropdown
+                  placement='bottom'
                   trigger={'click'}
-                  menu={{
-                    items: itemsNotification
-                  }}
-                  dropdownRender={(menu) => (
-                    <div className='flex flex-col bg-white w-[300px] h-[100px] rounded-[10px]'>
-                      <div className='flex items-center justify-between border-b-[1px] py-[10px] px-[10px]'>
-                        <div className='flex items-center justify-center gap-x-1'>
-                          <GoBell />
-                          <span>Thông báo</span>
+                  dropdownRender={() => (
+                    <div className='flex justify-center mt-[10px]'>
+                      <div className='flex flex-col bg-[#f0f0f0] rounded-[10px] w-1/2'>
+                        <div className='flex items-center justify-between border-b-[1px] py-[10px] px-[10px] '>
+                          <div className='flex items-center justify-center gap-x-1'>
+                            <GoBell />
+                            <span>Thông báo</span>
+                          </div>
+                          <div>
+                            <Link to='/notifications' className='text-blue-500'>Xem thêm</Link>
+                          </div>
                         </div>
-                        <div>
-                          <Link to='/notifications' className='text-blue-500'>Xem thêm</Link>
+                        <div className='rounded-none p-4 flex flex-col gap-y-4'>
+                          {notification && (
+                            notification.map((items, index) => (
+                              index < 5 && (
+                                <div className='flex items-center justify-between' key={index}>
+                                  <Link key={index} to='/history-borrow-book'>
+                                    <span className='mr-[50px] cursor-pointer'>{items.message}</span>
+                                  </Link>
+                                  <div className='flex items-center gap-x-2'>
+                                    <Dropdown
+                                      trigger={'click'}
+                                      placement='bottomRight'
+                                      menu={
+                                        {
+                                          items: [
+                                            {
+                                              key: '1',
+                                              icon: <MdDone />,
+                                              label: (
+                                                <span className='' onClick={() => handleReaded(items.id)}>Đánh dấu là đã đọc</span>
+                                              )
+                                            },
+                                            {
+                                              key: '2',
+                                              icon: <MdDelete />,
+                                              label: (
+                                                <span className=''>Xóa thông báo này</span>
+                                              )
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    >
+                                      <PiDotsThreeCircleFill className='text-[2rem] cursor-pointer' />
+                                    </Dropdown>
+                                    {items.status !== 'read' && (
+                                      <TbPointFilled className='text-blue-500 text-[1.4rem]' />
+                                    )}
+                                  </div>
+                                </div>
+                              )
+                            ))
+                          )}
                         </div>
-                      </div>
-                      <div className='rounded-none'>
-                        {menu}
                       </div>
                     </div>
                   )}
@@ -164,7 +234,12 @@ function Header() {
                       }}
                       trigger={['click']}
                     >
-                      <Avatar src={<img src={avatarUser} alt="avatar" className='cursor-pointer' />} />
+                      {avatar ? (
+                        <Avatar src={avatar} className='cursor-pointer' />
+
+                      ) : (
+                        <Avatar icon={<UserOutlined />} className='cursor-pointer' />
+                      )}
                     </Dropdown>
                   </div>
                 ) : (
@@ -193,7 +268,10 @@ function Header() {
               <Input suffix={<IoIosSearch />} className='w-[50rem]' onPressEnter={handleEnter} />
             </div>
             <div className="w-0.5/3">
-              <RiBookFill className='text-[2rem]' />
+              <Link to='/history-borrow-book'>
+                <Badge count={totalBorrow} >
+                  <RiBookFill className='text-[2.3rem] text-white' />
+                </Badge></Link>
             </div>
           </div>
         </div>

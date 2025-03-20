@@ -7,7 +7,6 @@ import ResetPassword from "../pages/ResetPassword/ResetPassword";
 import Admin from "../pages/Admin/Admin";
 import UserAdmin from "../pages/UserAdmin/UserAdmin";
 import UserProfile from "../pages/Profiles/UserProfiles";
-import AdminProfile from "../pages/Profiles/AdminProfile";
 import BookAdmin from "../pages/BookAdmin/BookAdmin";
 import CategoryAdmin from "../pages/CategoryAdmin/CategoryAdmin";
 import AddCategory from "../pages/AddCategory/AddCategory";
@@ -22,6 +21,7 @@ import BookDetail from "../pages/BookDetail/BookDetail";
 import SearchPage from "../pages/SearchPage";
 import BorrowBook from "../pages/BorrowBook";
 import HistoryBorrowBook from "../pages/HistoryBorrowBook";
+import BookReturned from "../pages/BookReturned";
 
 export const routes = [
 
@@ -84,10 +84,6 @@ export const routes = [
                 element: <UserAdmin />
             },
             {
-                path: 'profile',
-                element: <AdminProfile />
-            },
-            {
                 path: 'book',
                 element: <BookAdmin />
             },
@@ -126,6 +122,10 @@ export const routes = [
             {
                 path: 'borrow-book',
                 element: <BorrowBook />
+            },
+            {
+                path: 'returned-book',
+                element: <BookReturned />
             }
         ]
     }

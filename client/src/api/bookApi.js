@@ -25,7 +25,7 @@ export const bookApi = {
     },
     searchBookByCategory: async (data) => {
         const response = await instance.get('/api/books/search/category', {
-            "categories":`"${data}"`
+            "categories": data
         });
         return response.data;
     },

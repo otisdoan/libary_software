@@ -27,8 +27,16 @@ export const bookBorrowApi = {
         const response = await instance.put(`/api/borrow-record/return-book/${id}`);
         return response.data;
     },
-    getHistoryBorrowBook: async (id) => {
-        const response = await instance.get(`/api/borrow-record/borrow-history/${id}`);
+    getHistoryBorrowBook: async (id, page, size) => {
+        const response = await instance.get(`/api/borrow-record/borrow-history/${id}`,{
+            params: {page, size}
+        });
+        return response.data;
+    },
+    getBookReturned: async (page, size, sortField) => {
+        const response = await instance.get('/api/borrow-record/executed-request-history', {
+            params: { page, size, sortField}
+        });
         return response.data;
     }
 }

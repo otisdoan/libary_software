@@ -20,6 +20,24 @@ class NotificationController {
       res.status(500).json({ message: error.message });
     }
   }
+
+  async deleteNotification(req, res) {
+    try {
+        const result = await notificationService.deleteNotification(req.params.id);
+        res.status(200).json({ message: 'Notification has been deleted.', result });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+  }
+
+  async markAllNotificationsAsRead(req, res) {
+    try {
+      const result = await notificationService.markAllNotificationsAsRead(req.params.userId);
+      res.status(200).json({ message: 'All notifications have been marked as read.', result });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  }
 }
 
 module.exports = new NotificationController();

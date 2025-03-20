@@ -64,13 +64,35 @@ class BorrowRecordRepository {
         const skip = (page - 1) * size;
 
         const [data, total] = await Promise.all([
-            BorrowRecord.find()
+            BorrowRecord.find({ status: { $in: ['pending', 'approved'] } })
                 .populate('userId', 'email')
                 .populate('bookId', 'title')
-                .sort({[sortField]: 1})
+                .sort({ [sortField]: -1 })
                 .skip(skip)
                 .limit(size),
-            BorrowRecord.countDocuments()
+            BorrowRecord.countDocuments({ status: { $in: ['pending', 'approved'] } })
+        ]);
+
+        return {
+            data,
+            totalElements: total,
+            totalPages: Math.ceil(total / size),
+            currentPage: page,
+            currentSize: size
+        };
+    }
+
+    async findExecutedBorrowRecordHistory(page = 1, size = 10, sortField = 'createdAt') {
+        const skip = (page - 1) * size;
+
+        const [data, total] = await Promise.all([
+            BorrowRecord.find({ status: { $in: ['returned', 'rejected'] } })
+                .populate('userId', 'email')
+                .populate('bookId', 'title')
+                .sort({[sortField]: -1})
+                .skip(skip)
+                .limit(size),
+            BorrowRecord.countDocuments({ status: { $in: ['returned', 'rejected'] } })
         ]);
 
         return {

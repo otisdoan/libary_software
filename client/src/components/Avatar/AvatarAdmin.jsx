@@ -1,7 +1,6 @@
 import { Avatar, Button, Dropdown } from 'antd';
 import avatarAdmin from "../../assets/images/z5581996737056_ec0f21259be216a6270fde9f7c300f4f.jpg"
 import { Link } from 'react-router-dom';
-import { FaUser } from "react-icons/fa";
 import { IoLogOutSharp } from "react-icons/io5";
 import { IoHomeOutline } from "react-icons/io5";
 function AvatarAdmin() {
@@ -20,13 +19,6 @@ function AvatarAdmin() {
         },
         {
             key: '2',
-            icon: <FaUser />,
-            label: (
-                <Link to="/admin/profile">My profile</Link>
-            )
-        },
-        {
-            key: '3',
             icon: <IoLogOutSharp />,
             label: (
                 <Button className='p-0 text-black' type='link' onClick={handleLogout}>Log out</Button>

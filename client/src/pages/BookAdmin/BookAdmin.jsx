@@ -1,9 +1,7 @@
-import { Select, Input, Table, Pagination, Modal, Button, Alert } from 'antd';
+import { Input, Table, Pagination, Modal, Button, Alert } from 'antd';
 import { useEffect, useState } from 'react';
-import { categoryApi } from '../../api/categoryApi';
 import { Link, Outlet } from 'react-router-dom';
 import { bookApi } from '../../api/bookApi';
-import AddBook from '../AddBook/AddBook';
 import UpdateBook from '../../components/UpdateBook/UpdateBook';
 
 function BookAdmin() {
@@ -70,6 +68,10 @@ function BookAdmin() {
             dataIndex: 'totalBook'
         },
         {
+            title: 'Sách đã mượn',
+            dataIndex: 'borrowBook'
+        },
+        {
             title: 'Thao tác',
             dataIndex: 'action',
             render: (_, record) => (
@@ -115,9 +117,8 @@ function BookAdmin() {
     };
 
     useEffect(() => {
-
         fetchApi(currentPage);
-    }, [currentPage]);
+    }, [currentPage, books]);
 
     const handlePageChange = (page) => {
         setCurrentPage(page);

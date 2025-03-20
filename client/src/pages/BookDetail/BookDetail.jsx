@@ -84,6 +84,12 @@ function BookDetail() {
             }
         } catch (error) {
             console.log(error);
+            setIsModalOpenRequest(false);
+            api['error']({
+                message: 'Yêu cầu mượn sách không thành công',
+                description: error?.response?.data?.message,
+                duration: 5
+            });
         }
     }
     useEffect(() => {
@@ -304,11 +310,6 @@ function BookDetail() {
                                 span: 24
                             }}
                         >
-                            <Form.Item
-                                name={'nameFeedback'}
-                            >
-                                <Input placeholder="Nhập tên sẽ hiển thị khi đánh giá" />
-                            </Form.Item>
                             <Form.Item>
                                 <TextArea rows={4} placeholder="Nhận xét của bạn về sách" />
                             </Form.Item>

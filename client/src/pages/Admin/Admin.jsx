@@ -3,12 +3,11 @@ import { Navigate } from "react-router-dom";
 import LayoutAdmin from "../../components/LayoutAdmin/LayoutAdmin";
 
 function Admin() {
-    const email = localStorage.getItem('email');
-    const emailAdmin = 'admin@gmail.com';
+    const role = localStorage.getItem('role');
 
     return (
         <>
-            {email === emailAdmin ? (
+            {role === 'admin' ? (
                 <LayoutAdmin />
             ) : (
                 <Navigate to='/'/>
