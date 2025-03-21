@@ -14,7 +14,7 @@ const reviewController = {
             const page = Math.max(1, parseInt(req.query.page) || 1); // Default page is 1
             const size = Math.min(100, Math.max(1, parseInt(req.query.size) || 10)); // Size is capped at 100. Default size is 10
             const sortField = req.query.sortField || 'createdAt'; // Field to sort by. Default is createdAt
-            const bookId = req.params.id;
+            const bookId = req.params.bookId;
             const result = await reviewService.getAllReviewByBookId(bookId, page, size, sortField);
 
             res.json(result);

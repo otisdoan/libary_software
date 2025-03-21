@@ -25,15 +25,25 @@ class ReviewRepository {
         const skip = (page - 1) * size;
 
         const [data, total] = await Promise.all([
-            Review.find({bookId})
-                .sort({[sortField]: 1})
+            Review.find({ bookId })
+                .populate('userId', 'email') // Join with User to get email
+                .populate('bookId', 'title') // Join with Book to get title
+                .sort({ [sortField]: 1 })
                 .skip(skip)
                 .limit(size),
-            Review.countDocuments({bookId})
+            Review.countDocuments({ bookId })
         ]);
 
+        const detailedReviews = data.map(review => ({
+            id: review._id,
+            email: review.userId ? review.userId.email : 'Unknown user',
+            bookTitle: review.bookId ? review.bookId.title : 'Unknown book',
+            content: review.content,
+            createdAt: review.createdAt
+        }));
+
         return {
-            data,
+            data: detailedReviews,
             totalElements: total,
             totalPages: Math.ceil(total / size),
             currentPage: page,

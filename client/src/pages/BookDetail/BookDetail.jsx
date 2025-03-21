@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { bookApi } from "../../api/bookApi";
-import { Breadcrumb, Button, Card, DatePicker, Form, Input, List, Modal, notification, Tabs, Typography } from "antd";
+import { Avatar, Breadcrumb, Button, Card, DatePicker, Dropdown, Form, Input, List, Modal, notification, Pagination, Tabs, Typography } from "antd";
 import { GiReturnArrow } from "react-icons/gi";
 import { MdAutorenew } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
@@ -10,10 +10,14 @@ import TextArea from "antd/es/input/TextArea";
 import Meta from "antd/es/card/Meta";
 import dayjs from 'dayjs';
 import { bookBorrowApi } from "../../api/bookBorrowApi";
-
+import { reviewBookApi } from "../../api/reviewBookApi";
+import { UserOutlined } from '@ant-design/icons';
+import { RiMore2Fill } from "react-icons/ri";
+import { MdHome } from "react-icons/md";
 const { Paragraph } = Typography;
 function BookDetail() {
     const today = dayjs();
+    const [form] = Form.useForm();
     const [isModalOpenBorrow, setIsModalBorrowOpen] = useState(false);
     const [isModalOpenRenew, setIsModalOpenRenew] = useState(false);
     const [isModalOpenFeedback, setIsModalOpenFeedBack] = useState(false);
@@ -24,13 +28,86 @@ function BookDetail() {
     const [bookDetail, setBookDetail] = useState({});
     const dateFormat = 'DD/MM/YYYY';
     const [api, contextHolder] = notification.useNotification();
+    const [reviewBook, setReviewBook] = useState([]);
+    const userId = localStorage.getItem('userId');
+    const [resultFeedback, setResultFeedback] = useState({});
+    const [totalReview, setTotalReview] = useState(0);
+    const [size, setSize] = useState(5);
+    const [pageFeedback, setPageFeedback] = useState(1);
+    const [isOpenModalUpdateFeedback, setIsOpenModalUpdateFeedback] = useState(false);
+    const [idReviewUpdate, setIdReviewUpdate] = useState();
     const items = [
         {
             key: '1',
             label: 'Mới nhất',
-            children: 'Feedback'
+            children: (
+                <>
+                    {reviewBook.map((items, index) => (
+                        <div key={index} className="flex flex-col p-4">
+                            <div className="flex items-center gap-x-3">
+                                <Avatar size={40} icon={<UserOutlined className="" />} />
+                                <span>{items.email}</span>
+                            </div>
+                            <div className="flex justify-between pl-[50px] mt-[20px] items-center">
+                                <span>{items.content}</span>
+                                <Dropdown
+                                    trigger={'click'}
+                                    placement="bottomRight"
+                                    dropdownRender={() => (
+                                        <div className="flex flex-col gap-y-3 bg-white shadow-lg p-4 rounded-lg">
+                                            <span className="cursor-pointer" onClick={() => hanldeUpdateFeedBack(items.id, items.content)}>Chỉnh sửa</span>
+                                            <Modal open={isOpenModalUpdateFeedback} footer={false} onCancel={handleCancel}>
+                                                <h1 className="font-bold text-[1.1rem] text-center">Chỉnh sửa bình luận</h1>
+                                                <Form
+                                                    wrapperCol={{ span: 24 }}
+                                                    onFinish={onFinishUpdateFeedback}
+                                                    form={form}
+
+                                                >
+                                                    <Form.Item
+                                                        name={'content'}
+                                                    >
+                                                        <TextArea />
+                                                    </Form.Item>
+                                                    <Form.Item className="flex justify-end">
+                                                        <Button className="mr-[10px]" onClick={handleCancel}>Hủy</Button>
+                                                        <Button type="primary" danger htmlType="submit">Chỉnh sửa</Button>
+                                                    </Form.Item>
+                                                </Form>
+                                            </Modal>
+                                            <span className="cursor-pointer">Xóa bình luận</span>
+                                        </div>
+                                    )}
+                                >
+                                    <RiMore2Fill className="text-[1rem] cursor-pointer w-[30px] h-[30px] rounded-full p-2 hover:bg-gray-400" />
+                                </Dropdown>
+                            </div>
+                            <div className="w-full h-1 border-t-[1px] border-t-black opacity-15 mt-[30px]"></div>
+                        </div>
+                    ))}
+                </>
+            )
         }
     ]
+    const onFinishUpdateFeedback = async (values) => {
+        try {
+            const result = await reviewBookApi.updateReview(idReviewUpdate, values);
+            if (result) {
+                setResultFeedback(result);
+                setIsOpenModalUpdateFeedback(false);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const hanldeUpdateFeedBack = (id, content) => {
+        console.log(content);
+        setIdReviewUpdate(id);
+        setIsOpenModalUpdateFeedback(true);
+        form.setFieldsValue({
+            content: content
+        })
+    }
     const fetchApi = async () => {
         try {
             const result = await bookApi.getBookById(id);
@@ -55,7 +132,8 @@ function BookDetail() {
         setIsModalBorrowOpen(false);
         setIsModalOpenRenew(false);
         setIsModalOpenFeedBack(false);
-        setIsModalOpenRequest(false)
+        setIsModalOpenRequest(false);
+        setIsOpenModalUpdateFeedback(false);
     }
     const handleExpandMore = () => {
         setEllipsis(false);
@@ -63,11 +141,24 @@ function BookDetail() {
     const handleExpandSmall = () => {
         setEllipsis(true);
     }
-    const handleOk = () => {
 
-    }
-    const onFinish = () => {
-
+    const onFinish = async (values) => {
+        const { content } = values;
+        try {
+            const result = await reviewBookApi.creatReview(
+                {
+                    "userId": userId,
+                    "bookId": id,
+                    "content": content
+                }
+            )
+            if (result) {
+                setResultFeedback(result);
+                setIsModalOpenFeedBack(false);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
     const onFinishRequest = async (values) => {
         try {
@@ -92,6 +183,9 @@ function BookDetail() {
             });
         }
     }
+    const handleChangePageFeedback = (page) => {
+        setPageFeedback(page)
+    }
     useEffect(() => {
         fetchApi();
         console.log(bookDetail)
@@ -106,13 +200,34 @@ function BookDetail() {
         }
         fetchBookByTitle();
     }, [])
+
+    useEffect(() => {
+        const fetchAllReview = async () => {
+            try {
+                const result = await reviewBookApi.getAllReview(id, pageFeedback, size);
+                if (result) {
+                    setReviewBook(result.data);
+                    setTotalReview(result.totalElements)
+                }
+            } catch (error) {
+                console.log(error)
+            }
+
+        }
+        fetchAllReview();
+    }, [id, resultFeedback, pageFeedback, size])
     return (
         <>
             {contextHolder}
-            <div className="my-[20px]">
+            <div className="my-[10px] bg-white rounded-lg p-2 shadow-md">
                 <Breadcrumb separator=">">
                     <Breadcrumb.Item>
-                        <Link to="/">Trang chủ</Link>
+                        <Link to="/">
+                            <div className="flex items-center gap-x-1">
+                                <MdHome className="text-[1.2rem] text-orange-600"/>
+                                <span>Trang chủ</span>
+                            </div>
+                        </Link>
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>{bookDetail.title}</Breadcrumb.Item>
                 </Breadcrumb>
@@ -120,8 +235,8 @@ function BookDetail() {
             <div className="flex gap-x-4 justify-center">
                 <div className="w-[40%] bg-white p-[40px] rounded-lg h-full sticky top-[150px]">
                     <div className="flex flex-col gap-y-4 items-center mb-[16px]">
-                        <img src={bookDetail.image} className="h-full w-full" />
-                        <Button type="primary" danger className="h-[40px] w-[250px]" onClick={showModalRequest}>Gửi yêu cầu mượn</Button>
+                        <img src={bookDetail.image} className="h-full w-full hover:scale-105 duration-500" />
+                        <Button type="primary" danger className="h-[40px] w-[250px] animate-pulse " onClick={showModalRequest}>Gửi yêu cầu mượn</Button>
                         <Modal
                             open={isModalOpenRequest}
                             onCancel={handleCancel}
@@ -295,14 +410,8 @@ function BookDetail() {
                     <Modal
                         open={isModalOpenFeedback}
                         onCancel={handleCancel}
-                        footer={[
-                            <Button key="back" className="text-gray-500" onClick={handleCancel}>
-                                Hủy
-                            </Button>,
-                            <Button key="submit" className="bg-red-500 text-white" onClick={handleOk}>
-                                Gửi nhận xét
-                            </Button>,
-                        ]}>
+                        footer={false}
+                    >
                         <h3 className="text-[1.1rem] font-medium uppercase text-center">Viết đánh giá sản phẩm</h3>
                         <Form
                             onFinish={onFinish}
@@ -310,14 +419,27 @@ function BookDetail() {
                                 span: 24
                             }}
                         >
-                            <Form.Item>
-                                <TextArea rows={4} placeholder="Nhận xét của bạn về sách" />
+                            <Form.Item
+                                name={'content'}
+                            >
+                                <TextArea rows={4} placeholder="Nhận xét của bạn về sách" className="mt-[20px]" />
+                            </Form.Item>
+                            <Form.Item className="flex justify-end items-center">
+                                <Button className="text-gray-500 mr-[10px]" >
+                                    Hủy
+                                </Button>
+                                <Button className="bg-red-500 text-white" htmlType="submit">
+                                    Gửi nhận xét
+                                </Button>
                             </Form.Item>
                         </Form>
                     </Modal>
                 </div>
                 <div>
                     <Tabs items={items} />
+                    <div className="flex justify-center">
+                        <Pagination total={totalReview} pageSize={size} current={pageFeedback} onChange={handleChangePageFeedback} />
+                    </div>
                 </div>
             </div>
             <div className="bg-white p-[20px] rounded-lg mt-[16px]">

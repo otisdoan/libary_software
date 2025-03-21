@@ -2,6 +2,7 @@ import { Breadcrumb, Button, Form, Input, Modal, Select } from "antd";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useProfileApi } from "../../api/userProfileApi";
+import { MdHome } from "react-icons/md";
 
 function UserProfile() {
     const userId = localStorage.getItem('userId');
@@ -21,7 +22,7 @@ function UserProfile() {
             setIsModalOpen(false);
             const result = await useProfileApi.upDateProfile(userId, inforUpdate);
             if (result) {
-                
+
                 form.setFieldsValue({
                     gender: result?.gender || '',
                     fullName: result?.fullName || '',
@@ -56,10 +57,15 @@ function UserProfile() {
     }, [userId, form])
     return (
         <>
-            <div className="mt-[20px]">
+            <div className="my-[10px] bg-white rounded-lg p-2 shadow-md">
                 <Breadcrumb separator='>'>
                     <Breadcrumb.Item>
-                        <Link to='/'>Trang chủ</Link>
+                        <Link to="/">
+                            <div className="flex items-center gap-x-1">
+                                <MdHome className="text-[1.2rem] text-orange-600" />
+                                <span>Trang chủ</span>
+                            </div>
+                        </Link>
                     </Breadcrumb.Item>
                     <Breadcrumb.Item>
                         Profile
@@ -86,7 +92,7 @@ function UserProfile() {
                             name={'fullName'}
                             className="w-1/2"
                         >
-                            <Input  disabled={true} />
+                            <Input disabled={true} />
                         </Form.Item>
                     </div>
                     <div className="flex gap-x-4 items-center ">

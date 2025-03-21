@@ -55,7 +55,6 @@ class BorrowRecordController {
             res.status(400).json({message: error.message});
         }
     }
-    
     async getExecutedBorrowRecordHistory(req, res) {
         try {
             const page = Math.max(1, parseInt(req.query.page) || 1);
