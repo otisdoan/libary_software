@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { categoryApi } from "../../api/categoryApi";
-import { Card, Checkbox, Empty, Pagination } from "antd";
+import { Breadcrumb, Card, Checkbox, Empty, Pagination } from "antd";
 import { Link, useParams } from "react-router-dom";
 import { bookApi } from "../../api/bookApi";
 import Meta from "antd/es/card/Meta";
+import { MdHome } from "react-icons/md";
 
 function SearchPage() {
     const params = useParams();
@@ -51,7 +52,22 @@ function SearchPage() {
     }, [])
     return (
         <>
-            <div className="flex gap-x-4 mt-[50px]">
+            <div className="my-[10px] bg-white rounded-lg p-2 shadow-md">
+                <Breadcrumb separator='>'>
+                    <Breadcrumb.Item>
+                        <Link to="/">
+                            <div className="flex items-center gap-x-1">
+                                <MdHome className="text-[1.2rem] text-orange-600" />
+                                <span>Trang chủ</span>
+                            </div>
+                        </Link>
+                    </Breadcrumb.Item>
+                    <Breadcrumb.Item>
+                        <h1 className="">Kết quả tìm kiếm: <span className="text-blue-500">{`${params.title} (${totalBook} kết quả)`}</span></h1>
+                    </Breadcrumb.Item>
+                </Breadcrumb>
+            </div>
+            <div className="flex gap-x-4 mt-[20px]">
                 <div className="w-1/3 rounded-[10px] bg-white p-4 sticky top-[150px] h-full">
                     <h1 className="text-[#ff4500] text-[1.5rem] font-bold mt-[30px] mb-[15px]">LỌC THEO</h1>
                     <div className="w-full h-1 border-t-black border-t-[1px] opacity-15"></div>
