@@ -64,4 +64,4 @@ build/
 # Yarn Integrity file
 .yarn-integrity 
 
-server/.env
+
