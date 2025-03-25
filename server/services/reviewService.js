@@ -9,5 +9,8 @@ class ReviewService {
     async update(id, updateData) {
         return await reviewRepository.updateReview(id, updateData);
     }
+    async delete(id) {
+        return await reviewRepository.deleteReview(id);
+    }
 }
 module.exports = new ReviewService();

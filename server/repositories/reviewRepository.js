@@ -50,6 +50,13 @@ class ReviewRepository {
             currentSize: size
         };
     }
+    async deleteReview(id) {
+        const reviewExists = await Review.exists({_id: id});
+        if (!reviewExists) {
+            throw new Error('Review not found');
+        }
+        return Review.findOneAndDelete({_id: id});
+    }
 }
 
 module.exports = new ReviewRepository();

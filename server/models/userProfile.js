@@ -44,4 +44,4 @@ userProfileSchema.method('toJSON', function() {
     object.id = _id;
     return object;
 });
-module.exports = mongoose.model('UserProfile', userProfileSchema);
+module.exports = mongoose.models.UserProfile || mongoose.model('UserProfile', userProfileSchema);
