@@ -2,16 +2,6 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
 const { protect, authorize } = require('../middleware/authMiddleware');
-const passport = require('passport');
-
-router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-
-// Google callback route after redirection
-router.get(
-    '/google/callback',
-    passport.authenticate('google', { failureRedirect: '/login', session: false }),
-    authController.googleLogin
-);
 
 router.post('/register', authController.register);
 router.post('/login', authController.login);

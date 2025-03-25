@@ -33,6 +33,17 @@ const reviewController = {
             res.status(500).json({ error: error.message });
         }
     },
+    deleteReview : async (req, res) => {
+        try {
+            const deletedReview = await reviewService.delete(req.params.id);
+            if (!deletedReview) {
+                return res.status(404).json({ error: 'Review not found' });
+            }
+            res.json(deletedReview);
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
 };
 
 module.exports = reviewController;
