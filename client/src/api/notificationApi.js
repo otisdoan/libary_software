@@ -8,5 +8,13 @@ export const notificationApi = {
     maskAsRead: async (id) => {
         const response = await instance.put(`/api/notifications/${id}/read`);
         return response.data;
+    },
+    deleteNotification: async (id) => {
+        const reponse = await instance.delete(`/api/notifications/${id}`);
+        return reponse.data;
+    },
+    markAllReaded: async (id) => {
+        const reponse = await instance.put(`/api/notifications/${id}/read-all`);
+        return reponse.data;
     }
 }

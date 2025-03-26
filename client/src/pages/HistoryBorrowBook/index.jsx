@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { MdHome } from "react-icons/md";
 
 function HistoryBorrowBook() {
+    const token = localStorage.getItem('accessToken');
     const [listBorrow, setListBorrow] = useState([]);
     const [totalBorrow, setTotalBorrow] = useState(0);
     const [pageCurrent, setPageCurrent] = useState(1);
@@ -61,18 +62,20 @@ function HistoryBorrowBook() {
     useEffect(() => {
         const fetchBorrowBook = async () => {
             try {
-                const result = await bookBorrowApi.getHistoryBorrowBook(userId, pageCurrent, size);
-                console.log('History', result);
-                if (result) {
-                    setListBorrow(result.data);
-                    setTotalBorrow(result.totalElements);
+                if (token && userId) {
+                    const result = await bookBorrowApi.getHistoryBorrowBook(userId, pageCurrent, size);
+                    console.log('History', result);
+                    if (result) {
+                        setListBorrow(result.data);
+                        setTotalBorrow(result.totalElements);
+                    }
                 }
             } catch (error) {
                 console.log(error)
             }
         }
         fetchBorrowBook();
-    }, [pageCurrent, size, userId])
+    }, [pageCurrent, size, userId, token])
 
     return (
         <>

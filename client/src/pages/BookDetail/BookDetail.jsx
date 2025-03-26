@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { bookApi } from "../../api/bookApi";
-import { Avatar, Breadcrumb, Button, Card, DatePicker, Dropdown, Form, Input, List, Modal, notification, Pagination, Tabs, Typography } from "antd";
+import { Avatar, Breadcrumb, Button, Card, DatePicker, Dropdown, Empty, Form, Input, List, Modal, notification, Pagination, Tabs, Typography } from "antd";
 import { GiReturnArrow } from "react-icons/gi";
 import { MdAutorenew } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
@@ -75,7 +75,7 @@ function BookDetail() {
                                                     </Form.Item>
                                                 </Form>
                                             </Modal>
-                                            <span className="cursor-pointer">Xóa bình luận</span>
+                                            <span className="cursor-pointer" onClick={() => handleDeleteReview(items.id)}>Xóa bình luận</span>
                                         </div>
                                     )}
                                 >
@@ -89,6 +89,16 @@ function BookDetail() {
             )
         }
     ]
+    const handleDeleteReview = async (id) => {
+        try {
+            if (id) {
+                const result = await reviewBookApi.deleteReview(id);
+                setResultFeedback(result);
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
     const onFinishUpdateFeedback = async (values) => {
         try {
             const result = await reviewBookApi.updateReview(idReviewUpdate, values);
@@ -110,8 +120,10 @@ function BookDetail() {
     }
     const fetchApi = async () => {
         try {
-            const result = await bookApi.getBookById(id);
-            setBookDetail(result);
+            if (id) {
+                const result = await bookApi.getBookById(id);
+                setBookDetail(result);
+            }
         } catch (error) {
             console.log(error)
         }
@@ -145,16 +157,18 @@ function BookDetail() {
     const onFinish = async (values) => {
         const { content } = values;
         try {
-            const result = await reviewBookApi.creatReview(
-                {
-                    "userId": userId,
-                    "bookId": id,
-                    "content": content
+            if (userId) {
+                const result = await reviewBookApi.creatReview(
+                    {
+                        "userId": userId,
+                        "bookId": id,
+                        "content": content
+                    }
+                )
+                if (result) {
+                    setResultFeedback(result);
+                    setIsModalOpenFeedBack(false);
                 }
-            )
-            if (result) {
-                setResultFeedback(result);
-                setIsModalOpenFeedBack(false);
             }
         } catch (error) {
             console.log(error);
@@ -193,9 +207,11 @@ function BookDetail() {
 
     useEffect(() => {
         const fetchBookByTitle = async () => {
-            const result = await bookApi.getAllBook(1, 99999, id);
-            if (result) {
-                setAllBook(result.data);
+            if (id) {
+                const result = await bookApi.getAllBook(1, 99999, id);
+                if (result) {
+                    setAllBook(result.data);
+                }
             }
         }
         fetchBookByTitle();
@@ -204,10 +220,12 @@ function BookDetail() {
     useEffect(() => {
         const fetchAllReview = async () => {
             try {
-                const result = await reviewBookApi.getAllReview(id, pageFeedback, size);
-                if (result) {
-                    setReviewBook(result.data);
-                    setTotalReview(result.totalElements)
+                if (id) {
+                    const result = await reviewBookApi.getAllReview(id, pageFeedback, size);
+                    if (result) {
+                        setReviewBook(result.data);
+                        setTotalReview(result.totalElements)
+                    }
                 }
             } catch (error) {
                 console.log(error)
@@ -224,7 +242,7 @@ function BookDetail() {
                     <Breadcrumb.Item>
                         <Link to="/">
                             <div className="flex items-center gap-x-1">
-                                <MdHome className="text-[1.2rem] text-orange-600"/>
+                                <MdHome className="text-[1.2rem] text-orange-600" />
                                 <span>Trang chủ</span>
                             </div>
                         </Link>
@@ -437,9 +455,11 @@ function BookDetail() {
                 </div>
                 <div>
                     <Tabs items={items} />
-                    <div className="flex justify-center">
-                        <Pagination total={totalReview} pageSize={size} current={pageFeedback} onChange={handleChangePageFeedback} />
-                    </div>
+                    {totalReview ? (
+                        <div className="flex justify-center">
+                            <Pagination total={totalReview} pageSize={size} current={pageFeedback} onChange={handleChangePageFeedback} />
+                        </div>
+                    ) : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
                 </div>
             </div>
             <div className="bg-white p-[20px] rounded-lg mt-[16px]">

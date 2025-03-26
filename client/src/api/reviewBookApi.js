@@ -14,5 +14,9 @@ export const reviewBookApi = {
     updateReview: async (id, data) => {
         const response = await instance.put(`/api/review/update/${id}`,data);
         return response.data;
+    },
+    deleteReview: async (id) => {
+        const response = await instance.delete(`/api/review/delete/${id}`);
+        return response.data;
     }
 }

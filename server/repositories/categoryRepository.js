@@ -2,7 +2,7 @@ const Category = require('../models/category');
 
 class CategoryRepository {
     async create(categoryData) {
-        const existingCategory = await this.findByName(categoryData.name);
+        const existingCategory = await this.existByName(categoryData.name);
         if (existingCategory) {
             throw new Error('Category name already exists');
         }
@@ -11,7 +11,7 @@ class CategoryRepository {
 
     async update(id, categoryData) {
         if (categoryData.name) {
-            const existingCategory = await this.findByName(categoryData.name);
+            const existingCategory = await this.existByName(categoryData.name);
             if (existingCategory && existingCategory._id.toString() !== id) {
                 throw new Error('Category name already exists');
             }
