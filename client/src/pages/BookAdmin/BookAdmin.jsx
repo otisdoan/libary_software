@@ -118,7 +118,7 @@ function BookAdmin() {
 
     useEffect(() => {
         fetchApi(currentPage);
-    }, [currentPage, books]);
+    }, [currentPage]);
 
     const handlePageChange = (page) => {
         setCurrentPage(page);

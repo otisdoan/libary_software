@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const { Meta } = Card;
 function Books() {
     const [pageCurrent, setPageCurrent] = useState(1);
-    const [pageSize, setPageSize] = useState(5);
+    const [pageSize, setPageSize] = useState();
     const [books, setBooks] = useState([]);
     const [totalBook, setTotalBook] = useState(0);
     const fetchApi = async (page) => {

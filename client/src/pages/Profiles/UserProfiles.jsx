@@ -20,14 +20,16 @@ function UserProfile() {
     const handleOk = async () => {
         try {
             setIsModalOpen(false);
-            const result = await useProfileApi.upDateProfile(userId, inforUpdate);
-            if (result) {
+            if (userId) {
+                const result = await useProfileApi.upDateProfile(userId, inforUpdate);
+                if (result) {
 
-                form.setFieldsValue({
-                    gender: result?.gender || '',
-                    fullName: result?.fullName || '',
-                    avatar: result?.avatar || ''
-                })
+                    form.setFieldsValue({
+                        gender: result?.gender || '',
+                        fullName: result?.fullName || '',
+                        avatar: result?.avatar || ''
+                    })
+                }
             }
         } catch (error) {
             console.log(error)
@@ -42,13 +44,15 @@ function UserProfile() {
     useEffect(() => {
         const fetchProfiles = async () => {
             try {
-                const result = await useProfileApi.getUserProfile(userId);
-                console.log(result);
-                form.setFieldsValue({
-                    gender: result?.gender || '',
-                    fullName: result?.fullName || '',
-                    avatar: result?.avatar || ''
-                })
+                if (userId) {
+                    const result = await useProfileApi.getUserProfile(userId);
+                    console.log(result);
+                    form.setFieldsValue({
+                        gender: result?.gender || '',
+                        fullName: result?.fullName || '',
+                        avatar: result?.avatar || ''
+                    })
+                }
             } catch (error) {
                 console.log(error)
             }

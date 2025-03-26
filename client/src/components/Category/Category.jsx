@@ -6,7 +6,7 @@ function Category() {
     const [category, setCategory] = useState([]);
     const fetchyApi = async () => {
         try {
-            const result = await categoryApi.getAllCategories(1);
+            const result = await categoryApi.getAllCategories(1, 9999);
             console.log(result);
             setCategory(result.data);
         } catch (error) {

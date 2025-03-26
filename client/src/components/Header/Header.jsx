@@ -35,6 +35,7 @@ function Header() {
   const [avatar, setAvatar] = useState('');
   const [notification, setNotification] = useState([]);
   const [readed, setReaded] = useState();
+  const [listNoti, setListNoti] = useState();
   const handleLogout = () => {
     logout();
     navigate('/');
@@ -87,12 +88,38 @@ function Header() {
     }
   }
 
+  const handleDelete = async (id) => {
+    try {
+      if (id) {
+        const result = await notificationApi.deleteNotification(id);
+        if (result) {
+          setListNoti(result);
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const handleAllReaded = async () => {
+    try {
+      if (userId) {
+        const result = await notificationApi.markAllReaded(userId);
+        if (result) {
+          setListNoti(result);
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   useEffect(() => {
     const fetchBorrowBook = async () => {
       try {
-        const result = await bookBorrowApi.getHistoryBorrowBook(userId, 1, 9999999);
-        if (result) {
-          setTotalBorrow(result.totalElements);
+        if (userId) {
+          const result = await bookBorrowApi.getHistoryBorrowBook(userId, 1, 9999999);
+          if (result) {
+            setTotalBorrow(result.totalElements);
+          }
         }
       } catch (error) {
         console.log(error)
@@ -104,8 +131,10 @@ function Header() {
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
-        const result = await useProfileApi.getUserProfile(userId);
-        setAvatar(result.avatar);
+        if (userId) {
+          const result = await useProfileApi.getUserProfile(userId);
+          setAvatar(result.avatar);
+        }
       } catch (error) {
         console.log(error)
       }
@@ -116,17 +145,19 @@ function Header() {
   useEffect(() => {
     const fetchNotification = async () => {
       try {
-        const result = await notificationApi.getAllNotification(userId);
-        console.log('Noti1', result)
-        if (result) {
-          setNotification(result.data);
+        if (userId) {
+          const result = await notificationApi.getAllNotification(userId);
+          console.log('Noti1', result)
+          if (result) {
+            setNotification(result.data);
+          }
         }
       } catch (error) {
         console.log(error)
       }
     }
     fetchNotification();
-  }, [userId])
+  }, [userId, listNoti])
 
   return (
     <>
@@ -144,15 +175,34 @@ function Header() {
                   placement='bottom'
                   trigger={'click'}
                   dropdownRender={() => (
-                    <div className='flex justify-center mt-[10px]'>
-                      <div className='flex flex-col bg-[#f0f0f0] rounded-[10px] w-1/2'>
+                    <div className='flex justify-center mt-[10px] w-[80%]'>
+                      <div className='flex flex-col bg-[#f0f0f0] rounded-[10px]'>
                         <div className='flex items-center justify-between border-b-[1px] py-[10px] px-[10px] '>
-                          <div className='flex items-center justify-center gap-x-1'>
+                          <div className='flex items-center justify-center gap-x-1 mr-[50px]'>
                             <GoBell />
-                            <span>Thông báo</span>
+                            <span className='whitespace-nowrap'>Thông báo</span>
                           </div>
-                          <div>
-                            <Link to='/notifications' className='text-blue-500'>Xem thêm</Link>
+                          <div className='flex items-center gap-x-4'>
+                            <Dropdown
+                              trigger={'click'}
+                              placement='bottomRight'
+                              menu={
+                                {
+                                  items: [
+                                    {
+                                      key: '1',
+                                      icon: <MdDone />,
+                                      label: (
+                                        <span className='' onClick={() => handleAllReaded()}>Đánh dấu là tất cả đã đọc</span>
+                                      )
+                                    }
+                                  ]
+                                }
+                              }
+                            >
+                              <PiDotsThreeCircleFill className='text-[2rem] cursor-pointer' />
+                            </Dropdown>
+                            <Link to='/notifications' className='text-blue-500 whitespace-nowrap'>Xem thêm</Link>
                           </div>
                         </div>
                         <div className='rounded-none p-4 flex flex-col gap-y-4'>
@@ -181,7 +231,7 @@ function Header() {
                                               key: '2',
                                               icon: <MdDelete />,
                                               label: (
-                                                <span className=''>Xóa thông báo này</span>
+                                                <span className='' onClick={() => handleDelete(items.id)}>Xóa thông báo này</span>
                                               )
                                             }
                                           ]
