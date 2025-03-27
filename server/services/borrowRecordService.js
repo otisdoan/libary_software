@@ -9,7 +9,7 @@ class BorrowRecordService {
         if (book.leftBook <= 0) throw new Error('Book is out of stock');
 
         const borrowDate = new Date();
-        const returnDate = new Date(borrowDate);
+        const returnDate = new Date(borrowDate.getTime() + returnDays * 24 * 60 * 60 * 1000);
         returnDate.setDate(borrowDate.getDate() + returnDays);
 
         return await borrowRecordRepo.createBorrowRequest(userId, bookId, returnDate);

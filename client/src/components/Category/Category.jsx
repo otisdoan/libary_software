@@ -18,7 +18,7 @@ function Category() {
                     </div>
                     <div className='flex flex-col gap-y-2 items-center'>
                         <img src={ngoaivan} className='w-[120px]'/>
-                        <span>Ngoại vănvăn</span>
+                        <span>Ngoại văn </span>
                     </div>
                     <div className='flex flex-col gap-y-2 items-center'>
                         <img src={tamlykynang} className='w-[120px]'/>
