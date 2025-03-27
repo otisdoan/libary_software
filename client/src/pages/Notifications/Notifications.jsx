@@ -8,7 +8,7 @@ import { MdDelete, MdDone, MdHome } from "react-icons/md";
 
 function Notifications() {
     const userId = localStorage.getItem('userId');
-    const [notification, setNotification] = useState([]);
+    const [notification, setNotification] = useState();
     const [readed, setReaded] = useState();
     const [listNoti, setListNoti] = useState();
 

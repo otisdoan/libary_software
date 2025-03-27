@@ -7,17 +7,7 @@ function Tab() {
             key: '1',
             label: 'Sách HOT',
             children: <Books />
-        },
-        {
-            key: '2',
-            label: 'Sách mới',
-            children: 'Content of Tab Pane 2',
-        },
-        {
-            key: '3',
-            label: 'Xu hướng',
-            children: 'Content of Tab Pane 3',
-        },
+        }
     ];
     return (
         <>

@@ -1,11 +1,12 @@
 
-import { Button, Form, Input, message } from 'antd';
+import { Button, Form, Input, notification } from 'antd';
 import { Link } from 'react-router-dom';
 import Accounts from '../Accounts/Accounts';
 import { authApi } from '../../api/authApi';
 
 
 function LoginForm() {
+  const [api, contextHolder] = notification.useNotification();
   const onFinish = async (values) => {
     try {
       const response = await authApi.login(values.email, values.password);
@@ -15,20 +16,19 @@ function LoginForm() {
       localStorage.setItem('email', response.user.email);
       localStorage.setItem('userId', response.user.id);
       localStorage.setItem('role', response.user.role);
-      message.success("Đăng nhập thành công!");
       window.location.href = '/';
     } catch (error) {
       console.error('Login failed:', error);
-      if (error.response && error.response.data.message) {
-        message.error(error.response.data.message);
-      } else {
-        message.error("Có lỗi xảy ra, vui lòng thử lại!");
-      }
+      api["error"]({
+        message: 'Đăng nhập không thành công',
+        description: error.response.data.message,
+      });      
     }
   };
 
   return (
     <>
+      {contextHolder}
       <div className=''>
         <Form
           wrapperCol={{

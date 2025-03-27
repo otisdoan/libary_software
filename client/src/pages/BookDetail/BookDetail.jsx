@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { bookApi } from "../../api/bookApi";
-import { Avatar, Breadcrumb, Button, Card, DatePicker, Dropdown, Empty, Form, Input, List, Modal, notification, Pagination, Tabs, Typography } from "antd";
+import { Avatar, Breadcrumb, Button, Card, Carousel, DatePicker, Dropdown, Empty, Form, Input, List, Modal, notification, Pagination, Tabs, Typography } from "antd";
 import { GiReturnArrow } from "react-icons/gi";
 import { MdAutorenew } from "react-icons/md";
 import { IoIosArrowForward } from "react-icons/io";
@@ -24,6 +24,8 @@ function BookDetail() {
     const [isModalOpenRequest, setIsModalOpenRequest] = useState(false);
     const [ellipsis, setEllipsis] = useState(true);
     const [allBook, setAllBook] = useState([]);
+    const [ktcategory, setKtcategory] = useState([]);
+    const [knscategory, setKnscategory] = useState([]);
     const { id } = useParams();
     const [bookDetail, setBookDetail] = useState({});
     const dateFormat = 'DD/MM/YYYY';
@@ -33,9 +35,12 @@ function BookDetail() {
     const [resultFeedback, setResultFeedback] = useState({});
     const [totalReview, setTotalReview] = useState(0);
     const [size, setSize] = useState(5);
+    const [sizePage, setSizePgae] = useState(16);
     const [pageFeedback, setPageFeedback] = useState(1);
     const [isOpenModalUpdateFeedback, setIsOpenModalUpdateFeedback] = useState(false);
     const [idReviewUpdate, setIdReviewUpdate] = useState();
+    const [pageCurrent, setPageCurrent] = useState(1);
+    const [totalBook, setTotalBook] = useState([]);
     const items = [
         {
             key: '1',
@@ -205,17 +210,21 @@ function BookDetail() {
         console.log(bookDetail)
     }, [id])
 
+    const handleChangePage = (page) => {
+        setPageCurrent(page);
+    }
     useEffect(() => {
         const fetchBookByTitle = async () => {
             if (id) {
-                const result = await bookApi.getAllBook(1, 99999, id);
+                const result = await bookApi.getAllBook(pageCurrent, sizePage, id);
                 if (result) {
                     setAllBook(result.data);
+                    setTotalBook(result.totalElements);
                 }
             }
         }
         fetchBookByTitle();
-    }, [])
+    }, [pageCurrent, sizePage, id])
 
     useEffect(() => {
         const fetchAllReview = async () => {
@@ -233,7 +242,34 @@ function BookDetail() {
 
         }
         fetchAllReview();
-    }, [id, resultFeedback, pageFeedback, size])
+    }, [id, resultFeedback, pageFeedback, size]);
+    useEffect(() => {
+        const fetchKTCatefory = async () => {
+            try {
+                const result = await bookApi.searchBookByCategory("Kinh tế");
+                if (result) {
+                    setKtcategory(result);
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchKTCatefory();
+    }, []);
+
+    useEffect(() => {
+        const fetchKTCatefory = async () => {
+            try {
+                const result = await bookApi.searchBookByCategory("Tâm lý - Kỹ năng sống");
+                if (result) {
+                    setKnscategory(result);
+                }
+            } catch (error) {
+                console.log(error)
+            }
+        }
+        fetchKTCatefory();
+    }, []);
     return (
         <>
             {contextHolder}
@@ -463,9 +499,9 @@ function BookDetail() {
                 </div>
             </div>
             <div className="bg-white p-[20px] rounded-lg mt-[16px]">
-                <h2 className="text-[1.1rem] font-bold">Gợi ý cho bạn</h2>
-                <div className="flex justify-center">
-                    <div className="flex items-center gap-6 my-[50px] flex-wrap w-[95%] px-[12px]">
+                <h2 className="text-[1.2rem] font-bold">Gợi ý cho bạn</h2>
+                <div className="flex flex-col items-center">
+                    <div className="flex items-center gap-6 my-[50px] flex-wrap justify-center">
                         {allBook.map((element, index) => (
                             <Link to={`/book-detail/${element.id}`} key={index}>
                                 <Card
@@ -497,7 +533,104 @@ function BookDetail() {
                             </Link>
                         ))}
                     </div>
+                    <div>
+                        <Pagination total={totalBook} pageSize={sizePage} current={pageCurrent} onChange={handleChangePage} />
+                    </div>
                 </div>
+            </div>
+            <div className="rounded-[10px] bg-white p-4 mt-4">
+                <h1 className="text-[1.2rem] font-bold mb-[20px]">Thể loại nổi bật</h1>
+                <Carousel
+                    slidesToShow={4}
+                    slidesToScroll={1}
+                    autoplay
+                    autoplaySpeed={2500}
+                    arrows={true}
+                    className=""
+                    dots={false}
+                >
+                    {ktcategory.map((element, index) => (
+                        <div key={index}>
+                            <div className="px-2">
+                                <Link to={`/book-detail/${element.id}`} >
+                                    <Card
+                                        hoverable
+                                        key={index}
+                                        className="shadow-lg"
+                                        cover={
+                                            <img
+                                                src={element.image}
+                                                className="hover:scale-90 duration-500 transition-transform"
+                                            />
+                                        }
+                                        actions={[
+                                            <div key={index} className="flex justify-center gap-x-2">
+                                                <span>Đã mượn</span>
+                                                <span className="text-red-500">{element.borrowBook}</span>
+                                            </div>
+                                        ]}
+                                    >
+                                        <Meta
+                                            title={element.title}
+                                            description={
+                                                <>
+                                                    Total book: <span style={{ color: 'red' }}>{element.totalBook}</span>
+                                                </>
+                                            }
+                                        />
+                                    </Card>
+                                </Link>
+                            </div>
+                        </div>
+                    ))}
+                </Carousel>
+            </div>
+            <div className="rounded-[10px] bg-white p-4 mt-4 mb-[50px]">
+                <h1 className="text-[1.2rem] font-bold mb-[20px]">Tâm lý - Kỹ năng sống</h1>
+                <Carousel
+                    slidesToShow={4}
+                    slidesToScroll={1}
+                    autoplay
+                    autoplaySpeed={2000}
+                    arrows={true}
+                    className=""
+                    dots={false}
+                >
+                    {knscategory.map((element, index) => (
+                        <div key={index}>
+                            <div className="px-2">
+                                <Link to={`/book-detail/${element.id}`} >
+                                    <Card
+                                        hoverable
+                                        key={index}
+                                        className="shadow-lg"
+                                        cover={
+                                            <img
+                                                src={element.image}
+                                                className="hover:scale-90 duration-500 transition-transform"
+                                            />
+                                        }
+                                        actions={[
+                                            <div key={index} className="flex justify-center gap-x-2">
+                                                <span>Đã mượn</span>
+                                                <span className="text-red-500">{element.borrowBook}</span>
+                                            </div>
+                                        ]}
+                                    >
+                                        <Meta
+                                            title={element.title}
+                                            description={
+                                                <>
+                                                    Total book: <span style={{ color: 'red' }}>{element.totalBook}</span>
+                                                </>
+                                            }
+                                        />
+                                    </Card>
+                                </Link>
+                            </div>
+                        </div>
+                    ))}
+                </Carousel>
             </div>
         </>
     )

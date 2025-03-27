@@ -77,7 +77,7 @@ function BookReturned() {
         <>
             {contextHolder}
             <div className="flex flex-col p-5 mt-[20px]">
-                <h1 className="text-[1.4rem] font-bold">Quản lý yêu cầu mượn sách</h1>
+                <h1 className="text-[1.4rem] font-bold">Quản lý sách đã trả</h1>
                 <div className="flex justify-center">
                     <Input placeholder="Tìm kiếm theo id..." className="w-1/3 h-[35px]" />
                 </div>

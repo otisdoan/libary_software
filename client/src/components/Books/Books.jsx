@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const { Meta } = Card;
 function Books() {
     const [pageCurrent, setPageCurrent] = useState(1);
-    const [pageSize, setPageSize] = useState();
+    const [pageSize, setPageSize] = useState(16);
     const [books, setBooks] = useState([]);
     const [totalBook, setTotalBook] = useState(0);
     const fetchApi = async (page) => {
@@ -29,7 +29,7 @@ function Books() {
     return (
         <>
             <div className="flex justify-center">
-                <div className="flex items-center gap-6 my-[50px] flex-wrap w-[90%] px-[12px]">
+                <div className="flex items-center gap-6 my-[50px] flex-wrap w-[90%] justify-center">
                     {books.map((element, index) => (
                         <Link to={`/book-detail/${element.id}`} key={index}>
                             <Card
@@ -39,13 +39,13 @@ function Books() {
                                 cover={
                                     <img
                                         src={element.image}
-                                        className="hover:scale-90 duration-500 transition-transform"
+                                        className="hover:scale-90 duration-500 transition-transform w-full h-full"
                                     />
                                 }
                                 actions={[
                                     <div key={index} className="flex justify-center gap-x-2">
                                         <span>Đã mượn</span>
-                                        <span className="text-red-500">{element.leftBook}</span>
+                                        <span className="text-red-500">{element.borrowBook}</span>
                                     </div>
                                 ]}
                             >

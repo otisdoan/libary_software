@@ -1,27 +1,46 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { categoryApi } from "../../api/categoryApi";
-
+import kinhte from '../../assets/images/kinhte.jpg';
+import ngoaivan from '../../assets/images/ngoaivan.jpg';
+import tamlykynang from '../../assets/images/tamlykynang.jpg';
+import thieunhi from '../../assets/images/thieunhi.jpg';
+import vanhoc from '../../assets/images/vanhoc.jpg';
+import ngoaingu from '../../assets/images/ngoaingu.jpg';
+import dammy from '../../assets/images/dammy.jpg';
 function Category() {
-    const [category, setCategory] = useState([]);
-    const fetchyApi = async () => {
-        try {
-            const result = await categoryApi.getAllCategories(1, 9999);
-            console.log(result);
-            setCategory(result.data);
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    useEffect(() => {
-        fetchyApi()
-    }, [])
+
     return (
         <>
-            <div className="bg-white rounded-[10px] mt-[20px] py-[40px] flex gap-x-4 justify-around flex-wrap">
-                {category.map((element, index) => (
-                    <Link to='#' key={index}>{element.name}</Link>
-                ))}
+            <div className="bg-white rounded-md my-4 p-4">
+                <h1 className="font-bold mb-[20px]">Khám phá theo danh mục </h1>
+                <div className='flex items-center justify-between'>
+                    <div className='flex flex-col gap-y-2 items-center'>
+                        <img src={kinhte} className='w-[120px]'/>
+                        <span>Kinh tế</span>
+                    </div>
+                    <div className='flex flex-col gap-y-2 items-center'>
+                        <img src={ngoaivan} className='w-[120px]'/>
+                        <span>Ngoại vănvăn</span>
+                    </div>
+                    <div className='flex flex-col gap-y-2 items-center'>
+                        <img src={tamlykynang} className='w-[120px]'/>
+                        <span>Tâm lý - Kỹ năng</span>
+                    </div>
+                    <div className='flex flex-col gap-y-2 items-center'>
+                        <img src={vanhoc} className='w-[120px]'/>
+                        <span>Văn học</span>
+                    </div>
+                    <div className='flex flex-col gap-y-2 items-center'>
+                        <img src={thieunhi} className='w-[120px]'/>
+                        <span>Thiếu nhi</span>
+                    </div>
+                    <div className='flex flex-col gap-y-2 items-center'>
+                        <img src={ngoaingu} className='w-[120px]'/>
+                        <span>Sách học ngoại ngữ</span>
+                    </div>
+                    <div className='flex flex-col gap-y-2 items-center'>
+                        <img src={dammy} className='w-[120px]'/>
+                        <span>Đam mỹ</span>
+                    </div>
+                </div>
             </div>
         </>
     )

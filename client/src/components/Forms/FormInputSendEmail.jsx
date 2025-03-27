@@ -1,18 +1,30 @@
-import { Form, Input, Button, message } from 'antd';
+import { Form, Input, Button, notification } from 'antd';
 import { authApi } from '../../api/authApi';
 
 function InputEmail() {
+    const [api, contextHolder] = notification.useNotification();
     const onFinish = async (values) => {
         try {
             const response = await authApi.sendResetPasswordEmail(values.user.email);
-            message.success('Email sent successfully!');
+            if (response) {
+                api["info"]({
+                    message: "Email xác nhận đã được gửi",
+                    description: "Vui lòng kiểm tra hộp thư đến hoặc thư rác để kích hoạt tài khoản của bạn.",
+                });
+            }
         } catch (error) {
-            message.error('Failed to send email.');
+            console.log(error);
+            api["error"]({
+                message: "Gửi email thất bại",
+                description: "Đã xảy ra lỗi khi gửi email. Vui lòng thử lại sau.",
+            });
+
         }
     };
 
     return (
         <>
+            {contextHolder}
             <div>
                 <Form
                     name="email"
