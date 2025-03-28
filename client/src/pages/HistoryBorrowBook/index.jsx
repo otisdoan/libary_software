@@ -14,7 +14,9 @@ function HistoryBorrowBook() {
     const userId = localStorage.getItem('userId');
     const [openModal, setOpenModal] = useState(false);
     const [selectedRecord, setSelectedRecord] = useState(null);
+    const [IdSelectedRecord, setIdSelectedRecord] = useState();
     const [api, contextHolder] = notification.useNotification();
+    const [reload, setReload] = useState(false);
 
     const columns = [
         {
@@ -66,7 +68,7 @@ function HistoryBorrowBook() {
             render: (_, record) => {
                 if (record.status === 'expired') {
                     return (
-                        <Button type="primary" danger onClick={() => handleRenew(record)}>Gia hạn</Button>
+                        <Button type="primary" danger onClick={() => handleRenew(record, record?.id)}>Gia hạn</Button>
                     )
                 }
             }
@@ -74,15 +76,17 @@ function HistoryBorrowBook() {
     ]
 
     const onFinishRequest = async (value) => {
+        console.log(IdSelectedRecord, value)
         setOpenModal(false);
         try {
-            const result = await bookBorrowApi.renewBook(value);
+            const result = await bookBorrowApi.renewBook(IdSelectedRecord, value);
             console.log(result);
             if (result) {
                 api['success']({
                     message: 'Gia hạn sách thành công',
                     description: 'Bạn đã gia hạn sách thành công. Vui lòng chờ phê duyệt.',
                 });
+                setReload(true);
             } 
         } catch (error) {
             console.log(error)
@@ -97,7 +101,8 @@ function HistoryBorrowBook() {
         setOpenModal(false)
     }
 
-    const handleRenew = async (record) => {
+    const handleRenew = async (record, id) => {
+        setIdSelectedRecord(id)
         setSelectedRecord(record);
         setOpenModal(true)
     }
@@ -122,7 +127,7 @@ function HistoryBorrowBook() {
             }
         }
         fetchBorrowBook();
-    }, [pageCurrent, size, userId, token])
+    }, [pageCurrent, size, userId, token, reload])
 
     return (
         <>
@@ -178,7 +183,7 @@ function HistoryBorrowBook() {
                             </Form.Item>
                             <Form.Item
                                 label={'Ngày trả'}
-                                name={'returnDays'}
+                                name={'extensionDays'}
                                 rules={[
                                     {
                                         required: true,
