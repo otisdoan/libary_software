@@ -16,6 +16,10 @@ function BorrowBook() {
             dataIndex: 'id',
         },
         {
+            title: 'Email',
+            dataIndex: 'email',
+        },
+        {
             title: 'Tên sách',
             dataIndex: 'bookTitle',
         },

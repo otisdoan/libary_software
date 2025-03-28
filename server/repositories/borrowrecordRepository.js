@@ -42,6 +42,12 @@ class BorrowRecordRepository {
     async updateBorrowRequestStatus(id, status) {
         return BorrowRecord.findByIdAndUpdate(id, {status}, {new: true});
     }
+    async renewBorrowRequestStatus(id, status, returnDate = null) {
+        const updateData = { status };
+        if (returnDate) updateData.returnDate = returnDate;
+
+        return BorrowRecord.findByIdAndUpdate(id, updateData, { new: true });
+    }
 
     async updateReturnDate(id) {
         return BorrowRecord.findByIdAndUpdate(id, {status: 'returned', returnDate: new Date()}, {new: true});
@@ -49,8 +55,9 @@ class BorrowRecordRepository {
 
     async findBorrowsDueInTwoDays() {
         const today = new Date();
-        const twoDaysFromNow = new Date(today);
-        twoDaysFromNow.setDate(today.getDate() + 2);
+        today.setUTCHours(0, 0, 0, 0);
+
+        const twoDaysFromNow = new Date(today.getTime() + (2 * 24 * 60 * 60 * 1000));
 
         return BorrowRecord.find({
             returnDate: {
@@ -60,6 +67,7 @@ class BorrowRecordRepository {
             status: 'approved'
         });
     }
+
     async findAll(page = 1, size = 10, sortField = 'createdAt') {
         const skip = (page - 1) * size;
 
@@ -93,6 +101,35 @@ class BorrowRecordRepository {
                 .skip(skip)
                 .limit(size),
             BorrowRecord.countDocuments({ status: { $in: ['returned', 'rejected'] } })
+        ]);
+
+        return {
+            data,
+            totalElements: total,
+            totalPages: Math.ceil(total / size),
+            currentPage: page,
+            currentSize: size
+        };
+    }
+
+    async findExpiredBorrowRequests(currentDate) {
+        return BorrowRecord.find({
+            returnDate: { $lt: currentDate },
+            status: 'approved'
+        });
+    }
+
+    async findAllExpired(page = 1, size = 10, sortField = 'createdAt') {
+        const skip = (page - 1) * size;
+
+        const [data, total] = await Promise.all([
+            BorrowRecord.find({ status: 'expired' })
+                .populate('userId', 'email')
+                .populate('bookId', 'title')
+                .sort({ [sortField]: -1 })
+                .skip(skip)
+                .limit(size),
+            BorrowRecord.countDocuments({ status: 'expired' })
         ]);
 
         return {

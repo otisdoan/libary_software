@@ -79,10 +79,6 @@ function UserAdmin() {
             dataIndex: 'email',
         },
         {
-            title: 'Số điện thoại',
-            dataIndex: 'phone',
-        },
-        {
             title: 'Quyền hạn',
             dataIndex: 'role',
         },
@@ -99,7 +95,7 @@ function UserAdmin() {
             dataIndex: 'action',
             render: (_, record) => (
                 <div className='flex gap-x-3'>
-                    <div className=''>
+                    <div className='flex items-center gap-x-4'>
                         <Button type='primary' onClick={() => showModal(record.id, record.email, record.role, record.status)}>
                             Update 
                         </Button>

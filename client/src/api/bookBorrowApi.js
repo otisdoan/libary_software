@@ -38,5 +38,13 @@ export const bookBorrowApi = {
             params: { page, size, sortField}
         });
         return response.data;
+    },
+    getExpiredBook: async () => {
+        const response = await instance.get('/api/borrow-record/borrow-records-expired');
+        return response.data;
+    },
+    renewBook: async (data) => {
+        const response = await instance.put(`/api/borrow-record/borrow-records/67e6117d9837e75ff2bc44af/renew`, {data});
+        return response.data;
     }
 }

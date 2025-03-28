@@ -22,6 +22,7 @@ import SearchPage from "../pages/SearchPage";
 import BorrowBook from "../pages/BorrowBook";
 import HistoryBorrowBook from "../pages/HistoryBorrowBook";
 import BookReturned from "../pages/BookReturned";
+import ExpiredBook from "../pages/ExpiredBook";
 
 export const routes = [
 
@@ -126,6 +127,10 @@ export const routes = [
             {
                 path: 'returned-book',
                 element: <BookReturned />
+            },
+            {
+                path: 'expired-book',
+                element: <ExpiredBook />
             }
         ]
     }

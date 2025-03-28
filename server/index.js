@@ -9,6 +9,7 @@ const User = require("./models/User");
 const UserProfile = require("./models/UserProfile");
 const userRepository = require("./repositories/userRepository");
 const routes = require('./routes');
+require('./config/cronJobs');
 
 // Load environment variables
 dotenv.config({ path: path.join(__dirname, ".env") });

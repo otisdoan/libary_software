@@ -7,6 +7,7 @@ import { MdAutorenew } from "react-icons/md";
 import { BiCategory } from "react-icons/bi";
 import { FaUser } from "react-icons/fa";
 import { GoGitPullRequest } from "react-icons/go";
+import { FcExpired } from "react-icons/fc";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -42,6 +43,11 @@ function LayoutAdmin() {
       key: 'da-tra',
       label: <Link to='/admin/returned-book'>Quản lý sách đã trả</Link>,
       icon: <MdAutorenew />
+    },
+    {
+      key: 'renew',
+      label: <Link to='/admin/expired-book'>Quản lý sách đã quá hạn</Link>,
+      icon: <FcExpired />
     },
     {
       key: 'the-loai-sach',

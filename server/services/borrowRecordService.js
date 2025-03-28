@@ -8,9 +8,15 @@ class BorrowRecordService {
         if (!book) throw new Error('Book does not exist');
         if (book.leftBook <= 0) throw new Error('Book is out of stock');
 
+        // Convert current date to seconds
         const borrowDate = new Date();
-        const returnDate = new Date(borrowDate.getTime() + returnDays * 24 * 60 * 60 * 1000);
-        returnDate.setDate(borrowDate.getDate() + returnDays);
+        const borrowDateSeconds = Math.floor(borrowDate.getTime() / 1000);
+
+        // Calculate return date in seconds (add 27 days worth of seconds)
+        const returnDateSeconds = borrowDateSeconds + (returnDays * 24 * 60 * 60);
+
+        // Convert seconds back to Date object
+        const returnDate = new Date(returnDateSeconds * 1000);
 
         return await borrowRecordRepo.createBorrowRequest(userId, bookId, returnDate);
     }
@@ -73,8 +79,49 @@ class BorrowRecordService {
             currentSize: result.currentSize
         };
     }
+
     async getExecutedBorrowRecordHistory(page, size, sortField) {
         const result = await borrowRecordRepo.findExecutedBorrowRecordHistory(page, size, sortField);
+        const detailedRecords = result.data.map(borrowRecord => ({
+            id: borrowRecord._id,
+            email: borrowRecord.userId ? borrowRecord.userId.email : 'Unknown user',
+            bookTitle: borrowRecord.bookId ? borrowRecord.bookId.title : 'Unknown book',
+            borrowDate: borrowRecord.borrowDate,
+            returnDate: borrowRecord.returnDate,
+            status: borrowRecord.status
+        }));
+
+        return {
+            data: detailedRecords,
+            totalElements: result.totalElements,
+            totalPages: result.totalPages,
+            currentPage: result.currentPage,
+            currentSize: result.currentSize
+        };
+    }
+
+    async renewExpiredBorrowRecord(id, extensionDays) {
+        const borrowRecord = await borrowRecordRepo.findBorrowRequestById(id);
+        if (!borrowRecord) throw new Error('Borrow record not found');
+        if (borrowRecord.status !== 'expired') {
+            throw new Error('Only expired borrow records can be renewed');
+        }
+
+        // Convert return date to milliseconds
+        const returnDateMillis = borrowRecord.returnDate.getTime();
+
+        // Calculate new return date in milliseconds (add extensionDays worth of milliseconds)
+        const newReturnDateMillis = returnDateMillis + (extensionDays * 24 * 60 * 60 * 1000);
+
+        // Convert milliseconds back to Date object
+        const newReturnDate = new Date(newReturnDateMillis);
+
+        // Update borrow record with new return date
+        return await borrowRecordRepo.renewBorrowRequestStatus(id, 'approved', newReturnDate);
+    }
+
+    async findAllExpired(page, size, sortField) {
+        const result = await borrowRecordRepo.findAllExpired(page, size, sortField);
         const detailedRecords = result.data.map(borrowRecord => ({
             id: borrowRecord._id,
             email: borrowRecord.userId ? borrowRecord.userId.email : 'Unknown user',

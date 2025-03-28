@@ -53,15 +53,45 @@ const bookSchema = new mongoose.Schema({
   timestamps: true
 });
 
+// Middleware before create book
 bookSchema.pre('save', function(next) {
-  this.leftBook = this.totalBook - this.borrowBook;
+  if (this.isModified('totalBook')) {
+    if (this.totalBook < this.borrowBook) {
+      return next(new Error('Total books cannot be less than borrowed books'));
+    }
+    this.leftBook = this.totalBook - this.borrowBook;
+  }
   next();
 });
+
+// Middleware before update book
+bookSchema.pre('findOneAndUpdate', async function(next) {
+  const update = this.getUpdate();
+
+  if (update.totalBook !== undefined) {
+    const book = await this.model.findOne(this.getQuery());
+
+    if (!book) {
+      return next(new Error('Book not found'));
+    }
+
+    if (update.totalBook < book.totalBook) {
+      return next(new Error('Total books cannot be decreased'));
+    }
+
+    update.leftBook = update.totalBook - book.borrowBook;
+  }
+
+  next();
+});
+
+// Format the returned object
 bookSchema.method('toJSON', function() {
   const { _id, ...object } = this.toObject();
   object.id = _id;
   return object;
 });
+
 const Book = mongoose.model('Book', bookSchema);
 
 module.exports = Book;

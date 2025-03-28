@@ -50,7 +50,7 @@ function Content() {
                 <div className="rounded-[10px] bg-white p-4 mt-4">
                     <h1 className="text-[1.5rem] font-bold mb-[20px]">Thể loại nổi bật</h1>
                     <Carousel
-                        slidesToShow={4}
+                        slidesToShow={5}
                         slidesToScroll={1}
                         autoplay
                         autoplaySpeed={2500}
@@ -97,7 +97,7 @@ function Content() {
                 <div className="rounded-[10px] bg-white p-4 mt-4">
                     <h1 className="text-[1.5rem] font-bold mb-[20px]">Tâm lý - Kỹ năng sống</h1>
                     <Carousel
-                        slidesToShow={4}
+                        slidesToShow={5}
                         slidesToScroll={1}
                         autoplay
                         autoplaySpeed={2000}

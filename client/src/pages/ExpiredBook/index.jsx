@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { bookBorrowApi } from "../../api/bookBorrowApi";
 import dayjs from "dayjs";
 
-function BookReturned() {
+function ExpiredBook() {
     const [listBorrow, setListBorrow] = useState([]);
     const [totalBorrow, setTotalBorrow] = useState(0);
     const [pageCurrent, setPageCurrent] = useState(1);
@@ -40,18 +40,10 @@ function BookReturned() {
             title: 'Trạng thái',
             dataIndex: 'status',
             render: (_, record) => {
-                if (record.status === 'pending') {
+                if (record.status === 'expired') {
                     return (
-                        <div className="flex items-center gap-x-3">
-                            <Spin size="small" />
-                            <span className="text-red-600">Pending</span>
-                        </div>
+                        <span className="text-red-600">Expired</span>
                     )
-                } else if (record.status === 'approved') {
-                    return <span className="text-orange-400">Approved</span>
-                }
-                else {
-                    return <span className="text-green-600">Returned</span>
                 }
             }
         },
@@ -64,7 +56,7 @@ function BookReturned() {
     useEffect(() => {
         const fetchBorrowBook = async () => {
             try {
-                const result = await bookBorrowApi.getBookReturned(pageCurrent, size, 'id');
+                const result = await bookBorrowApi.getExpiredBook(pageCurrent, size, 'id');
                 console.log(result)
                 if (result) {
                     setListBorrow(result.data);
@@ -81,7 +73,7 @@ function BookReturned() {
         <>
             {contextHolder}
             <div className="flex flex-col p-5 mt-[20px]">
-                <h1 className="text-[1.4rem] font-bold">Quản lý sách đã trả</h1>
+                <h1 className="text-[1.4rem] font-bold">Quản lý sách đã quá hạn</h1>
                 <div className="flex justify-center">
                     <Input placeholder="Tìm kiếm theo id..." className="w-1/3 h-[35px]" />
                 </div>
@@ -95,4 +87,4 @@ function BookReturned() {
         </>
     )
 }
-export default BookReturned;
+export default ExpiredBook;

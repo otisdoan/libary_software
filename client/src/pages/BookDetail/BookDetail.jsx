@@ -541,7 +541,7 @@ function BookDetail() {
             <div className="rounded-[10px] bg-white p-4 mt-4">
                 <h1 className="text-[1.2rem] font-bold mb-[20px]">Thể loại nổi bật</h1>
                 <Carousel
-                    slidesToShow={4}
+                    slidesToShow={5}
                     slidesToScroll={1}
                     autoplay
                     autoplaySpeed={2500}
@@ -588,7 +588,7 @@ function BookDetail() {
             <div className="rounded-[10px] bg-white p-4 mt-4 mb-[50px]">
                 <h1 className="text-[1.2rem] font-bold mb-[20px]">Tâm lý - Kỹ năng sống</h1>
                 <Carousel
-                    slidesToShow={4}
+                    slidesToShow={5}
                     slidesToScroll={1}
                     autoplay
                     autoplaySpeed={2000}

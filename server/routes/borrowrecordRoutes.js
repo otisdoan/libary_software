@@ -9,4 +9,6 @@ router.put('/return-book/:id', protect, authorize(['admin']), borrowRecordContro
 router.get('/borrow-history/:userId', protect, borrowRecordController.getUserBorrowHistory);
 router.get('/', protect, authorize(['admin']), borrowRecordController.getAllBorrowRecords);
 router.get('/executed-request-history', protect, borrowRecordController.getExecutedBorrowRecordHistory);
+router.put('/borrow-records/:id/renew', borrowRecordController.renewBorrowRecord);
+router.get('/borrow-records-expired', borrowRecordController.getExpiredBorrowRequests);
 module.exports = router;

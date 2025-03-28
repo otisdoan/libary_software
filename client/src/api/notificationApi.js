@@ -1,8 +1,10 @@
 import instance from "./axiosClient"
 
 export const notificationApi = {
-    getAllNotification: async (id) => {
-        const response = await instance.get(`/api/notifications/${id}`);
+    getAllNotification: async (id, page, size) => {
+        const response = await instance.get(`/api/notifications/${id}`, {
+            params: {page, size}
+        });
         return response.data;
     },
     maskAsRead: async (id) => {

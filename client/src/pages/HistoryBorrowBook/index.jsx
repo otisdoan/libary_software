@@ -1,4 +1,4 @@
-import { Breadcrumb, Input, Pagination, Spin, Table } from "antd";
+import { Breadcrumb, Button, DatePicker, Form, Input, Modal, notification, Pagination, Spin, Table } from "antd";
 import { useEffect, useState } from "react";
 import { bookBorrowApi } from "../../api/bookBorrowApi";
 import dayjs from "dayjs";
@@ -12,6 +12,10 @@ function HistoryBorrowBook() {
     const [pageCurrent, setPageCurrent] = useState(1);
     const [size, setSize] = useState(10);
     const userId = localStorage.getItem('userId');
+    const [openModal, setOpenModal] = useState(false);
+    const [selectedRecord, setSelectedRecord] = useState(null);
+    const [api, contextHolder] = notification.useNotification();
+
     const columns = [
         {
             title: 'Tên sách',
@@ -48,12 +52,55 @@ function HistoryBorrowBook() {
                 } else if (record.status === 'approved') {
                     return <span className="text-orange-400">Approved</span>
                 }
+                else if (record.status === 'expired') {
+                    return <span className="text-red-600 font-bold">EXPIRED</span>
+                }
                 else {
                     return <span className="text-green-600">Returned</span>
                 }
             }
         },
+        {
+            title: 'Action',
+            dataIndex: 'action',
+            render: (_, record) => {
+                if (record.status === 'expired') {
+                    return (
+                        <Button type="primary" danger onClick={() => handleRenew(record)}>Gia hạn</Button>
+                    )
+                }
+            }
+        },
     ]
+
+    const onFinishRequest = async (value) => {
+        setOpenModal(false);
+        try {
+            const result = await bookBorrowApi.renewBook(value);
+            console.log(result);
+            if (result) {
+                api['success']({
+                    message: 'Gia hạn sách thành công',
+                    description: 'Bạn đã gia hạn sách thành công. Vui lòng chờ phê duyệt.',
+                });
+            } 
+        } catch (error) {
+            console.log(error)
+            api['error']({
+                message: 'Gia hạn sách thất bại',
+                description: 'Có lỗi xảy ra khi gia hạn sách. Vui lòng thử lại sau.',
+            });
+        }
+    }
+
+    const handleCancel = () => {
+        setOpenModal(false)
+    }
+
+    const handleRenew = async (record) => {
+        setSelectedRecord(record);
+        setOpenModal(true)
+    }
 
     const onChangePage = (page) => {
         setPageCurrent(page);
@@ -79,6 +126,7 @@ function HistoryBorrowBook() {
 
     return (
         <>
+            {contextHolder}
             <div className="my-[10px] bg-white rounded-lg p-2 shadow-md">
                 <Breadcrumb separator='>'>
                     <Breadcrumb.Item>
@@ -104,6 +152,54 @@ function HistoryBorrowBook() {
                     <Pagination total={totalBorrow} pageSize={size} current={pageCurrent} onChange={onChangePage} />
                 </div>
             </div>
+
+            <Modal open={openModal} onCancel={handleCancel} footer={false}>
+                {selectedRecord && (
+                    <>
+                        <h3 className="text-[1.1rem]">Thông tin gia hạn sách</h3>
+                        <Form
+                            onFinish={onFinishRequest}
+                            labelCol={{
+                                span: 24
+                            }}
+                            wrapperCol={{
+                                span: 24
+                            }}
+                        >
+                            <Form.Item label={'Tên sách'}>
+                                <Input value={selectedRecord?.bookId?.title} readOnly />
+                            </Form.Item>
+                            <Form.Item label={'Ngày mượn'}>
+                                <DatePicker
+                                    value={dayjs(selectedRecord.borrowDate)}
+                                    readOnly
+                                    format="DD/MM/YYYY"
+                                />
+                            </Form.Item>
+                            <Form.Item
+                                label={'Ngày trả'}
+                                name={'returnDays'}
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: 'Bắt buộc phải nhập!'
+                                    },
+                                    {
+                                        pattern: /^(?:[1-9]|[12][0-9]|3[01])$/,
+                                        message: 'Vui lòng nhập một số nguyên từ 1 đến 31!',
+                                    },
+                                ]}
+                            >
+                                <Input placeholder="Ngày trả" className="w-1/4 h-[40px]" />
+                            </Form.Item>
+                            <Form.Item className="flex justify-end">
+                                <Button htmlType="button" type="default" className="mr-[16px]" onClick={handleCancel}>Hủy</Button>
+                                <Button htmlType="submit" type="primary" danger>Gửi yêu cầu</Button>
+                            </Form.Item>
+                        </Form>
+                    </>
+                )}
+            </Modal>
         </>
     )
 }
