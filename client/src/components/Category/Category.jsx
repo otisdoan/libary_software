@@ -13,31 +13,31 @@ function Category() {
                 <h1 className="font-bold mb-[20px]">Khám phá theo danh mục </h1>
                 <div className='flex items-center justify-between'>
                     <div className='flex flex-col gap-y-2 items-center'>
-                        <img src={kinhte} className='w-[120px]'/>
+                        <img src={kinhte} className='w-[120px]' />
                         <span>Kinh tế</span>
                     </div>
                     <div className='flex flex-col gap-y-2 items-center'>
-                        <img src={ngoaivan} className='w-[120px]'/>
+                        <img src={ngoaivan} className='w-[120px]' />
                         <span>Ngoại văn </span>
                     </div>
                     <div className='flex flex-col gap-y-2 items-center'>
-                        <img src={tamlykynang} className='w-[120px]'/>
+                        <img src={tamlykynang} className='w-[120px]' />
                         <span>Tâm lý - Kỹ năng</span>
                     </div>
                     <div className='flex flex-col gap-y-2 items-center'>
-                        <img src={vanhoc} className='w-[120px]'/>
+                        <img src={vanhoc} className='w-[120px]' />
                         <span>Văn học</span>
                     </div>
                     <div className='flex flex-col gap-y-2 items-center'>
-                        <img src={thieunhi} className='w-[120px]'/>
+                        <img src={thieunhi} className='w-[120px]' />
                         <span>Thiếu nhi</span>
                     </div>
                     <div className='flex flex-col gap-y-2 items-center'>
-                        <img src={ngoaingu} className='w-[120px]'/>
+                        <img src={ngoaingu} className='w-[120px]' />
                         <span>Sách học ngoại ngữ</span>
                     </div>
                     <div className='flex flex-col gap-y-2 items-center'>
-                        <img src={dammy} className='w-[120px]'/>
+                        <img src={dammy} className='w-[120px]' />
                         <span>Đam mỹ</span>
                     </div>
                 </div>
